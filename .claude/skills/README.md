@@ -22,3 +22,25 @@ plugin by Jesse Vincent (obra), MIT-licensed (see `LICENSE`).
   Claude Code web sandbox, but is included so it's available when running locally.
 - `using-tmux-for-interactive-commands` and `mcp-cli` depend on `tmux` / the `mcp`
   CLI being installed in the environment where the session runs.
+
+## Caveman skills
+
+Imported from the **[caveman](https://github.com/JuliusBrussee/caveman)** plugin
+by Julius Brussee, MIT-licensed (see `CAVEMAN-LICENSE`). Companion agents live in
+`../agents/` (`cavecrew-investigator`, `cavecrew-builder`, `cavecrew-reviewer`).
+
+| Skill | Purpose |
+|-------|---------|
+| `caveman` | Ultra-compressed reply mode (lite/full/ultra/wenyan). On-demand via `/caveman`. |
+| `caveman-commit` | Conventional-Commit messages, ≤50-char subject. |
+| `caveman-review` | One-line-per-finding PR review comments. |
+| `caveman-stats` | Session token usage + estimated savings. |
+| `caveman-compress` | Rewrite memory files (e.g. `CLAUDE.md`) into compact form. |
+| `caveman-help` | Quick reference for all caveman modes/commands. |
+| `cavecrew` | Decision guide for when to delegate to the `cavecrew-*` agents. |
+
+**Only the skills + agents are installed** — these activate on demand (e.g.
+typing `/caveman`). The plugin's *always-on* behavior (SessionStart hook,
+statusline badge, `caveman-shrink` MCP server) is **not** wired up; that requires
+`.claude/settings.json` hook/statusline/MCP configuration. The original plugin's
+hook scripts are not included here.
