@@ -17,6 +17,52 @@ Results include per-page tabs, a snapshot gallery, a **Before / After / Split**
 compare toggle, and an optional **Anthropic API key field** (used per-request,
 never stored) that switches snapshots from template to AI-authored.
 
+---
+
+## Pilhammer lead engine (`/leads`)
+
+A lead-generation platform on top of Reface: source Norwegian companies, qualify
+them by real financials, score how likely they are to need a new website, and
+(next phase) auto-generate Pilhammer mockups for the best ones.
+
+**Data (free, official):**
+- **Brønnøysund Enhetsregisteret** — every registered company (1.16M), filterable
+  by municipality / NACE sector / size.
+- **Brønnøysund Regnskapsregisteret** — annual accounts (revenue, profit, equity,
+  liquidity) to qualify who can actually afford a site.
+
+**Two-tier audit (the cost/speed design):**
+- **Tier 1** (`lib/engine/auditLite.ts`) — one HTTP fetch + regex parse, *no
+  browser, no AI*. ~free, runs across the whole registry. (80 companies sourced +
+  financially qualified + audited + scored in ~9s.)
+- **Tier 2** (next phase) — Chromium screenshots + AI mockups, only for the
+  shortlist you choose to pursue.
+
+**Scoring** (`lib/engine/score.ts`): `lead = bite (website weakness) × afford
+(financial headroom)`. Profitable companies with weak/no site rank highest.
+
+**Storage:** SQLite via built-in `node:sqlite` (`data/pilhammer.db`) — nothing is
+re-fetched. Swap for Postgres at scale (the query surface in `lib/engine/db.ts`
+is small and portable).
+
+**Operate:** the `/leads` dashboard has stat cards, an ingest runner, financial +
+weak-site filters, a ranked lead table with reasons, and an **activity log**
+(info / warnings / faults) with per-run summaries.
+
+**All-Norway:** don't page 1.1M times — Brreg publishes a bulk dataset
+(`bulkDownloadUrl`); the full national ingest streams that file. Run filtered
+slices (by kommune/NACE) for fast, cheap campaigns.
+
+```bash
+npm run dev            # http://localhost:3000/leads
+# then set Kommune nr (5501 = Tromsø) + Run ingest
+```
+
+> Requires the Brreg APIs to be reachable (they're public). In this environment
+> outbound traffic is proxied + CA-trusted automatically via lib/proxyFetch.ts.
+
+---
+
 ## Two brains (hybrid)
 
 | Mode | When | Review | Redesign |
