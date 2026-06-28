@@ -49,6 +49,30 @@ is small and portable).
 weak-site filters, a ranked lead table with reasons, and an **activity log**
 (info / warnings / faults) with per-run summaries.
 
+### Cold outreach (`/outreach`)
+
+For the top *emailable* qualified leads, Pilhammer auto-generates a ready-to-send
+campaign:
+- **Showcase** (`lib/engine/showcase.ts`) — a sector-styled "proposal" site for
+  the prospect (their name as the brand, sector-relevant services, the exact
+  improvements we'd make). Fast, no browser. Served at `/api/showcase/{id}`.
+- **Email** (`lib/engine/emailCompose.ts`) — a personalized Norwegian B2B email:
+  a specific hook ("nettsiden er ikke mobiltilpasset…"), the showcase link, clear
+  **sender identity**, and a **one-click opt-out**.
+- **Recipient discovery** (`lib/engine/emailDiscover.ts`) — finds a role address
+  (post@, kontakt@) on the firm's own site; prefers role over personal.
+
+**Compliance by design** (markedsføringsloven §15 + GDPR): every email carries
+sender identity + opt-out; opt-outs hit a **suppression list** and are never
+re-sent; role addresses preferred. The hottest *no-site* leads have no email —
+they're flagged `needs_email` for a phone/postal channel, not blasted.
+
+**Sending is DRY-RUN by default.** With no SMTP env, drafts are marked
+`sent (dry-run)` and nothing leaves. To go live, set:
+`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, and
+`PILHAMMER_SENDER_NAME/EMAIL/PERSON/PHONE`, `PILHAMMER_PUBLIC_URL`. Then the same
+buttons send for real (throttled, suppression-checked).
+
 **All-Norway:** don't page 1.1M times — Brreg publishes a bulk dataset
 (`bulkDownloadUrl`); the full national ingest streams that file. Run filtered
 slices (by kommune/NACE) for fast, cheap campaigns.

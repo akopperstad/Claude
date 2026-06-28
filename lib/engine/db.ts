@@ -63,6 +63,18 @@ export function getDb(): DatabaseSync {
       started_at TEXT, finished_at TEXT, scope TEXT, status TEXT,
       processed INTEGER, qualified INTEGER, errors INTEGER
     );
+    CREATE TABLE IF NOT EXISTS outreach (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      orgnr TEXT, navn TEXT, campaign TEXT,
+      to_email TEXT, to_name TEXT,
+      subject TEXT, body_text TEXT, body_html TEXT, showcase_html TEXT,
+      total_score INTEGER, status TEXT, error TEXT,
+      created_at TEXT, sent_at TEXT
+    );
+    CREATE INDEX IF NOT EXISTS idx_outreach_status ON outreach(status);
+    CREATE TABLE IF NOT EXISTS suppression (
+      email TEXT PRIMARY KEY, reason TEXT, ts TEXT
+    );
   `);
   _db = db;
   return db;
@@ -186,6 +198,64 @@ export function recentLogs(limit = 100, level?: string) {
 
 export function recentRuns(limit = 20) {
   return getDb().prepare(`SELECT * FROM runs ORDER BY id DESC LIMIT ?`).all(Math.min(limit, 100));
+}
+
+// ---- Outreach ----
+export interface OutreachDraft {
+  orgnr: string; navn: string; campaign: string;
+  to_email: string | null; to_name: string | null;
+  subject: string; body_text: string; body_html: string; showcase_html: string;
+  total_score: number | null; status: string;
+}
+
+export function insertOutreach(d: OutreachDraft): number {
+  const r = getDb().prepare(
+    `INSERT INTO outreach (orgnr, navn, campaign, to_email, to_name, subject, body_text, body_html, showcase_html, total_score, status, created_at)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`
+  ).run(d.orgnr, d.navn, d.campaign, d.to_email, d.to_name, d.subject, d.body_text, d.body_html, d.showcase_html, d.total_score ?? null, d.status, now());
+  return Number(r.lastInsertRowid);
+}
+
+export function getOutreach(id: number) {
+  return getDb().prepare(`SELECT * FROM outreach WHERE id=?`).get(id);
+}
+
+export function listOutreach(status?: string, limit = 200) {
+  const args: any[] = [];
+  let sql = `SELECT id, orgnr, navn, campaign, to_email, to_name, subject, total_score, status, error, created_at, sent_at FROM outreach`;
+  if (status) { sql += ` WHERE status=?`; args.push(status); }
+  sql += ` ORDER BY total_score DESC NULLS LAST, id DESC LIMIT ?`; args.push(Math.min(limit, 500));
+  return getDb().prepare(sql).all(...args);
+}
+
+export function updateOutreach(id: number, fields: Partial<{ to_email: string; subject: string; body_text: string; body_html: string; status: string; error: string | null; sent_at: string }>) {
+  const keys = Object.keys(fields);
+  if (!keys.length) return;
+  const sql = `UPDATE outreach SET ${keys.map((k) => `${k}=?`).join(", ")} WHERE id=?`;
+  getDb().prepare(sql).run(...keys.map((k) => (fields as any)[k]), id);
+}
+
+export function outreachExists(orgnr: string, campaign: string): boolean {
+  return !!getDb().prepare(`SELECT 1 FROM outreach WHERE orgnr=? AND campaign=?`).get(orgnr, campaign);
+}
+
+export function outreachStats() {
+  const db = getDb();
+  const by = (s: string) => db.prepare(`SELECT COUNT(*) c FROM outreach WHERE status=?`).get(s).c;
+  return {
+    total: db.prepare(`SELECT COUNT(*) c FROM outreach`).get().c,
+    draft: by("draft"), needs_email: by("needs_email"), ready: by("ready"),
+    sent: by("sent"), sent_dry: by("sent_dry"), failed: by("failed"), optout: by("optout"),
+  };
+}
+
+// ---- Suppression / opt-out ----
+export function addSuppression(email: string, reason: string) {
+  getDb().prepare(`INSERT INTO suppression (email, reason, ts) VALUES (?,?,?) ON CONFLICT(email) DO NOTHING`)
+    .run(email.toLowerCase().trim(), reason, now());
+}
+export function isSuppressed(email: string): boolean {
+  return !!getDb().prepare(`SELECT 1 FROM suppression WHERE email=?`).get(email.toLowerCase().trim());
 }
 
 export function stats() {

@@ -96,6 +96,7 @@ export default function Leads() {
         <span className="mark">Pil<b>hammer</b></span>
         <span className="sp" />
         <a href="/leads" className="on"><span style={{ display: "inline-flex", gap: 6, alignItems: "center" }}><Icon d={I.list} /> Leads</span></a>
+        <a href="/outreach">Outreach</a>
         <a href="/">Mockups</a>
       </nav>
 
