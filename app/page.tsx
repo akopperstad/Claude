@@ -1,22 +1,24 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { AnalyzeResult, Finding } from "@/lib/types";
+import type { AnalyzeResult, Finding, PageAudit } from "@/lib/types";
 
 const STEPS = [
   "Launching headless browser…",
-  "Loading the site & taking screenshots…",
+  "Crawling & loading pages…",
   "Auditing UX, accessibility, SEO & performance…",
   "Generating your redesign…",
 ];
 
 export default function Home() {
   const [url, setUrl] = useState("");
+  const [maxPages, setMaxPages] = useState(3);
+  const [apiKey, setApiKey] = useState("");
+  const [showOpts, setShowOpts] = useState(false);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AnalyzeResult | null>(null);
-  const [shot, setShot] = useState<"desktop" | "mobile">("desktop");
 
   async function run(e?: React.FormEvent) {
     e?.preventDefault();
@@ -27,13 +29,13 @@ export default function Home() {
     setStep(0);
     const ticker = setInterval(
       () => setStep((s) => Math.min(s + 1, STEPS.length - 1)),
-      4000
+      5000
     );
     try {
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url, maxPages, apiKey: apiKey.trim() || undefined }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Request failed");
@@ -71,6 +73,44 @@ export default function Home() {
             {loading ? "Working…" : "Reface it →"}
           </button>
         </form>
+
+        <button
+          className="opts-toggle"
+          type="button"
+          onClick={() => setShowOpts((v) => !v)}
+        >
+          {showOpts ? "▾" : "▸"} Options
+        </button>
+        {showOpts && (
+          <div className="opts">
+            <label>
+              Pages to crawl
+              <select
+                value={maxPages}
+                onChange={(e) => setMaxPages(Number(e.target.value))}
+                disabled={loading}
+              >
+                {[1, 2, 3, 4, 5, 6].map((n) => (
+                  <option key={n} value={n}>
+                    {n === 1 ? "1 (home only)" : `${n} pages`}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Anthropic API key <span className="hint">(optional · AI redesign · not stored)</span>
+              <input
+                type="password"
+                placeholder="sk-ant-…"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                disabled={loading}
+                autoComplete="off"
+              />
+            </label>
+          </div>
+        )}
+
         <div className="examples">
           Try:
           {["stripe.com", "news.ycombinator.com", "example.com"].map((x) => (
@@ -89,27 +129,23 @@ export default function Home() {
         </div>
       )}
 
-      {result && <Results r={result} shot={shot} setShot={setShot} />}
+      {result && <Results r={result} />}
 
       <footer className="foot">
         Reface · captures with Chromium · heuristic + AI audit ·{" "}
         {result?.redesignSource === "ai"
           ? "AI redesign active"
-          : "set ANTHROPIC_API_KEY for AI redesigns"}
+          : "add an API key for AI redesigns"}
       </footer>
     </main>
   );
 }
 
-function Results({
-  r,
-  shot,
-  setShot,
-}: {
-  r: AnalyzeResult;
-  shot: "desktop" | "mobile";
-  setShot: (s: "desktop" | "mobile") => void;
-}) {
+function Results({ r }: { r: AnalyzeResult }) {
+  const [sel, setSel] = useState(0);
+  const [shot, setShot] = useState<"desktop" | "mobile">("desktop");
+  const [view, setView] = useState<"before" | "after" | "split">("after");
+
   const color =
     r.score >= 80 ? "var(--green)" : r.score >= 55 ? "var(--amber)" : "var(--red)";
   const circ = 2 * Math.PI * 42;
@@ -121,7 +157,10 @@ function Results({
     return URL.createObjectURL(blob);
   }, [r.redesignHtml]);
 
-  const current = shot === "desktop" ? r.capture.desktopShot : r.capture.mobileShot;
+  const page = r.pages[sel];
+  const current = shot === "desktop" ? page.capture.desktopShot : page.capture.mobileShot;
+  const counts = (sev: Finding["severity"]) =>
+    r.pages.reduce((n, p) => n + p.findings.filter((f) => f.severity === sev).length, 0);
 
   return (
     <section className="results">
@@ -129,20 +168,10 @@ function Results({
         <div className="gauge">
           <svg width="96" height="96">
             <circle cx="48" cy="48" r="42" stroke="var(--border)" strokeWidth="8" fill="none" />
-            <circle
-              cx="48"
-              cy="48"
-              r="42"
-              stroke={color}
-              strokeWidth="8"
-              fill="none"
-              strokeLinecap="round"
-              strokeDasharray={`${dash} ${circ}`}
-            />
+            <circle cx="48" cy="48" r="42" stroke={color} strokeWidth="8" fill="none"
+              strokeLinecap="round" strokeDasharray={`${dash} ${circ}`} />
           </svg>
-          <div className="num" style={{ color }}>
-            {r.score}
-          </div>
+          <div className="num" style={{ color }}>{r.score}</div>
         </div>
         <div className="scoremeta">
           <h2>
@@ -152,43 +181,39 @@ function Results({
             </span>
           </h2>
           <p>
-            {r.findings.filter((f) => f.severity === "critical").length} critical ·{" "}
-            {r.findings.filter((f) => f.severity === "warning").length} warnings ·{" "}
-            {r.findings.filter((f) => f.severity === "info").length} info · captured{" "}
-            {r.capture.finalUrl}
+            {r.pages.length} page(s) · {counts("critical")} critical · {counts("warning")} warnings · {counts("info")} info
           </p>
         </div>
       </div>
 
+      {r.pages.length > 1 && (
+        <div className="pagetabs">
+          {r.pages.map((p, i) => (
+            <button key={i} className={i === sel ? "active" : ""} onClick={() => setSel(i)}
+              title={p.capture.finalUrl}>
+              {i === 0 ? "🏠 Home" : pathLabel(p)} <em>{p.score}</em>
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="cols">
         <div className="panel">
-          <h3>Original site</h3>
+          <h3>Original page</h3>
           <div className="shot-tabs">
-            <button
-              className={shot === "desktop" ? "active" : ""}
-              onClick={() => setShot("desktop")}
-            >
-              🖥 Desktop
-            </button>
-            <button
-              className={shot === "mobile" ? "active" : ""}
-              onClick={() => setShot("mobile")}
-            >
-              📱 Mobile
-            </button>
+            <button className={shot === "desktop" ? "active" : ""} onClick={() => setShot("desktop")}>🖥 Desktop</button>
+            <button className={shot === "mobile" ? "active" : ""} onClick={() => setShot("mobile")}>📱 Mobile</button>
           </div>
           <div className="shotframe">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={current} alt={`${shot} screenshot of ${r.capture.finalUrl}`} />
+            <img src={current} alt={`${shot} screenshot of ${page.capture.finalUrl}`} />
           </div>
         </div>
 
         <div className="panel">
-          <h3>Audit findings</h3>
+          <h3>Audit findings <span className="muted">· {pathLabel(page) || "home"}</span></h3>
           <ul className="findings">
-            {r.findings.map((f) => (
-              <FindingRow key={f.id} f={f} />
-            ))}
+            {page.findings.map((f) => <FindingRow key={f.id} f={f} />)}
           </ul>
         </div>
       </div>
@@ -200,31 +225,52 @@ function Results({
 
       <div className="redesign-head">
         <h3>✨ Your redesign</h3>
+        <div className="viewtoggle" role="tablist" aria-label="Compare view">
+          {(["before", "after", "split"] as const).map((v) => (
+            <button key={v} className={view === v ? "active" : ""} onClick={() => setView(v)}>
+              {v === "before" ? "Before" : v === "after" ? "After" : "Split"}
+            </button>
+          ))}
+        </div>
         <div className="actions">
-          <a href={downloadUrl} download="reface-redesign.html">
-            ⬇ Download HTML
-          </a>
-          <button
-            onClick={() => {
-              const w = window.open();
-              if (w) {
-                w.document.write(r.redesignHtml);
-                w.document.close();
-              }
-            }}
-          >
-            ↗ Open full screen
-          </button>
+          <a href={downloadUrl} download="reface-redesign.html">⬇ Download</a>
+          <button onClick={() => {
+            const w = window.open();
+            if (w) { w.document.write(r.redesignHtml); w.document.close(); }
+          }}>↗ Full screen</button>
         </div>
       </div>
-      <iframe
-        className="preview"
-        title="Redesigned website preview"
-        srcDoc={r.redesignHtml}
-        sandbox="allow-same-origin"
-      />
+
+      <div className={`compare ${view}`}>
+        {(view === "before" || view === "split") && (
+          <div className="compare-pane">
+            <span className="tag">Before</span>
+            <div className="shotframe tall">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={page.capture.desktopShot} alt="Original site" />
+            </div>
+          </div>
+        )}
+        {(view === "after" || view === "split") && (
+          <div className="compare-pane">
+            <span className="tag after">After</span>
+            <iframe className="preview" title="Redesigned website preview"
+              srcDoc={r.redesignHtml} sandbox="allow-same-origin" />
+          </div>
+        )}
+      </div>
     </section>
   );
+}
+
+function pathLabel(p: PageAudit): string {
+  try {
+    const path = new URL(p.capture.finalUrl).pathname.replace(/\/$/, "");
+    const last = path.split("/").filter(Boolean).pop();
+    return last ? last.replace(/[-_]/g, " ").slice(0, 18) : "home";
+  } catch {
+    return "page";
+  }
 }
 
 function FindingRow({ f }: { f: Finding }) {

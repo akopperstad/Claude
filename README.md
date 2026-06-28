@@ -2,10 +2,15 @@
 
 **Paste a website link → get an instant UX/UI audit and a redesigned version.**
 
-Reface loads any public URL in a headless Chromium browser, screenshots it
-(desktop + mobile), runs a heuristic audit across **accessibility, responsive
-design, SEO, performance, structure, visual, and security**, scores it 0–100,
-and then **generates an improved redesign** you can preview and download.
+Reface loads any public URL in a headless Chromium browser, **crawls up to 6
+same-origin pages**, screenshots each (desktop + mobile), runs a heuristic audit
+across **accessibility, responsive design, SEO, performance, structure, visual,
+and security**, scores each page 0–100, and then **generates an improved,
+multi-section redesign** you can preview side-by-side and download.
+
+Results include per-page tabs, a **Before / After / Split** compare toggle, and
+an optional **Anthropic API key field** (used per-request, never stored) that
+switches the redesign from template to AI-authored.
 
 ## Two brains (hybrid)
 

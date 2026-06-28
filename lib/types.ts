@@ -33,6 +33,7 @@ export interface CaptureResult {
   favicon: boolean;
   fonts: string[];
   headings: HeadingNode[];
+  links: string[]; // same-origin internal links discovered on the page
   counts: {
     images: number;
     imagesNoAlt: number;
@@ -63,12 +64,18 @@ export interface CaptureResult {
   loadMs: number;
 }
 
-export interface AnalyzeResult {
+export interface PageAudit {
   capture: CaptureResult;
   findings: Finding[];
   score: number;
+}
+
+export interface AnalyzeResult {
+  pages: PageAudit[];
+  score: number; // overall (site-wide)
   scoreBreakdown: Record<string, number>;
   review: string;
   redesignHtml: string;
   redesignSource: "ai" | "template";
+  aiRequested: boolean;
 }

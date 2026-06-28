@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { captureSite } from "@/lib/capture";
+import { crawlSite } from "@/lib/capture";
 import { auditSite } from "@/lib/audit";
-import { aiReviewAndRedesign, aiAvailable } from "@/lib/ai";
+import { aiReviewAndRedesign, resolveApiKey } from "@/lib/ai";
 import { templateRedesign } from "@/lib/template";
-import type { AnalyzeResult, CaptureResult, Finding } from "@/lib/types";
+import type { AnalyzeResult, Finding, PageAudit } from "@/lib/types";
 
-// Playwright + the Anthropic SDK need the Node runtime, and capture can be slow.
 export const runtime = "nodejs";
-export const maxDuration = 120;
+export const maxDuration = 300;
 
 export async function POST(req: NextRequest) {
-  let url: string;
+  let url: string, maxPages: number, apiKey: string | undefined;
   try {
-    ({ url } = await req.json());
+    const body = await req.json();
+    url = body.url;
+    maxPages = Math.min(Math.max(parseInt(body.maxPages, 10) || 1, 1), 6);
+    apiKey = body.apiKey;
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
@@ -21,32 +23,52 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const capture = await captureSite(url);
-    const { findings, score, breakdown } = auditSite(capture);
+    const captures = await crawlSite(url, maxPages);
+    const pages: PageAudit[] = captures.map((capture) => {
+      const { findings, score } = auditSite(capture);
+      return { capture, findings, score };
+    });
 
+    // Aggregate: site score = average of page scores; dedup findings by title.
+    const score = Math.round(pages.reduce((s, p) => s + p.score, 0) / pages.length);
+    const seen = new Set<string>();
+    const allFindings: Finding[] = [];
+    const breakdown: Record<string, number> = {};
+    for (const p of pages) {
+      for (const f of p.findings) {
+        breakdown[f.category] = (breakdown[f.category] || 0) + 1;
+        if (seen.has(f.title)) continue;
+        seen.add(f.title);
+        allFindings.push(f);
+      }
+    }
+
+    const aiRequested = !!resolveApiKey(apiKey);
     let review: string;
     let redesignHtml: string;
     let redesignSource: "ai" | "template";
 
-    const ai = await aiReviewAndRedesign(capture, findings);
+    const ai = aiRequested
+      ? await aiReviewAndRedesign(pages, allFindings, apiKey)
+      : null;
     if (ai) {
       review = ai.review;
       redesignHtml = ai.redesignHtml;
       redesignSource = "ai";
     } else {
-      redesignHtml = templateRedesign(capture, findings);
+      redesignHtml = templateRedesign(pages, allFindings);
       redesignSource = "template";
-      review = buildHeuristicReview(capture, findings, score);
+      review = buildHeuristicReview(pages, allFindings, score, aiRequested);
     }
 
     const result: AnalyzeResult = {
-      capture,
-      findings,
+      pages,
       score,
       scoreBreakdown: breakdown,
       review,
       redesignHtml,
       redesignSource,
+      aiRequested,
     };
     return NextResponse.json(result);
   } catch (e: any) {
@@ -63,26 +85,29 @@ export async function POST(req: NextRequest) {
 }
 
 function buildHeuristicReview(
-  c: CaptureResult,
+  pages: PageAudit[],
   findings: Finding[],
-  score: number
+  score: number,
+  aiRequested: boolean
 ): string {
   const crit = findings.filter((f) => f.severity === "critical").length;
   const warn = findings.filter((f) => f.severity === "warning").length;
   const lines: string[] = [];
   lines.push(
-    `Heuristic review of ${c.finalUrl} — overall score ${score}/100.`,
+    `Heuristic review of ${pages[0].capture.finalUrl} — ${pages.length} page(s), overall score ${score}/100.`,
     "",
-    `Found ${crit} critical and ${warn} warning issue(s). Top priorities:`
+    `Pages audited: ${pages.map((p) => p.capture.finalUrl).join(", ")}`,
+    "",
+    `Found ${crit} critical and ${warn} warning issue type(s). Top priorities:`
   );
-  for (const f of findings.filter((x) => x.severity !== "good" && x.severity !== "info").slice(0, 6)) {
+  for (const f of findings.filter((x) => x.severity === "critical" || x.severity === "warning").slice(0, 7)) {
     lines.push(`• ${f.title} — ${f.recommendation}`);
   }
   lines.push(
     "",
-    aiAvailable()
-      ? "AI redesign was attempted but unavailable; showing a clean templated redesign instead."
-      : "No ANTHROPIC_API_KEY set, so this redesign is generated from a responsive, accessible template using your real content. Add a key to get an AI-authored, screenshot-aware redesign."
+    aiRequested
+      ? "AI redesign was attempted but unavailable (check the API key/model); showing a templated redesign instead."
+      : "No API key provided, so this redesign is a responsive, accessible template built from your real content. Add a key (UI field or ANTHROPIC_API_KEY) for an AI-authored, screenshot-aware redesign."
   );
   return lines.join("\n");
 }
