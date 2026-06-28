@@ -8,9 +8,14 @@ across **accessibility, responsive design, SEO, performance, structure, visual,
 and security**, scores each page 0–100, and then **generates an improved,
 multi-section redesign** you can preview side-by-side and download.
 
-Results include per-page tabs, a **Before / After / Split** compare toggle, and
-an optional **Anthropic API key field** (used per-request, never stored) that
-switches the redesign from template to AI-authored.
+Reface **detects the site's sector** (SaaS, restaurant, finance, agency, health,
+e-commerce, legal, real estate, fitness, nonprofit, …) and generates **3 redesign
+snapshots styled for that sector** (palette, type, layout vibe). You can override
+the sector from a dropdown to re-style the snapshots instantly (no re-crawl).
+
+Results include per-page tabs, a snapshot gallery, a **Before / After / Split**
+compare toggle, and an optional **Anthropic API key field** (used per-request,
+never stored) that switches snapshots from template to AI-authored.
 
 ## Two brains (hybrid)
 

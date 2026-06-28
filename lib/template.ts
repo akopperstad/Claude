@@ -1,4 +1,5 @@
 import type { Finding, PageAudit } from "./types";
+import type { StyleTokens } from "./styles";
 
 function esc(s: string): string {
   return s
@@ -18,15 +19,29 @@ function pageLabel(p: PageAudit, i: number): string {
   try {
     const path = new URL(p.capture.finalUrl).pathname.replace(/\/$/, "");
     const last = path.split("/").filter(Boolean).pop();
-    if (last) return last.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()).slice(0, 24);
+    if (last)
+      return last.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()).slice(0, 24);
   } catch {}
   return p.capture.title.split(/[|\-–—]/)[0].trim().slice(0, 24) || `Page ${i + 1}`;
 }
 
-// Build a clean, modern, responsive single-file redesign from the crawled pages
-// WITHOUT an LLM. One cohesive site: hero from the homepage, a nav + section per
-// crawled page, and an "issues addressed" panel from the aggregated audit.
-export function templateRedesign(pages: PageAudit[], allFindings: Finding[]): string {
+function hexToRgba(hex: string, a: number): string {
+  const m = hex.replace("#", "");
+  const n = m.length === 3 ? m.split("").map((c) => c + c).join("") : m;
+  const r = parseInt(n.slice(0, 2), 16);
+  const g = parseInt(n.slice(2, 4), 16);
+  const b = parseInt(n.slice(4, 6), 16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+// Theme-driven, single-file, responsive multi-section redesign built from the
+// crawled pages and styled by `s`. Same structure for every preset; only the
+// tokens change, which is what makes the snapshots feel like distinct designs.
+export function templateRedesign(
+  pages: PageAudit[],
+  allFindings: Finding[],
+  s: StyleTokens
+): string {
   const home = pages[0].capture;
   const siteName = (home.title || home.finalUrl).split(/[|\-–—]/)[0].trim();
   const h1 = home.headings.find((h) => h.level === 1)?.text || home.title || siteName;
@@ -35,8 +50,7 @@ export function templateRedesign(pages: PageAudit[], allFindings: Finding[]): st
     home.contentText.split("\n").find((l) => l.trim().length > 40)?.slice(0, 200) ||
     "A clearer, faster, more accessible take on your site.";
 
-  const nav = pages
-    .map((p, i) => ({ id: slug(pageLabel(p, i), i), label: pageLabel(p, i) }));
+  const nav = pages.map((p, i) => ({ id: slug(pageLabel(p, i), i), label: pageLabel(p, i) }));
 
   const sections = pages
     .map((p, i) => {
@@ -48,8 +62,7 @@ export function templateRedesign(pages: PageAudit[], allFindings: Finding[]): st
         .map((l) => l.trim())
         .filter((l) => l.length > 50)
         .slice(0, 3);
-      const cards = (subs.length ? subs.map((s) => s.text) : paras.map((_, k) => `Highlight ${k + 1}`))
-        .slice(0, 3);
+      const cards = (subs.length ? subs.map((x) => x.text) : paras.map((_, k) => `Highlight ${k + 1}`)).slice(0, 3);
       return `<section class="section" id="${nav[i].id}"><div class="wrap">
     <span class="eyebrow">${esc(nav[i].label)}</span>
     <h2>${esc(heading)}</h2>
@@ -58,9 +71,10 @@ export function templateRedesign(pages: PageAudit[], allFindings: Finding[]): st
       cards.length
         ? `<div class="grid">${cards
             .map(
-              (t, k) => `<div class="card"><h3>${esc(t.slice(0, 60))}</h3><p>${esc(
-                paras[k + 1] || paras[0] || "Rebuilt with clear hierarchy, accessible contrast, and a mobile-first layout."
-              )}</p></div>`
+              (t, k) =>
+                `<div class="card"><h3>${esc(t.slice(0, 60))}</h3><p>${esc(
+                  paras[k + 1] || paras[0] || "Rebuilt with clear hierarchy, accessible contrast, and a mobile-first layout."
+                )}</p></div>`
             )
             .join("")}</div>`
         : ""
@@ -76,6 +90,15 @@ export function templateRedesign(pages: PageAudit[], allFindings: Finding[]): st
     .filter((v, i, a) => a.indexOf(v) === i)
     .slice(0, 8);
 
+  const ring = hexToRgba(s.brand, 0.32);
+  const heroGrad =
+    s.mode === "dark"
+      ? `radial-gradient(1200px 600px at 70% -10%, ${s.bgAccent} 0, ${s.bg} 60%)`
+      : `linear-gradient(180deg, ${s.bgAccent} 0, ${s.bg} 320px)`;
+  const tu = s.uppercaseHeads ? "text-transform:uppercase;letter-spacing:-.01em;" : "";
+  const heroTextAlign = s.heroAlign === "left" ? "left" : "center";
+  const heroCtaJustify = s.heroAlign === "left" ? "flex-start" : "center";
+
   return `<!doctype html>
 <html lang="${esc(home.lang || "en")}">
 <head>
@@ -84,42 +107,43 @@ export function templateRedesign(pages: PageAudit[], allFindings: Finding[]): st
 <title>${esc(home.title || siteName)}</title>
 <meta name="description" content="${esc(desc.slice(0, 160))}">
 <style>
-  :root{--bg:#0b1020;--surface:#121a33;--text:#e8ecf6;--muted:#9aa6c4;
-    --brand:#6c8cff;--brand-2:#9b6cff;--ring:rgba(108,140,255,.35);--radius:16px;--maxw:1080px}
+  :root{--bg:${s.bg};--surface:${s.surface};--text:${s.text};--muted:${s.muted};
+    --brand:${s.brand};--brand2:${s.brand2};--border:${s.border};--ring:${ring};
+    --radius:${s.radius};--maxw:1080px;--body:${s.bodyFont};--head:${s.headingFont}}
   *{box-sizing:border-box}html{scroll-behavior:smooth}
-  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-    background:radial-gradient(1200px 600px at 70% -10%,#1b2750 0,var(--bg) 60%);
+  body{margin:0;font-family:var(--body);background:${heroGrad};background-attachment:fixed;
     color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:var(--head)}
   a{color:var(--brand);text-decoration:none}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
-  header{position:sticky;top:0;backdrop-filter:blur(10px);background:rgba(11,16,32,.75);
-    border-bottom:1px solid #1e2a4d;z-index:10}
+  header{position:sticky;top:0;backdrop-filter:blur(10px);background:${hexToRgba(s.bg, 0.8)};
+    border-bottom:1px solid var(--border);z-index:10}
   nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
-  .brand{font-weight:800;letter-spacing:-.02em;font-size:1.15rem}
-  .brand span{background:linear-gradient(90deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .brand{font-weight:800;letter-spacing:-.02em;font-size:1.15rem;font-family:var(--head);${tu}}
+  .brand span{color:var(--brand)}
   .nav-links{display:flex;gap:22px;flex-wrap:wrap}
   .nav-links a{color:var(--muted);font-weight:500;min-height:44px;display:flex;align-items:center}
   .nav-links a:hover{color:var(--text)}
   .btn{display:inline-flex;align-items:center;padding:12px 22px;border-radius:999px;font-weight:600;min-height:44px;
-    background:linear-gradient(90deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 8px 30px var(--ring);transition:transform .15s}
+    background:linear-gradient(90deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 8px 30px var(--ring);transition:transform .15s}
   .btn:hover{transform:translateY(-2px)}
-  .btn.ghost{background:transparent;border:1px solid #2a3a66;color:var(--text);box-shadow:none}
-  .hero{padding:96px 0 64px;text-align:center}
-  .hero h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.05;letter-spacing:-.03em;margin:0 0 20px}
-  .hero p{font-size:clamp(1.05rem,2.5vw,1.3rem);color:var(--muted);max-width:680px;margin:0 auto 32px}
-  .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-  .section{padding:64px 0;border-top:1px solid #16213f}
+  .btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text);box-shadow:none}
+  .hero{padding:96px 0 64px;text-align:${heroTextAlign}}
+  .hero h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.05;letter-spacing:-.03em;margin:0 0 20px;${tu}}
+  .hero p{font-size:clamp(1.05rem,2.5vw,1.3rem);color:var(--muted);max-width:680px;margin:${s.heroAlign === "left" ? "0 0 32px" : "0 auto 32px"}}
+  .cta{display:flex;gap:14px;justify-content:${heroCtaJustify};flex-wrap:wrap}
+  .section{padding:64px 0;border-top:1px solid var(--border)}
   .eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--brand);font-weight:700}
-  .section h2{font-size:clamp(1.6rem,4vw,2.4rem);letter-spacing:-.02em;margin:8px 0 16px}
+  .section h2{font-size:clamp(1.6rem,4vw,2.4rem);letter-spacing:-.02em;margin:8px 0 16px;${tu}}
   .lead{color:var(--muted);max-width:720px}
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin:28px 0}
-  .card{background:var(--surface);border:1px solid #1e2a4d;border-radius:var(--radius);padding:24px;transition:transform .2s,border-color .2s}
-  .card:hover{transform:translateY(-4px);border-color:#2f4a82}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:transform .2s,box-shadow .2s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 12px 40px ${hexToRgba(s.brand, 0.15)}}
   .card h3{margin:0 0 8px;font-size:1.1rem}.card p{margin:0;color:var(--muted)}
   .link{display:inline-block;margin-top:8px;font-weight:600}
   .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
-  .chip{font-size:.85rem;padding:8px 14px;border-radius:999px;background:#16213f;color:#bcd;border:1px solid #243a66}
-  footer{padding:48px 0;color:var(--muted);border-top:1px solid #16213f;margin-top:24px}
+  .chip{font-size:.85rem;padding:8px 14px;border-radius:999px;background:var(--surface);color:var(--muted);border:1px solid var(--border)}
+  footer{padding:48px 0;color:var(--muted);border-top:1px solid var(--border);margin-top:24px}
   .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
   :focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:8px}
   @media(max-width:640px){.nav-links{display:none}}
@@ -158,7 +182,7 @@ export function templateRedesign(pages: PageAudit[], allFindings: Finding[]): st
 
 <footer><div class="wrap foot">
   <div>© ${new Date().getFullYear()} ${esc(siteName)}</div>
-  <div>Redesigned by Reface · ${pages.length} page(s) · mobile-first · WCAG-aware</div>
+  <div>${esc(s.name)} · Reface · ${pages.length} page(s) · mobile-first</div>
 </div></footer>
 </body>
 </html>`;

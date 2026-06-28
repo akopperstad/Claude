@@ -70,12 +70,23 @@ export interface PageAudit {
   score: number;
 }
 
+export interface Snapshot {
+  id: string;
+  styleName: string;
+  vibe: string;
+  source: "ai" | "template";
+  html: string;
+}
+
 export interface AnalyzeResult {
   pages: PageAudit[];
   score: number; // overall (site-wide)
   scoreBreakdown: Record<string, number>;
   review: string;
-  redesignHtml: string;
-  redesignSource: "ai" | "template";
+  snapshots: Snapshot[];
+  sector: string; // detected or chosen sector id
+  sectorLabel: string;
+  sectorConfidence: number; // 0-1
+  sectors: { id: string; label: string }[]; // all selectable sectors
   aiRequested: boolean;
 }

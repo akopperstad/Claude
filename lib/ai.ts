@@ -1,33 +1,40 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { Finding, PageAudit } from "./types";
+import type { StyleTokens } from "./styles";
 
 const MODEL = process.env.REFACE_MODEL || "claude-sonnet-4-6";
 
-// A key can come from the request (UI field) or the environment.
 export function resolveApiKey(reqKey?: string): string | undefined {
   const k = (reqKey || "").trim();
   if (k) return k;
   return process.env.ANTHROPIC_API_KEY || undefined;
 }
 
-interface AiOutput {
-  review: string;
-  redesignHtml: string;
+function pagesContext(pages: PageAudit[]): string {
+  return pages
+    .map((p, i) => {
+      const c = p.capture;
+      return `### Page ${i + 1}${i === 0 ? " (HOME)" : ""}: ${c.finalUrl}
+Title: ${c.title}
+Headings: ${c.headings.slice(0, 8).map((h) => `h${h.level}:${h.text}`).join(" | ")}
+Content:
+${c.contentText.slice(0, i === 0 ? 2600 : 1200)}`;
+    })
+    .join("\n\n")
+    .slice(0, 9000);
 }
 
-// Send the homepage screenshot + every crawled page's content + the aggregated
-// heuristic findings to Claude (vision) and ask for (1) a prose UX/UI review and
-// (2) a complete, self-contained multi-section redesigned site. Returns null on
-// any failure so the caller can fall back to the template redesign.
-export async function aiReviewAndRedesign(
+// Generate ONE style-directed redesign snapshot with Claude (vision). Optionally
+// also returns a prose review (only request it once per run to save tokens).
+export async function aiSnapshot(
   pages: PageAudit[],
   findings: Finding[],
-  apiKey?: string
-): Promise<AiOutput | null> {
-  const key = resolveApiKey(apiKey);
-  if (!key) return null;
-  const client = new Anthropic({ apiKey: key });
-
+  style: StyleTokens,
+  sectorLabel: string,
+  apiKey: string,
+  wantReview: boolean
+): Promise<{ html: string; review?: string } | null> {
+  const client = new Anthropic({ apiKey });
   const home = pages[0].capture;
   const base64 = home.desktopShot.replace(/^data:image\/png;base64,/, "");
   const findingsText = findings
@@ -35,49 +42,36 @@ export async function aiReviewAndRedesign(
     .map((f) => `- [${f.severity}] ${f.title}: ${f.recommendation}`)
     .join("\n");
 
-  const pagesText = pages
-    .map((p, i) => {
-      const c = p.capture;
-      return `### Page ${i + 1}${i === 0 ? " (HOME)" : ""}: ${c.finalUrl}
-Title: ${c.title}
-Headings: ${c.headings.slice(0, 8).map((h) => `h${h.level}:${h.text}`).join(" | ")}
-Content:
-${c.contentText.slice(0, i === 0 ? 3000 : 1500)}`;
-    })
-    .join("\n\n");
-
-  const prompt = `You are a senior product designer and front-end engineer reviewing a website (${pages.length} page(s) crawled).
-
-The HOMEPAGE screenshot is attached. Site URL: ${home.finalUrl}
-Detected fonts: ${home.fonts.join(", ") || "n/a"}
-
-Aggregated heuristic audit findings (across all pages):
-${findingsText || "(none)"}
-
-Crawled pages and their real content (reuse this copy so the redesign stays recognizable):
-"""
-${pagesText.slice(0, 9000)}
-"""
-
-Do TWO things, in this exact output format:
-
-<review>
-A concise, specific UX/UI critique (250-450 words) of the site as a whole.
-Cover visual hierarchy, layout, typography, color/contrast, accessibility,
-navigation/IA across the pages, and conversion. Reference what you actually see
-in the homepage screenshot. Short paragraphs and bullets.
+  const reviewBlock = wantReview
+    ? `<review>
+A concise, specific UX/UI critique (220-380 words) of the site as a whole — visual
+hierarchy, layout, typography, color/contrast, accessibility, navigation across the
+pages, and conversion. Reference what you see in the homepage screenshot. Bullets ok.
 </review>
 
-<redesign>
+`
+    : "";
+
+  const prompt = `You are a senior product designer redesigning a ${sectorLabel} website (${pages.length} page(s) crawled). The homepage screenshot is attached.
+
+Design direction for THIS snapshot — "${style.name}": ${style.vibe}.
+Palette: background ${style.bg}, text ${style.text}, primary ${style.brand}, secondary ${style.brand2} (${style.mode} mode). Headings font family like ${style.headingFont}. Corner radius ~${style.radius}. Make the design clearly match this direction and feel appropriate for a ${sectorLabel} brand.
+
+Aggregated heuristic findings to fix:
+${findingsText || "(none)"}
+
+Crawled pages and real content (reuse this copy so it stays recognizable):
+"""
+${pagesContext(pages)}
+"""
+
+Output EXACTLY in this format:
+${reviewBlock}<redesign>
 A COMPLETE, self-contained HTML document (one file, inline <style>, no build step,
-no external JS frameworks) that redesigns the WHOLE site as a single cohesive page:
-- a sticky top nav linking to one in-page section per crawled page
-- a strong hero from the homepage
-- one <section> per crawled page, reusing that page's real headline/content
-- mobile-first, fully responsive, modern cohesive visual design
-- fixes the audit findings (responsive viewport, contrast >= 4.5:1, alt text, labels, semantic landmarks <header><nav><main><footer>)
-- production-quality, renders correctly on its own
-Output ONLY the HTML inside this tag, starting with <!doctype html>.
+no external JS) redesigning the WHOLE site as one cohesive page in the "${style.name}"
+direction: sticky nav linking to one in-page section per crawled page, a strong hero,
+one <section> per page reusing real content, mobile-first + responsive, semantic
+landmarks, contrast >= 4.5:1, alt text. Output ONLY the HTML, starting with <!doctype html>.
 </redesign>`;
 
   try {
@@ -94,21 +88,21 @@ Output ONLY the HTML inside this tag, starting with <!doctype html>.
         },
       ],
     });
-
     const text = msg.content
       .filter((b): b is Anthropic.TextBlock => b.type === "text")
       .map((b) => b.text)
       .join("\n");
 
-    const review =
-      text.match(/<review>([\s\S]*?)<\/review>/i)?.[1]?.trim() || text.slice(0, 1400);
-    let redesignHtml = text.match(/<redesign>([\s\S]*?)<\/redesign>/i)?.[1]?.trim() || "";
-    redesignHtml = redesignHtml.replace(/^```html?\s*/i, "").replace(/```$/i, "").trim();
+    let html = text.match(/<redesign>([\s\S]*?)<\/redesign>/i)?.[1]?.trim() || "";
+    html = html.replace(/^```html?\s*/i, "").replace(/```$/i, "").trim();
+    if (!/<!doctype html|<html/i.test(html)) return null;
 
-    if (!/<!doctype html|<html/i.test(redesignHtml)) return null;
-    return { review, redesignHtml };
+    const review = wantReview
+      ? text.match(/<review>([\s\S]*?)<\/review>/i)?.[1]?.trim()
+      : undefined;
+    return { html, review };
   } catch (e) {
-    console.error("AI redesign failed:", e);
+    console.error("AI snapshot failed:", e);
     return null;
   }
 }
