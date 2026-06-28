@@ -39,8 +39,24 @@ by Julius Brussee, MIT-licensed (see `CAVEMAN-LICENSE`). Companion agents live i
 | `caveman-help` | Quick reference for all caveman modes/commands. |
 | `cavecrew` | Decision guide for when to delegate to the `cavecrew-*` agents. |
 
-**Only the skills + agents are installed** — these activate on demand (e.g.
-typing `/caveman`). The plugin's *always-on* behavior (SessionStart hook,
-statusline badge, `caveman-shrink` MCP server) is **not** wired up; that requires
-`.claude/settings.json` hook/statusline/MCP configuration. The original plugin's
-hook scripts are not included here.
+### Always-on caveman (wired up)
+
+Caveman is configured to be **active by default every session** (opt-out, not
+opt-in). The supporting hook scripts live in `../hooks/` and are wired through
+`../settings.json`:
+
+- **SessionStart** → `caveman-activate.js` writes the mode flag
+  (`$CLAUDE_CONFIG_DIR/.caveman-active`, default `full`) and injects the caveman
+  ruleset so replies are compressed from message one.
+- **UserPromptSubmit** → `caveman-mode-tracker.js` watches for `/caveman <level>`
+  and switches level (lite / full / ultra / wenyan…) mid-session.
+- **statusLine** → `caveman-statusline.sh` renders a `[CAVEMAN]` badge.
+
+**Turn it off:** say "normal mode" / "stop caveman" for the session, or set
+`CAVEMAN_DEFAULT_MODE=off` (or a `.caveman.json` with `{"defaultMode":"off"}`)
+to change the default. The `caveman-shrink` MCP server is **not** wired up
+(would require MCP config).
+
+> Note: the hook commands use `node` / `bash` with `${CLAUDE_PROJECT_DIR}` and
+> are written for a POSIX shell (the Linux web sandbox). On native Windows
+> without Git Bash they'd need PowerShell equivalents.
