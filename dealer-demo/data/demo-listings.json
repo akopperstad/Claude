@@ -1,0 +1,306 @@
+{
+ "468888593": {
+  "type": "motor",
+  "id": "468888593",
+  "main_search_key": "SEARCH_ID_CAR_USED",
+  "heading": "Subaru XV",
+  "location": "Oslo",
+  "image": {
+   "url": "https://images.finncdn.no/dynamic/default/item/468888593/cb1fd24d-b21c-4b01-881f-62430b554344",
+   "path": "item/468888593/cb1fd24d-b21c-4b01-881f-62430b554344",
+   "height": 1067,
+   "width": 1600,
+   "aspect_ratio": 1.499531396438613
+  },
+  "flags": [],
+  "timestamp": 1783167953000,
+  "coordinates": {
+   "lat": 59.94567,
+   "lon": 10.86864,
+   "accuracy": 8
+  },
+  "ad_type": 20,
+  "labels": [],
+  "canonical_url": "https://www.finn.no/mobility/item/468888593",
+  "extras": [],
+  "price": {
+   "amount": 139000,
+   "currency_code": "NOK",
+   "price_unit": "kr"
+  },
+  "org_id": "8637497",
+  "organisation_name": "Storm Auto AS",
+  "year": 2015,
+  "mileage": 119200,
+  "mileage_unit": "KILOMETER",
+  "dealer_segment": "Forhandler",
+  "warranty_duration": 3,
+  "service_documents": [],
+  "regno": "LJ58404",
+  "make": "Subaru",
+  "model": "XV",
+  "model_specification": "KAMERA, KROK, 4X4",
+  "transmission": "Automat",
+  "fuel": "Bensin",
+  "registration_class": {
+   "id": 1,
+   "value": "Personbil"
+  },
+  "facade_title": "Subaru XV",
+  "chassis_number": "JF1GP3LC5EG204754",
+  "sales_form": 1,
+  "used_car_of_the_year": [],
+  "image_urls": [
+   "https://images.finncdn.no/dynamic/default/item/468888593/cb1fd24d-b21c-4b01-881f-62430b554344",
+   "https://images.finncdn.no/dynamic/default/item/468888593/fa6eec48-4306-428d-abac-e8ff2c13376e",
+   "https://images.finncdn.no/dynamic/default/item/468888593/1844abe9-bd83-4416-995c-db45bdf8fcea",
+   "https://images.finncdn.no/dynamic/default/item/468888593/52f0e8c6-51b9-4446-8d68-ac4b453db106",
+   "https://images.finncdn.no/dynamic/default/item/468888593/42c3ad68-f072-412f-82d6-29a670797360"
+  ],
+  "ad_id": 468888593
+ },
+ "468887247": {
+  "type": "motor",
+  "id": "468887247",
+  "main_search_key": "SEARCH_ID_CAR_USED",
+  "heading": "BMW X1",
+  "location": "Oslo",
+  "image": {
+   "url": "https://images.finncdn.no/dynamic/default/item/468887247/9a2582e3-dd26-499b-b21f-d86a7fc23fd4",
+   "path": "item/468887247/9a2582e3-dd26-499b-b21f-d86a7fc23fd4",
+   "height": 1067,
+   "width": 1600,
+   "aspect_ratio": 1.499531396438613
+  },
+  "flags": [],
+  "timestamp": 1783167072000,
+  "coordinates": {
+   "lat": 59.94567,
+   "lon": 10.86864,
+   "accuracy": 8
+  },
+  "ad_type": 20,
+  "labels": [],
+  "canonical_url": "https://www.finn.no/mobility/item/468887247",
+  "extras": [],
+  "price": {
+   "amount": 229000,
+   "currency_code": "NOK",
+   "price_unit": "kr"
+  },
+  "org_id": "8637497",
+  "organisation_name": "Storm Auto AS",
+  "year": 2019,
+  "mileage": 225000,
+  "mileage_unit": "KILOMETER",
+  "dealer_segment": "Forhandler",
+  "service_documents": [],
+  "regno": "VJ18554",
+  "make": "BMW",
+  "series": "X-Serie",
+  "model": "X1",
+  "model_specification": "xDrive20d, H feste, M sport",
+  "transmission": "Automat",
+  "fuel": "Diesel",
+  "registration_class": {
+   "id": 1,
+   "value": "Personbil"
+  },
+  "facade_title": "BMW X1",
+  "chassis_number": "WBA31AE0XL5N90303",
+  "sales_form": 1,
+  "used_car_of_the_year": [],
+  "image_urls": [
+   "https://images.finncdn.no/dynamic/default/item/468887247/9a2582e3-dd26-499b-b21f-d86a7fc23fd4",
+   "https://images.finncdn.no/dynamic/default/item/468887247/ce4316f5-710c-4082-bd88-2dd328039fdb",
+   "https://images.finncdn.no/dynamic/default/item/468887247/0036db87-ab6c-448e-bab7-1dbb74b3b966",
+   "https://images.finncdn.no/dynamic/default/item/468887247/f3a30921-aafc-474c-b942-3dbf43ab79ca",
+   "https://images.finncdn.no/dynamic/default/item/468887247/b10932da-90ff-422b-9387-c48b562cc870"
+  ],
+  "ad_id": 468887247
+ },
+ "468885618": {
+  "type": "motor",
+  "id": "468885618",
+  "main_search_key": "SEARCH_ID_CAR_USED",
+  "heading": "Ford Mustang Mach-E",
+  "location": "Oslo",
+  "image": {
+   "url": "https://images.finncdn.no/dynamic/default/item/468885618/715b6b0f-135d-4be6-9876-ff933ac3b150",
+   "path": "item/468885618/715b6b0f-135d-4be6-9876-ff933ac3b150",
+   "height": 1067,
+   "width": 1600,
+   "aspect_ratio": 1.499531396438613
+  },
+  "flags": [],
+  "timestamp": 1783166192000,
+  "coordinates": {
+   "lat": 59.94567,
+   "lon": 10.86864,
+   "accuracy": 8
+  },
+  "ad_type": 20,
+  "labels": [],
+  "canonical_url": "https://www.finn.no/mobility/item/468885618",
+  "extras": [],
+  "price": {
+   "amount": 649000,
+   "currency_code": "NOK",
+   "price_unit": "kr"
+  },
+  "org_id": "8637497",
+  "organisation_name": "Storm Auto AS",
+  "year": 2025,
+  "mileage": 24600,
+  "mileage_unit": "KILOMETER",
+  "dealer_segment": "Forhandler",
+  "service_documents": [],
+  "regno": "EJ86413",
+  "make": "Ford",
+  "model": "Mustang Mach-E",
+  "model_specification": "MUSTANG MACH E RALLY, BREMBO,HFESTE",
+  "transmission": "Automat",
+  "fuel": "El",
+  "registration_class": {
+   "id": 1,
+   "value": "Personbil"
+  },
+  "driving_range": 510,
+  "facade_title": "Ford Mustang Mach-E",
+  "chassis_number": "WF0TK4SX3RMA12030",
+  "sales_form": 1,
+  "used_car_of_the_year": [],
+  "image_urls": [
+   "https://images.finncdn.no/dynamic/default/item/468885618/715b6b0f-135d-4be6-9876-ff933ac3b150",
+   "https://images.finncdn.no/dynamic/default/item/468885618/585d938c-3548-4de1-bc26-04be5673d306",
+   "https://images.finncdn.no/dynamic/default/item/468885618/bcba74a0-8ea4-437c-b727-2b2acf862348",
+   "https://images.finncdn.no/dynamic/default/item/468885618/86432713-5a3c-49d9-9063-f7f394aea9c2",
+   "https://images.finncdn.no/dynamic/default/item/468885618/b8aab88a-d26e-4f99-aede-b7f6d9e5ef2c"
+  ],
+  "ad_id": 468885618
+ },
+ "468883172": {
+  "type": "motor",
+  "id": "468883172",
+  "main_search_key": "SEARCH_ID_CAR_USED",
+  "heading": "Toyota Corolla",
+  "location": "Oslo",
+  "image": {
+   "url": "https://images.finncdn.no/dynamic/default/item/468883172/3f791c6f-88f2-4798-8788-85921aca65a5",
+   "path": "item/468883172/3f791c6f-88f2-4798-8788-85921aca65a5",
+   "height": -1,
+   "width": -1,
+   "aspect_ratio": 1
+  },
+  "flags": [],
+  "timestamp": 1783164885000,
+  "coordinates": {
+   "lat": 59.93255,
+   "lon": 10.80783,
+   "accuracy": 5
+  },
+  "ad_type": 20,
+  "labels": [],
+  "canonical_url": "https://www.finn.no/mobility/item/468883172",
+  "extras": [],
+  "price": {
+   "amount": 149000,
+   "currency_code": "NOK",
+   "price_unit": "kr"
+  },
+  "org_id": "907264444",
+  "organisation_name": "CARHOUSE AS",
+  "year": 2019,
+  "mileage": 166000,
+  "mileage_unit": "KILOMETER",
+  "dealer_segment": "Forhandler",
+  "service_documents": [],
+  "make": "Toyota",
+  "model": "Corolla",
+  "model_specification": "1.8HYBRID ACTIVE NAVI ACC R.KAMERA ACC 170HK",
+  "transmission": "Automat",
+  "fuel": "Hybrid bensin",
+  "registration_class": {
+   "id": 1,
+   "value": "Personbil"
+  },
+  "facade_title": "Toyota Corolla",
+  "chassis_number": "SB1Z93BE80E775415",
+  "sales_form": 1,
+  "used_car_of_the_year": [],
+  "association_memberships": [
+   "MOBILITY_POOL_CAR",
+   "BRUKTBILGRUPPEN_CAR"
+  ],
+  "image_urls": [
+   "https://images.finncdn.no/dynamic/default/item/468883172/3f791c6f-88f2-4798-8788-85921aca65a5",
+   "https://images.finncdn.no/dynamic/default/item/468883172/35f0fe2c-37ee-4672-9b2d-8be4b52bd93d",
+   "https://images.finncdn.no/dynamic/default/item/468883172/2cfe7ffa-c9ae-4bea-9d28-e20e37a0e34c",
+   "https://images.finncdn.no/dynamic/default/item/468883172/cdb0348c-c50a-410e-805e-8bb039e6a1d7",
+   "https://images.finncdn.no/dynamic/default/item/468883172/c01ce3eb-0384-4efb-8f4a-3ac81d89a49f"
+  ],
+  "ad_id": 468883172
+ },
+ "468886883": {
+  "type": "motor",
+  "id": "468886883",
+  "main_search_key": "SEARCH_ID_CAR_USED",
+  "heading": "Tesla Model S",
+  "location": "Oslo",
+  "image": {
+   "url": "https://images.finncdn.no/dynamic/default/item/468886883/24a6074b-aa88-4734-a61b-1fcbaab96816",
+   "path": "item/468886883/24a6074b-aa88-4734-a61b-1fcbaab96816",
+   "height": 1066,
+   "width": 1600,
+   "aspect_ratio": 1.5009380863039399
+  },
+  "flags": [],
+  "timestamp": 1783166890000,
+  "coordinates": {
+   "lat": 59.8779,
+   "lon": 10.81179,
+   "accuracy": 5
+  },
+  "ad_type": 20,
+  "labels": [],
+  "canonical_url": "https://www.finn.no/mobility/item/468886883",
+  "extras": [],
+  "price": {
+   "amount": 99900,
+   "currency_code": "NOK",
+   "price_unit": "kr"
+  },
+  "org_id": "6329208",
+  "organisation_name": "Car4Sale AS",
+  "year": 2014,
+  "mileage": 283000,
+  "mileage_unit": "KILOMETER",
+  "dealer_segment": "Forhandler",
+  "warranty_duration": 6,
+  "service_documents": [],
+  "make": "Tesla",
+  "model": "Model S",
+  "model_specification": "85 / Gratisk Lading / Ultra HiFi / 1 Eier / Skinn ++",
+  "transmission": "Automat",
+  "fuel": "El",
+  "registration_class": {
+   "id": 1,
+   "value": "Personbil"
+  },
+  "facade_title": "Tesla Model S",
+  "chassis_number": "5YJSA3H11EFP38127",
+  "sales_form": 1,
+  "used_car_of_the_year": [],
+  "association_memberships": [
+   "BRUKTBILGRUPPEN_CAR"
+  ],
+  "image_urls": [
+   "https://images.finncdn.no/dynamic/default/item/468886883/24a6074b-aa88-4734-a61b-1fcbaab96816",
+   "https://images.finncdn.no/dynamic/default/item/468886883/992b70f7-4b5f-47be-8bd5-eb75c755af33",
+   "https://images.finncdn.no/dynamic/default/item/468886883/7778cb39-1b51-4247-b538-3dbec42eebf7",
+   "https://images.finncdn.no/dynamic/default/item/468886883/925b725b-974c-4811-8624-484f84ea8ff2",
+   "https://images.finncdn.no/dynamic/default/item/468886883/9497ab8b-197f-4c09-84ab-7a615deb182e"
+  ],
+  "ad_id": 468886883
+ }
+}
