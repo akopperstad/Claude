@@ -64,7 +64,60 @@ kulisser. Optimaliser ekte bilder (lys, beskjæring, rekkefølge) og
 legg på forhandlerens egen logoramme. Det er dette som skiller
 proffene fra resten, og det er ærlig.
 
-## 4. FINNs egne tall (deres publiserte analyser)
+## 4. Beskrivelsen: hva topselgerne faktisk skriver
+
+Studie av fulle annonsetekster fra ti annonser hos storaktørene
+(Birger N. Haug, Bilia, Bertel O. Steen, Sulland). Snittlengde **3 099
+tegn**, altså vesentlig lengre og mer komplett enn hos de mindre
+forhandlerne. Andel som inneholder hvert element:
+
+| Element | Storaktører | Små forhandlere |
+|---|---|---|
+| Kontakt med navn + telefon | 100 % | 100 % |
+| Garantidetaljer (navn, varighet) | 100 % | 80 % |
+| Velkommen / oppfordring | 100 % | 100 % |
+| Innbytte | 90 % | 100 % |
+| Full utstyrsliste (alt navngitt) | 90 % | 40 % |
+| Finansiering med vilkår | 80 % | 100 % |
+| «Hvorfor kjøpe hos oss» | 80 % | 0 % |
+| Rekkevidde (km) | 70 % | 40 % |
+| Ladetider | 70 % | 60 % |
+| Frakt / levering | 60 % | 40 % |
+
+Fellesnevneren, i rekkefølge, er en fast mal:
+
+```
+1. KJEKT Å VITE (punktliste: rekkevidde, tilhengervekt, lading, garanti)
+2. Fortellende innledning (hva bilen er, tilstand, hvorfor attraktiv)
+3. FULL UTSTYRSLISTE (alt navngitt, ikke oppsummert)
+4. TILSTAND OG HISTORIKK (service, EU, eiere, hjulsett, ærlig om slitasje)
+5. GARANTI (navn på program, varighet)
+6. FINANSIERING (konkrete vilkår: 0 egenkapital, X år, bankpartner)
+7. INNBYTTE
+8. FRAKT OG LEVERING
+9. KONTAKT (navngitt selger + telefon)
+10. Sted og org.nr, velkommen
+```
+
+Viktigste forskjell fra de små: storaktørene **navngir alt utstyr** og
+**dokumenterer tilstand og historikk**. De små komprimerer, og taper
+poeng på nettopp det kjøperne rangerer høyest (se punkt 6).
+
+## 5. Internasjonalt (Blocket.se, proof of concept)
+
+Blocket er Sveriges FINN. Deres og bransjens funn:
+
+- **65 % oppgir at «transparent informasjon om bilens tilstand og
+  historikk» er den viktigste faktoren for å gjennomføre kjøpet.**
+  Dette er det enkeltfunnet som betyr mest for produktet vårt.
+- 9 bilder er optimalt (mot FINNs 10-29), godt kamera slår mobil.
+- Beskriv bilens egenskaper, ikke alle kjøpere kjenner modellforskjeller.
+- Rask respons på telefon, e-post og SMS. Treghet flytter interessen til
+  neste bil.
+- Bilene som selger raskest: høyere bakkeklaring og firehjulsdrift, ofte
+  200 000-300 000 kr. VW T-Cross topper (44 % solgt innen en uke).
+
+## 6. FINNs egne tall (deres publiserte analyser)
 
 - 93 % av bilkjøpere ser på bildene først.
 - 10-29 bilder gir raskest salg. Færre enn 5 skader salget.
@@ -89,5 +142,6 @@ proffene fra resten, og det er ærlig.
 6. Republiser ved synkende plassering.
 
 Kilder: FINN bedriftskunde («Bildebruk som selger», analyse av 155 000
-bilannonser; «Ekspertens beste tips til bilannonser på FINN») og egne
-uttrekk av aktive annonser per juli 2026.
+bilannonser; «Ekspertens beste tips til bilannonser på FINN»); FINN
+bilguiden og hjelpesenter; Blocket / mestmotor.se / carup.se; og egne
+uttrekk av 394 + 15 aktive annonser per juli 2026.

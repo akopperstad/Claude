@@ -17,8 +17,8 @@
    "Førstebilde uten logoramme eller ensartet stil"
   ],
   "score": {
-   "before": 40,
-   "after": 85,
+   "before": 38,
+   "after": 94,
    "breakdown": [
     {
      "label": "Spec-linje (55 tegn)",
@@ -28,22 +28,22 @@
     {
      "label": "Førstebilde",
      "b": 8,
-     "a": 16
+     "a": 17
     },
     {
      "label": "Beskrivelse",
-     "b": 12,
-     "a": 18
+     "b": 9,
+     "a": 19
     },
     {
      "label": "Tillitselementer",
      "b": 8,
-     "a": 16
+     "a": 20
     },
     {
      "label": "Komplett info",
-     "b": 8,
-     "a": 17
+     "b": 9,
+     "a": 20
     }
    ]
   }
@@ -66,8 +66,8 @@
    "Bilder i motlys uten justering, ingen logoramme"
   ],
   "score": {
-   "before": 47,
-   "after": 86,
+   "before": 45,
+   "after": 95,
    "breakdown": [
     {
      "label": "Spec-linje (55 tegn)",
@@ -77,22 +77,22 @@
     {
      "label": "Førstebilde",
      "b": 7,
-     "a": 16
+     "a": 17
     },
     {
      "label": "Beskrivelse",
-     "b": 13,
-     "a": 18
+     "b": 10,
+     "a": 20
     },
     {
      "label": "Tillitselementer",
-     "b": 8,
-     "a": 16
+     "b": 9,
+     "a": 20
     },
     {
      "label": "Komplett info",
      "b": 12,
-     "a": 18
+     "a": 20
     }
    ]
   }
@@ -115,8 +115,8 @@
    "Ingen rekkevidde- eller ladeinfo, det første elbilkjøpere ser etter"
   ],
   "score": {
-   "before": 50,
-   "after": 88,
+   "before": 49,
+   "after": 96,
    "breakdown": [
     {
      "label": "Spec-linje (55 tegn)",
@@ -126,22 +126,22 @@
     {
      "label": "Førstebilde",
      "b": 9,
-     "a": 16
+     "a": 18
     },
     {
      "label": "Beskrivelse",
      "b": 14,
-     "a": 18
+     "a": 20
     },
     {
      "label": "Tillitselementer",
      "b": 10,
-     "a": 18
+     "a": 20
     },
     {
      "label": "Komplett info",
-     "b": 12,
-     "a": 18
+     "b": 11,
+     "a": 20
     }
    ]
   }
@@ -164,8 +164,8 @@
    "Bildene spriker i stil og lys"
   ],
   "score": {
-   "before": 46,
-   "after": 87,
+   "before": 44,
+   "after": 95,
    "breakdown": [
     {
      "label": "Spec-linje (55 tegn)",
@@ -175,22 +175,22 @@
     {
      "label": "Førstebilde",
      "b": 8,
-     "a": 16
+     "a": 17
     },
     {
      "label": "Beskrivelse",
      "b": 10,
-     "a": 18
+     "a": 20
     },
     {
      "label": "Tillitselementer",
      "b": 12,
-     "a": 17
+     "a": 20
     },
     {
      "label": "Komplett info",
-     "b": 11,
-     "a": 18
+     "b": 9,
+     "a": 20
     }
    ]
   }
@@ -213,8 +213,8 @@
    "Ingen rekkeviddeinfo"
   ],
   "score": {
-   "before": 53,
-   "after": 89,
+   "before": 52,
+   "after": 93,
    "breakdown": [
     {
      "label": "Spec-linje (55 tegn)",
@@ -229,17 +229,17 @@
     {
      "label": "Beskrivelse",
      "b": 8,
-     "a": 18
+     "a": 19
     },
     {
      "label": "Tillitselementer",
      "b": 13,
-     "a": 18
+     "a": 20
     },
     {
      "label": "Komplett info",
-     "b": 12,
-     "a": 18
+     "b": 11,
+     "a": 19
     }
    ]
   }

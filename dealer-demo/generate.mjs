@@ -6,6 +6,44 @@ import { readFileSync, writeFileSync, readdirSync } from "fs";
 const listings = JSON.parse(readFileSync("data/demo-listings.json", "utf8"));
 const copy = JSON.parse(readFileSync("data/copy.json", "utf8"));
 const realDesc = JSON.parse(readFileSync("data/real-descriptions.json", "utf8"));
+const fullDesc = JSON.parse(readFileSync("data/full-descriptions.json", "utf8"));
+const equipment = JSON.parse(readFileSync("data/equipment.json", "utf8"));
+
+// Render our optimized description: SECTION HEADINGS in caps become labels,
+// bullet lines become a list, everything else is a paragraph.
+function renderDesc(text) {
+  const lines = text.split("\n");
+  let html = "";
+  let inList = false;
+  const close = () => {
+    if (inList) {
+      html += "</ul>";
+      inList = false;
+    }
+  };
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) {
+      close();
+      continue;
+    }
+    if (line.startsWith("•")) {
+      if (!inList) {
+        html += '<ul class="eqlist">';
+        inList = true;
+      }
+      html += `<li>${line.replace(/^•\s*/, "").replace(/\s*•\s*/g, " · ")}</li>`;
+    } else if (/^[A-ZÆØÅ0-9 ()åÅ]+$/.test(line) && line === line.toUpperCase() && line.length < 40) {
+      close();
+      html += `<div class="deschead">${line}</div>`;
+    } else {
+      close();
+      html += `<p class="descp">${line}</p>`;
+    }
+  }
+  close();
+  return html;
+}
 
 const img64 = (path) =>
   `data:image/jpeg;base64,${readFileSync(path).toString("base64")}`;
@@ -95,7 +133,8 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
             <p class="price">${nok(car.price.amount)} <span class="verdict">✓ ${c.priceVerdict}</span></p>
             <div class="chips">${specs.map((s) => `<span>${s}</span>`).join("")}</div>
             ${c.trust ? `<div class="trust">${c.trust.map((t) => `<span>✓ ${t}</span>`).join("")}</div>` : ""}
-            <div class="desc">${c.newDescription.replace(/\n/g, "<br>")}</div>
+            <div class="fieldlabel" style="margin-top:10px">Optimalisert beskrivelse (${(fullDesc[car.id] || "").length} tegn, ${(equipment[car.id] || []).length} utstyrspunkter)</div>
+            <div class="desc desc-after">${renderDesc(fullDesc[car.id] || "")}</div>
             <div class="thumbs">
               <img src="${img64(`images/enhanced/${car.id}-1.jpg`)}" alt="">
               <img src="${img64(`images/enhanced/${car.id}-2.jpg`)}" alt="">
@@ -151,6 +190,13 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
   .stats-src { text-align:center; font-size:11px; color:#84848f; margin-top:8px; }
   .desc { font-size:14px; line-height:1.55; color:#26262d; background:#fafafa; border:1px solid #eee; padding:14px; border-radius:8px; }
   .desc-before { max-height:220px; overflow-y:auto; color:#47474f; font-size:12.5px; }
+  .desc-after { max-height:440px; overflow-y:auto; }
+  .deschead { font-size:12px; font-weight:800; letter-spacing:.4px; color:#0063fb; margin:12px 0 4px; }
+  .deschead:first-child { margin-top:0; }
+  .descp { font-size:13px; line-height:1.5; color:#26262d; margin-bottom:6px; }
+  .eqlist { list-style:none; margin:2px 0 6px; columns:1; }
+  .eqlist li { font-size:12.5px; color:#26262d; padding:1px 0 1px 14px; position:relative; }
+  .eqlist li:before { content:"✓"; position:absolute; left:0; color:#059e6f; font-weight:700; }
   .scorebox { border:1px solid #dedee3; border-radius:10px; padding:16px 18px; margin-bottom:18px; background:#fafafa; }
   .scoreheads { display:flex; align-items:baseline; gap:14px; margin-bottom:12px; }
   .scorenum { font-size:34px; font-weight:800; }
