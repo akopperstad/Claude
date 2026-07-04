@@ -12,6 +12,7 @@ Automated AI video-ad agency. Every bucket is checked against these anchors befo
 | D4 | Offer: intro test pack → monthly retainer ladder | ✅ Confirmed | See OFFER.md |
 | D5 | Build minimalism: only build what gets clients or produces videos | ✅ Standing rule | Landing page capped at 1 day. No SaaS, no platform, no custom tooling beyond pipeline scripts. |
 | D6 | Automation-first: delivery pipeline is automated (Higgsfield + Claude), not hand-crafted per video | ✅ Confirmed | Owner's words: "automated ad agency" |
+| D7 | Credit discipline: preflight every generation (`get_cost`), tiered models — drafts on `veo3_1_lite` (12cr/8s), product-reference on `seedance_2_0_mini` (25cr/10s), `marketing_studio_video` (75cr/15s) only for client-facing finals. No generation outside an approved bucket plan. | ✅ Owner-mandated | Added after 150cr burned on 2 tests; owner called it out 2026-07-04 |
 
 ## Bucket status
 
