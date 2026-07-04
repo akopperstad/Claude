@@ -38,14 +38,21 @@ den er selve pitch-verktøyet.
 7. **Avslutt på `/pitch`** — forretningscasen: betalingsvilje per funksjon og
    ARR-scenarier (14,9–89,1 mill. kr).
 
-## Deploy (Vercel)
+## Deling / deploy
 
-Repoet har appen i undermappen `finn-plus/`:
+### GitHub Pages (automatisk)
 
-1. `npm i -g vercel && vercel login`
-2. Fra `finn-plus/`-mappen: `vercel --prod`
-   (eller i Vercel-dashboardet: importer repoet og sett **Root Directory**
-   til `finn-plus`)
+Workflowen `.github/workflows/deploy-pages.yml` bygger en statisk eksport og
+publiserer den ved hver push. Engangsoppsett: repoets **Settings → Pages →
+Source: «GitHub Actions»**. URL: `https://akopperstad.github.io/Claude/`.
+
+Appen er full statisk eksport (`output: "export"`); `BASE_PATH=/Claude`
+settes av workflowen fordi Pages serverer fra en understi.
+
+### Vercel (alternativ)
+
+1. vercel.com → importer repoet → sett **Root Directory** til `finn-plus`
+2. Eller CLI: `npm i -g vercel && vercel --prod` fra `finn-plus/`
 
 Ingen miljøvariabler kreves — alt er statisk mock-data.
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import "./globals.css";
 import Header from "@/components/Header";
 import DemoToggle from "@/components/DemoToggle";
@@ -23,9 +24,9 @@ export default function RootLayout({
           <DemoToggle />
           <footer className="mt-16 border-t border-finn-border bg-finn-bg py-8 text-center text-xs text-finn-gray-2">
             Konseptprototype for demonstrasjon — ikke tilknyttet FINN.no / Schibsted.{" "}
-            <a href="/pitch" className="text-finn-blue hover:underline">
+            <Link href="/pitch" className="text-finn-blue hover:underline">
               Forretningscase →
-            </a>
+            </Link>
           </footer>
         </PlusProvider>
       </body>

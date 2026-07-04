@@ -52,7 +52,7 @@ export default function ListingImage({
       <div className={`relative overflow-hidden ${className}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={`/listings/${listingId}.jpg`}
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/listings/${listingId}.jpg`}
           alt={alt}
           className="absolute inset-0 h-full w-full object-cover"
         />
