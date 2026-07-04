@@ -13,8 +13,13 @@ pluss FINNs egne publiserte analyser (155 000 annonser) og eksperttips.
   **maks 55 tegn**. Vises rett under overskriften og i søkeresultatet.
 - **Nøkkelinfo**: strukturerte felter (årsmodell, km, drivstoff, gir,
   effekt). Fylles fra regnummer.
-- **Beskrivelse**: fritekstfelt lenger ned.
-- **Utstyrsliste**: strukturert avkrysningsliste, søkbar.
+- **Utstyr**: en egen, strukturert seksjon lenger ned på siden, atskilt
+  fra beskrivelsen. Fylles fra bilens registrerte data og vises som en
+  søkbar liste (typisk 20-50 punkter). Dette er grunnen til at en bil kan
+  ha 50 utstyrspunkter selv med en kort beskrivelse. Verktøyet henter
+  denne verifiserte listen direkte fra annonsen.
+- **Beskrivelse**: fritekstfelt. Støtter kun ren tekst, fet skrift og
+  punktlister. Ingen farger, skrifttyper eller emoji.
 - **Bilder**: første bilde = søkeresultatbildet.
 
 All tittel-optimalisering skjer altså i én linje på 55 tegn.

@@ -1,13 +1,15 @@
-// Assembles COMPLETE optimized descriptions following the structure shared by
-// the top-performing FINN dealers (avg 3100 chars): fact list, narrative,
-// full equipment dump, condition/history (transparency = 65% purchase factor
-// per Blocket), warranty, financing, trade-in, delivery, named contact,
-// location, CTA. Nothing the dealer stated is dropped.
+// Assembles COMPLETE, FINN-authentic descriptions following the structure the
+// top-performing dealers use. FINN descriptions support only: paragraphs,
+// bold (strong), line breaks, and plain bullet lists. No colour, no emoji, no
+// custom fonts. Output markup convention consumed by generate.mjs:
+//   "## text"  -> bold header line
+//   "- text"   -> bullet item
+//   other      -> paragraph
 import { readFileSync, writeFileSync } from "fs";
 
+// Verified equipment (exact structured FINN "Utstyr" section per listing).
 const equipment = JSON.parse(readFileSync("data/equipment.json", "utf8"));
 
-// Per-car editorial content (narrative + fact bullets + condition).
 const cars = {
   "468888593": {
     facts: [
@@ -15,26 +17,26 @@ const cars = {
       "Hengerfeste følger med",
       "119 200 km, lav kjørelengde for årsmodellen",
       "Nylig EU-godkjent og klargjort fra forhandler",
-      "Bruktbilgaranti inkludert",
+      "Skinnseter, navigasjon og ryggekamera",
     ],
     intro:
       "Praktisk og driftssikker kompakt-SUV med Subarus anerkjente symmetriske firehjulsdrift. Subaru XV er kjent for god fremkommelighet, høy komfort og driftssikkerhet, og passer like godt til bykjøring som til lengre turer. Med firehjulsdrift og god bakkeklaring er den et trygt valg for norske vintre.",
     condition:
-      "Bilen fremstår som pen både innvendig og utvendig. 119 200 km er lav kjørelengde for årsmodellen. Leveres nylig EU-godkjent og klargjort fra forhandler. Plass til to barneseter i baksetet (Isofix).",
+      "Bilen fremstår som pen både innvendig og utvendig. 119 200 km er lav kjørelengde for årsmodellen. Leveres nylig EU-godkjent og klargjort fra forhandler. Plass til to barneseter i baksetet (Isofix). Både sommer- og vinterdekk på aluminiumsfelg følger med.",
     dealer: "storm",
   },
   "468887247": {
     facts: [
-      "xDrive firehjulsdrift",
-      "190 hk, drivstoffgjerrig 2,0-liters dieselmotor",
+      "xDrive firehjulsdrift, 190 hk dieselmotor",
       "Automatgir",
-      "Hengerfeste, tilhengervekt opptil 2 000 kg",
+      "Avtagbart hengerfeste",
       "Elektrisk soltak og panorama glasstak",
+      "Skinninteriør og M Sport-pakke",
     ],
     intro:
       "Velholdt BMW X1 xDrive20d i sportslig M Sport-utførelse. En komfortabel SUV med sterk og drivstoffgjerrig 2,0-liters dieselmotor, automatgir og xDrive firehjulsdrift, en bil som passer like godt til hverdagskjøring som på vinterføre.",
     condition:
-      "Pen og velholdt bil med servicehistorikk. Romslig bagasjerom på 505 liter gjør den familieklar. xDrive firehjulsdrift gir trygg fremkommelighet vinterstid.",
+      "Pen og velholdt bil med servicehistorikk. Romslig bagasjerom gjør den familieklar. xDrive firehjulsdrift gir trygg fremkommelighet vinterstid. Både sommer- og vinterdekk følger med.",
     dealer: "storm",
   },
   "468885618": {
@@ -60,18 +62,18 @@ const cars = {
       "Leveres EU-godkjent for 2 nye år",
     ],
     intro:
-      "Toyota Corolla 1.8 Hybrid Touring Sports Active, markedets mest driftssikre hybrid, med lave driftskostnader og romslig bagasjeplass. Utrolig romslig bil med god kjørekomfort, praktisk og økonomisk familiebil som passer ypperlig til både sommer og vinter. Hybrid uten ladekabel, den lader seg selv under kjøring.",
+      "Toyota Corolla 1.8 Hybrid Touring Sports Active, markedets mest driftssikre hybrid, med lave driftskostnader og romslig bagasjeplass. En utrolig romslig bil med god kjørekomfort, praktisk og økonomisk familiebil som passer ypperlig til både sommer og vinter. Hybrid uten ladekabel, den lader seg selv under kjøring.",
     condition:
       "1-eiers norsksolgt bil, førstegangsregistrert 30.12.2019. Foreligger servicehistorikk. Nylig utført service og byttet bremser foran. Medfølger to sett hjul. Leveres ferdig EU-godkjent for 2 nye år.",
     dealer: "carhouse",
   },
   "468886883": {
     facts: [
-      "Fri Supercharging som følger bilen, verdt 8 000 til 12 000 kr i året",
+      "Fri Supercharging som følger bilen",
       "Rekkevidde 506 km (NEDC), Motor.no testet til over 400 km",
       "Kjøpt ny i Norge, kun 1 eier",
       "Sist service utført juni 2026, EU-godkjent til juni 2028",
-      "Panorama glasstak og Ultra HiFi lydanlegg",
+      "Panorama glasstak",
     ],
     intro:
       "Tesla Model S 85 med den ettertraktede fordelen fri Supercharging, lad gratis på Teslas hurtigladenettverk så lenge bilen lever. Gjennom Teslas Superlader-nettverk kommer du deg enkelt og sømløst rundt i både Norge og Europa. En godt utstyrt Model S til svært tilgjengelig pris, hvor fri lading alene gjør regnestykket interessant.",
@@ -81,7 +83,6 @@ const cars = {
   },
 };
 
-// Dealer standard terms, taken verbatim from their own FINN descriptions.
 const dealers = {
   storm: {
     name: "Storm Auto AS",
@@ -92,7 +93,6 @@ const dealers = {
     tradein:
       "Vi tar innbytte og kan også selge din bil i kommisjon. Har vi ikke drømmebilen på lager, skaffer vi den via vårt kontaktnett i Norge eller utlandet.",
     delivery: null,
-    contact: "Ta kontakt med en av våre selgere for visning og prøvekjøring.",
   },
   carhouse: {
     name: "CARHOUSE AS",
@@ -101,18 +101,17 @@ const dealers = {
     financing: "Vi tilbyr finansiering og forsikring via våre samarbeidspartnere.",
     tradein: "Vi tar innbytte, ta kontakt for en rask vurdering av din bil.",
     delivery: "Vi tilbyr gratis frakt over hele landet.",
-    contact: "Ta kontakt for visning og prøvekjøring.",
   },
   car4sale: {
-    name: "Car4Sale AS, Norges største på megling av bil",
+    name: "Car4Sale AS",
     location: "Visningssted Lambertseter, Oslo. Ta kontakt på forhånd for visning.",
     warranty:
       "Utvidet garanti tilbys i inntil 3 år for biler under 300 000 km eller under 20 år.",
     financing:
-      "Car4Sale er godkjent låne- og forsikringsagent. Vi samarbeider blant annet med Nordea og tilbyr finansiering helt ned i kr 0 i egenkapital med lav rente.",
+      "Car4Sale er godkjent låne- og forsikringsagent, og samarbeider blant annet med Nordea. Vi tilbyr finansiering helt ned i kr 0 i egenkapital med lav rente.",
     tradein: "Ta kontakt med oss for å få vite raskt hva vi kan tilby deg i innbytte.",
     delivery: "Vi tilbyr frakt i hele landet.",
-    contact: "Telefon +47 994 99 996. Telefontid 10:00 til 21:00.",
+    phone: "Telefon 994 99 996, telefontid 10:00 til 21:00.",
   },
 };
 
@@ -121,39 +120,36 @@ function build(id) {
   const d = dealers[c.dealer];
   const eq = equipment[id] || [];
   const L = [];
-  L.push("KJEKT Å VITE OM DENNE BILEN");
-  c.facts.forEach((f) => L.push("• " + f));
+
+  L.push("## Kjekt å vite om denne bilen");
+  c.facts.forEach((f) => L.push("- " + f));
   L.push("");
   L.push(c.intro);
   L.push("");
-  L.push("TILSTAND OG HISTORIKK");
+  L.push("## Tilstand og historikk");
   L.push(c.condition);
   L.push("");
-  L.push(`UTSTYR (${eq.length} punkter)`);
-  // two-per-line dump keeps it readable but complete
-  for (let i = 0; i < eq.length; i += 2) {
-    L.push("• " + eq.slice(i, i + 2).join("  •  "));
-  }
+  L.push("## Utstyr");
+  eq.forEach((e) => L.push("- " + e));
   L.push("");
-  L.push("GARANTI");
+  L.push("## Garanti");
   L.push(d.warranty);
   L.push("");
-  L.push("FINANSIERING OG FORSIKRING");
+  L.push("## Finansiering og forsikring");
   L.push(d.financing);
   L.push("");
-  L.push("INNBYTTE");
+  L.push("## Innbytte");
   L.push(d.tradein);
   if (d.delivery) {
     L.push("");
-    L.push("FRAKT OG LEVERING");
+    L.push("## Frakt og levering");
     L.push(d.delivery);
   }
   L.push("");
-  L.push("KONTAKT");
-  L.push(d.contact);
-  L.push(d.location);
-  L.push("");
-  L.push("Velkommen til en trygg og hyggelig handel.");
+  L.push("## Kontakt");
+  if (d.phone) L.push(d.phone);
+  L.push(`${d.name}, ${d.location}`);
+  L.push("Ta kontakt for visning og prøvekjøring. Velkommen til en trygg og hyggelig handel.");
   return L.join("\n");
 }
 
@@ -161,5 +157,5 @@ const out = {};
 for (const id of Object.keys(cars)) out[id] = build(id);
 writeFileSync("data/full-descriptions.json", JSON.stringify(out, null, 1));
 for (const id of Object.keys(out)) {
-  console.log(id, out[id].length, "chars,", (equipment[id] || []).length, "utstyr");
+  console.log(id, out[id].length, "tegn,", (equipment[id] || []).length, "utstyr");
 }

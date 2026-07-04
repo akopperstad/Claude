@@ -9,8 +9,13 @@ const realDesc = JSON.parse(readFileSync("data/real-descriptions.json", "utf8"))
 const fullDesc = JSON.parse(readFileSync("data/full-descriptions.json", "utf8"));
 const equipment = JSON.parse(readFileSync("data/equipment.json", "utf8"));
 
-// Render our optimized description: SECTION HEADINGS in caps become labels,
-// bullet lines become a list, everything else is a paragraph.
+// Render the optimized description EXACTLY as FINN would display it: plain
+// black text, bold section headers, standard bullet lists. FINN supports only
+// <p>, <strong>, <br> and <ul>/<li> in descriptions, so we use nothing else.
+//   "## text" -> bold header, "- text" -> bullet, other -> paragraph.
+const esc = (s) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
 function renderDesc(text) {
   const lines = text.split("\n");
   let html = "";
@@ -27,18 +32,18 @@ function renderDesc(text) {
       close();
       continue;
     }
-    if (line.startsWith("•")) {
+    if (line.startsWith("## ")) {
+      close();
+      html += `<p><strong>${esc(line.slice(3))}</strong></p>`;
+    } else if (line.startsWith("- ")) {
       if (!inList) {
-        html += '<ul class="eqlist">';
+        html += "<ul>";
         inList = true;
       }
-      html += `<li>${line.replace(/^•\s*/, "").replace(/\s*•\s*/g, " · ")}</li>`;
-    } else if (/^[A-ZÆØÅ0-9 ()åÅ]+$/.test(line) && line === line.toUpperCase() && line.length < 40) {
-      close();
-      html += `<div class="deschead">${line}</div>`;
+      html += `<li>${esc(line.slice(2))}</li>`;
     } else {
       close();
-      html += `<p class="descp">${line}</p>`;
+      html += `<p>${esc(line)}</p>`;
     }
   }
   close();
@@ -122,7 +127,7 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
             ${specBlock(oldSpec, "bad")}
             <p class="price">${nok(car.price.amount)}</p>
             <ul class="problems">
-              ${c.beforeProblems.map((p) => `<li>✗ ${p}</li>`).join("")}
+              ${c.beforeProblems.map((p) => `<li>${p}</li>`).join("")}
             </ul>
             ${beforeDescBlock}
           </div>
@@ -130,16 +135,16 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
             <div class="tag tag-after">Slik kan den se ut</div>
             <img src="${img64(`images/enhanced/${car.id}-0-branded.jpg`)}" alt="">
             ${specBlock(newSpec, "good")}
-            <p class="price">${nok(car.price.amount)} <span class="verdict">✓ ${c.priceVerdict}</span></p>
+            <p class="price">${nok(car.price.amount)} <span class="verdict">${c.priceVerdict}</span></p>
             <div class="chips">${specs.map((s) => `<span>${s}</span>`).join("")}</div>
-            ${c.trust ? `<div class="trust">${c.trust.map((t) => `<span>✓ ${t}</span>`).join("")}</div>` : ""}
+            ${c.trust ? `<div class="trust">${c.trust.map((t) => `<span>${t}</span>`).join("")}</div>` : ""}
             <div class="fieldlabel" style="margin-top:10px">Optimalisert beskrivelse (${(fullDesc[car.id] || "").length} tegn, ${(equipment[car.id] || []).length} utstyrspunkter)</div>
             <div class="desc desc-after">${renderDesc(fullDesc[car.id] || "")}</div>
             <div class="thumbs">
               <img src="${img64(`images/enhanced/${car.id}-1.jpg`)}" alt="">
               <img src="${img64(`images/enhanced/${car.id}-2.jpg`)}" alt="">
             </div>
-            <p class="photoplan">📸 ${c.photoPlan}</p>
+            <p class="photoplan"><strong>Bilderekkefølge:</strong> ${c.photoPlan}</p>
           </div>
         </div>
       </section>`;
@@ -190,13 +195,13 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
   .stats-src { text-align:center; font-size:11px; color:#84848f; margin-top:8px; }
   .desc { font-size:14px; line-height:1.55; color:#26262d; background:#fafafa; border:1px solid #eee; padding:14px; border-radius:8px; }
   .desc-before { max-height:220px; overflow-y:auto; color:#47474f; font-size:12.5px; }
-  .desc-after { max-height:440px; overflow-y:auto; }
-  .deschead { font-size:12px; font-weight:800; letter-spacing:.4px; color:#0063fb; margin:12px 0 4px; }
-  .deschead:first-child { margin-top:0; }
-  .descp { font-size:13px; line-height:1.5; color:#26262d; margin-bottom:6px; }
-  .eqlist { list-style:none; margin:2px 0 6px; columns:1; }
-  .eqlist li { font-size:12.5px; color:#26262d; padding:1px 0 1px 14px; position:relative; }
-  .eqlist li:before { content:"✓"; position:absolute; left:0; color:#059e6f; font-weight:700; }
+  /* Description preview: rendered exactly as FINN shows it (plain text,
+     bold headers, standard bullets). No colour, no emoji. */
+  .desc-after { max-height:460px; overflow-y:auto; background:#fff; }
+  .desc-after p { font-size:13px; line-height:1.5; color:#26262d; margin-bottom:8px; }
+  .desc-after strong { font-weight:700; }
+  .desc-after ul { margin:2px 0 10px; padding-left:20px; }
+  .desc-after ul li { font-size:13px; line-height:1.45; color:#26262d; list-style:disc; }
   .scorebox { border:1px solid #dedee3; border-radius:10px; padding:16px 18px; margin-bottom:18px; background:#fafafa; }
   .scoreheads { display:flex; align-items:baseline; gap:14px; margin-bottom:12px; }
   .scorenum { font-size:34px; font-weight:800; }
@@ -221,7 +226,7 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
 </style></head>
 <body>
 <header>
-  <h1>Hei ${dealer} 👋</h1>
+  <h1>Hei ${dealer}</h1>
   <p>Vi tok ${cars.length === 1 ? "en av annonsene deres" : cars.length + " av annonsene deres"} på FINN og viste hva 5 minutter med verktøyet vårt gjør.</p>
 </header>
 <div class="stats">
@@ -236,8 +241,8 @@ ${blocks}
 </div>
 <footer>
   <h2>Bedre bilder. Bedre tekst. Riktig pris. Raskere salg.</h2>
-  <p>Automatisk annonseoptimalisering for bilforhandlere: profesjonelle bilder, komplett salgstekst fra regnummer, og prisanalyse mot markedet — for hele lagerbeholdningen.</p>
-  <p style="margin-top:12px"><strong style="color:#fff">Regnestykket:</strong> selger bilen 10 dager raskere, sparer dere ~3 000 kr i lagerkostnad — per bil. Svar på e-posten for en uforpliktende pilot på 5 biler.</p>
+  <p>Automatisk annonseoptimalisering for bilforhandlere: profesjonelle bilder, komplett salgstekst fra regnummer, og prisanalyse mot markedet, for hele lagerbeholdningen.</p>
+  <p style="margin-top:12px"><strong style="color:#fff">Regnestykket:</strong> selger bilen 10 dager raskere, og dere sparer rundt 3 000 kr i lagerkostnad per bil. Svar på e-posten for en uforpliktende pilot på 5 biler.</p>
 </footer>
 <div class="note">Demonstrasjon basert på deres offentlige FINN-annonser. Kun delt med dere. Bilder og annonser tilhører ${dealer}.</div>
 </body></html>`;
