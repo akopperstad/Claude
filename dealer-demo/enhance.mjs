@@ -10,7 +10,7 @@ const OUT = "images/enhanced";
 for (const f of readdirSync(IN).filter((f) => f.endsWith(".jpg"))) {
   await sharp(`${IN}/${f}`)
     .rotate()
-    .resize(1200, 900, { fit: "cover", position: "attention" })
+    .resize(1200, 900, { fit: "cover", position: "centre" })
     .normalise({ lower: 1, upper: 99 })
     .modulate({ brightness: 1.04, saturation: 1.12 })
     .sharpen({ sigma: 0.8 })

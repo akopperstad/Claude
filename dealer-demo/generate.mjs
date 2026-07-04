@@ -22,13 +22,23 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
   const blocks = cars
     .map((car) => {
       const c = copy[car.id];
-      const beforeTitle = `${car.heading} ${car.model_specification || ""}`.trim();
+      const oldSpec = car.model_specification || "";
+      const newSpec = c.specLine;
       const specs = [
         car.year,
         km(car.mileage),
         car.fuel,
         car.transmission,
       ].filter(Boolean);
+      const specBlock = (spec, cls) => `
+            <div class="finnstruct">
+              <div class="fieldlabel">Overskrift (genereres av FINN)</div>
+              <h3 class="adheading">${car.make} ${car.model}</h3>
+              <div class="fieldlabel">Modellbeskrivelse, maks 55 tegn
+                <span class="charcount ${spec.length > 55 ? "over" : cls}">${spec.length}/55 tegn</span>
+              </div>
+              <p class="specline ${cls}">${spec || "<em>(tom)</em>"}</p>
+            </div>`;
       return `
       <section class="car">
         <h2>${car.make} ${car.model}${car.regno ? ` <span class="reg">(${car.regno})</span>` : ""}</h2>
@@ -36,7 +46,7 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
           <div class="col before">
             <div class="tag tag-before">Slik ser annonsen ut i dag</div>
             <img src="${img64(`images/original/${car.id}-0.jpg`)}" alt="">
-            <h3 class="title-before">${beforeTitle}</h3>
+            ${specBlock(oldSpec, "bad")}
             <p class="price">${nok(car.price.amount)}</p>
             <ul class="problems">
               ${c.beforeProblems.map((p) => `<li>✗ ${p}</li>`).join("")}
@@ -44,8 +54,8 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
           </div>
           <div class="col after">
             <div class="tag tag-after">Slik kan den se ut</div>
-            <img src="${img64(`images/enhanced/${car.id}-0.jpg`)}" alt="">
-            <h3 class="title-after">${c.newTitle}</h3>
+            <img src="${img64(`images/enhanced/${car.id}-0-branded.jpg`)}" alt="">
+            ${specBlock(newSpec, "good")}
             <p class="price">${nok(car.price.amount)} <span class="verdict">✓ ${c.priceVerdict}</span></p>
             <div class="chips">${specs.map((s) => `<span>${s}</span>`).join("")}</div>
             ${c.trust ? `<div class="trust">${c.trust.map((t) => `<span>✓ ${t}</span>`).join("")}</div>` : ""}
@@ -54,6 +64,7 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
               <img src="${img64(`images/enhanced/${car.id}-1.jpg`)}" alt="">
               <img src="${img64(`images/enhanced/${car.id}-2.jpg`)}" alt="">
             </div>
+            <p class="photoplan">📸 ${c.photoPlan}</p>
           </div>
         </div>
       </section>`;
@@ -80,8 +91,17 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
   .tag { display:inline-block; font-size:12px; font-weight:700; padding:4px 10px; border-radius:99px; margin-bottom:10px; }
   .tag-before { background:#ffefef; color:#d91f0a; }
   .tag-after { background:#e3fcf3; color:#059e6f; }
-  .title-before { font-size:15px; margin:10px 0 4px; color:#47474f; font-weight:600; }
-  .title-after { font-size:17px; margin:12px 0 4px; }
+  .finnstruct { margin:12px 0 4px; }
+  .fieldlabel { font-size:11px; color:#84848f; text-transform:uppercase; letter-spacing:.4px; margin-bottom:2px; }
+  .adheading { font-size:18px; margin-bottom:8px; }
+  .charcount { font-size:11px; font-weight:700; text-transform:none; letter-spacing:0; padding:1px 7px; border-radius:99px; margin-left:6px; }
+  .charcount.bad { background:#fff5e8; color:#b8860b; }
+  .charcount.good { background:#e3fcf3; color:#059e6f; }
+  .charcount.over { background:#ffefef; color:#d91f0a; }
+  .specline { font-size:15px; font-weight:600; margin-bottom:8px; }
+  .specline.bad { color:#8a2b20; }
+  .specline.good { color:#0d203f; }
+  .photoplan { font-size:12.5px; color:#47474f; background:#f1f9ff; border-radius:8px; padding:10px 12px; margin-top:10px; line-height:1.45; }
   .price { font-size:18px; font-weight:700; margin:4px 0 10px; }
   .verdict { font-size:12px; font-weight:600; color:#059e6f; background:#e3fcf3; padding:3px 8px; border-radius:99px; margin-left:6px; }
   .problems { list-style:none; font-size:13px; color:#d91f0a; display:flex; flex-direction:column; gap:5px; }
@@ -104,11 +124,11 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
 <body>
 <header>
   <h1>Hei ${dealer} 👋</h1>
-  <p>Vi tok ${cars.length === 1 ? "en av annonsene deres" : cars.length + " av annonsene deres"} på FINN — og viste hva 5 minutter med verktøyet vårt gjør.</p>
+  <p>Vi tok ${cars.length === 1 ? "en av annonsene deres" : cars.length + " av annonsene deres"} på FINN og viste hva 5 minutter med verktøyet vårt gjør.</p>
 </header>
 <div class="stats">
   <div class="stat"><b>93 %</b><small>av bilkjøpere ser på bildene først</small></div>
-  <div class="stat"><b>10–29</b><small>bilder gir raskest salg — færre enn 5 skader salget</small></div>
+  <div class="stat"><b>10–29</b><small>bilder gir raskest salg, færre enn 5 skader salget</small></div>
   <div class="stat"><b>300 kr</b><small>daglig lagerkostnad per bil som står usolgt</small></div>
   <div class="stat"><b>14–21</b><small>dager til salg for riktig priset, komplett annonse</small></div>
 </div>
