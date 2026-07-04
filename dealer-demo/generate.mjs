@@ -5,6 +5,7 @@ import { readFileSync, writeFileSync, readdirSync } from "fs";
 
 const listings = JSON.parse(readFileSync("data/demo-listings.json", "utf8"));
 const copy = JSON.parse(readFileSync("data/copy.json", "utf8"));
+const realDesc = JSON.parse(readFileSync("data/real-descriptions.json", "utf8"));
 
 const img64 = (path) =>
   `data:image/jpeg;base64,${readFileSync(path).toString("base64")}`;
@@ -39,9 +40,43 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
               </div>
               <p class="specline ${cls}">${spec || "<em>(tom)</em>"}</p>
             </div>`;
+      const s = c.score;
+      const scoreBlock = s
+        ? `
+        <div class="scorebox">
+          <div class="scoreheads">
+            <div><span class="scorenum bad-n">${s.before}</span><span class="scorelbl">i dag</span></div>
+            <div class="scorearrow">→</div>
+            <div><span class="scorenum good-n">${s.after}</span><span class="scorelbl">optimalisert</span></div>
+            <div class="scoremax">av 100 poeng</div>
+          </div>
+          <div class="scorebars">
+            ${s.breakdown
+              .map(
+                (r) => `
+            <div class="scorerow">
+              <span class="scorecat">${r.label}</span>
+              <span class="bar"><i class="fill-b" style="width:${(r.b / 20) * 100}%"></i></span>
+              <span class="barv">${r.b}</span>
+              <span class="bar"><i class="fill-a" style="width:${(r.a / 20) * 100}%"></i></span>
+              <span class="barv">${r.a}</span>
+            </div>`
+              )
+              .join("")}
+            <div class="scorerow scorekey"><span class="scorecat"></span><span class="keylbl">i dag</span><span></span><span class="keylbl">optimalisert</span><span></span></div>
+          </div>
+        </div>`
+        : "";
+      const before = (realDesc[car.id] || "").trim();
+      const beforeDescBlock = before
+        ? `
+            <div class="fieldlabel" style="margin-top:10px">Beskrivelsen deres i dag (${before.length} tegn)</div>
+            <div class="desc desc-before">${before.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\n/g, "<br>")}</div>`
+        : "";
       return `
       <section class="car">
         <h2>${car.make} ${car.model}${car.regno ? ` <span class="reg">(${car.regno})</span>` : ""}</h2>
+        ${scoreBlock}
         <div class="grid">
           <div class="col before">
             <div class="tag tag-before">Slik ser annonsen ut i dag</div>
@@ -51,6 +86,7 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
             <ul class="problems">
               ${c.beforeProblems.map((p) => `<li>✗ ${p}</li>`).join("")}
             </ul>
+            ${beforeDescBlock}
           </div>
           <div class="col after">
             <div class="tag tag-after">Slik kan den se ut</div>
@@ -114,6 +150,22 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
   .stat small { color:#47474f; font-size:11.5px; line-height:1.35; display:block; margin-top:3px; }
   .stats-src { text-align:center; font-size:11px; color:#84848f; margin-top:8px; }
   .desc { font-size:14px; line-height:1.55; color:#26262d; background:#fafafa; border:1px solid #eee; padding:14px; border-radius:8px; }
+  .desc-before { max-height:220px; overflow-y:auto; color:#47474f; font-size:12.5px; }
+  .scorebox { border:1px solid #dedee3; border-radius:10px; padding:16px 18px; margin-bottom:18px; background:#fafafa; }
+  .scoreheads { display:flex; align-items:baseline; gap:14px; margin-bottom:12px; }
+  .scorenum { font-size:34px; font-weight:800; }
+  .bad-n { color:#d91f0a; } .good-n { color:#059e6f; }
+  .scorelbl { font-size:11px; color:#84848f; display:block; text-align:center; }
+  .scorearrow { font-size:22px; color:#84848f; }
+  .scoremax { margin-left:auto; font-size:12px; color:#84848f; }
+  .scorerow { display:grid; grid-template-columns:170px 1fr 26px 1fr 26px; gap:8px; align-items:center; margin-bottom:5px; }
+  .scorecat { font-size:12px; color:#47474f; }
+  .bar { height:8px; background:#ececf0; border-radius:99px; overflow:hidden; display:block; }
+  .bar i { display:block; height:100%; border-radius:99px; }
+  .fill-b { background:#d91f0a; opacity:.75; }
+  .fill-a { background:#059e6f; }
+  .barv { font-size:11px; font-weight:700; color:#47474f; text-align:right; }
+  .keylbl { font-size:10.5px; color:#84848f; text-align:center; }
   .thumbs { display:flex; gap:10px; margin-top:10px; }
   .thumbs img { width:calc(50% - 5px); border-radius:6px; }
   footer { background:#0d203f; color:#fff; padding:36px 24px; text-align:center; margin-top:16px; }

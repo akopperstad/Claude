@@ -1,4 +1,4 @@
-TO: (fylles fra data/prospects-emails.json eller manuelt)
+TO: (ikke funnet automatisk, slå opp manuelt)
 SUBJECT: Ford Mustang Mach-E-annonsen deres på FINN — vi gjorde den bedre (gratis demo)
 ATTACHMENT: output/storm-auto-as.html
 

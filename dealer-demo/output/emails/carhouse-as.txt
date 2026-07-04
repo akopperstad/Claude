@@ -1,4 +1,4 @@
-TO: (fylles fra data/prospects-emails.json eller manuelt)
+TO: post@manglerudbil.no (VERIFISER FØR SENDING)
 SUBJECT: Toyota Corolla-annonsen deres på FINN — vi gjorde den bedre (gratis demo)
 ATTACHMENT: output/carhouse-as.html
 

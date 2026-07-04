@@ -1,4 +1,4 @@
-TO: (fylles fra data/prospects-emails.json eller manuelt)
+TO: post@car4sale.no
 SUBJECT: Tesla Model S-annonsen deres på FINN — vi gjorde den bedre (gratis demo)
 ATTACHMENT: output/car4sale-as.html
 

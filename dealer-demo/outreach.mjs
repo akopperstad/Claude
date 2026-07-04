@@ -12,6 +12,15 @@ const SENDER = {
 
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
+// Verified/candidate recipient addresses per dealer. Company addresses only.
+const RECIPIENTS = {
+  "Car4Sale AS": "post@car4sale.no",
+  // carhouse.no (Carhouse Bilformidling, Oslo) lists this address — verify
+  // it is the same CARHOUSE AS (Rugveien 44, Manglerud) before sending:
+  "CARHOUSE AS": "post@manglerudbil.no (VERIFISER FØR SENDING)",
+  "Storm Auto AS": "(ikke funnet automatisk, slå opp manuelt)",
+};
+
 // Dealers that have a demo page generated (from generate.mjs)
 const listings = JSON.parse(readFileSync("data/demo-listings.json", "utf8"));
 const byDealer = {};
@@ -59,7 +68,7 @@ svar «stopp» så fjerner vi dere umiddelbart.`;
   const file = `output/emails/${slug(dealer)}.txt`;
   writeFileSync(
     file,
-    `TO: (fylles fra data/prospects-emails.json eller manuelt)\nSUBJECT: ${subject}\nATTACHMENT: output/${slug(dealer)}.html\n\n${body}\n`
+    `TO: ${RECIPIENTS[dealer] || "(fylles manuelt)"}\nSUBJECT: ${subject}\nATTACHMENT: output/${slug(dealer)}.html\n\n${body}\n`
   );
   console.log("wrote", file);
 }
