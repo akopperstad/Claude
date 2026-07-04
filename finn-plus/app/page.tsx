@@ -4,6 +4,7 @@ import VerticalNav from "@/components/VerticalNav";
 import ListingCard from "@/components/ListingCard";
 import { eiendomListings } from "@/lib/mock/eiendom";
 import { bilListings } from "@/lib/mock/bil";
+import { sortNewestFirst } from "@/lib/earlyAccess";
 
 export default function Home() {
   return (
@@ -15,13 +16,13 @@ export default function Home() {
       <VerticalNav />
 
       <Section title="Nytt i Eiendom" href="/eiendom">
-        {eiendomListings.slice(0, 4).map((l) => (
+        {sortNewestFirst(eiendomListings).slice(0, 4).map((l) => (
           <ListingCard key={l.id} listing={l} />
         ))}
       </Section>
 
       <Section title="Nytt i Bil" href="/bil">
-        {bilListings.slice(0, 4).map((l) => (
+        {sortNewestFirst(bilListings).slice(0, 4).map((l) => (
           <ListingCard key={l.id} listing={l} />
         ))}
       </Section>

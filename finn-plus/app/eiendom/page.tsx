@@ -1,6 +1,7 @@
 import SearchBar from "@/components/SearchBar";
 import ListingCard from "@/components/ListingCard";
 import { eiendomListings } from "@/lib/mock/eiendom";
+import { sortNewestFirst } from "@/lib/earlyAccess";
 
 export const metadata = { title: "Eiendom — FINN.no" };
 
@@ -17,7 +18,7 @@ export default function EiendomPage() {
         </p>
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {eiendomListings.map((l) => (
+        {sortNewestFirst(eiendomListings).map((l) => (
           <ListingCard key={l.id} listing={l} />
         ))}
       </div>

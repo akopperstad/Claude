@@ -1,6 +1,7 @@
 import SearchBar from "@/components/SearchBar";
 import ListingCard from "@/components/ListingCard";
 import { bilListings } from "@/lib/mock/bil";
+import { sortNewestFirst } from "@/lib/earlyAccess";
 
 export const metadata = { title: "Bil — FINN.no" };
 
@@ -17,7 +18,7 @@ export default function BilPage() {
         </p>
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {bilListings.map((l) => (
+        {sortNewestFirst(bilListings).map((l) => (
           <ListingCard key={l.id} listing={l} />
         ))}
       </div>

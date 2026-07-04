@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { allListings, formatKm, formatPrice, getListing } from "@/lib/listings";
 import ListingImage from "@/components/ListingImage";
 import PriceInsight from "@/components/PriceInsight";
+import EarlyAccessGate from "@/components/EarlyAccessGate";
+import { hoursUntilPublic, isEarlyAccess } from "@/lib/earlyAccess";
 
 export function generateStaticParams() {
   return allListings.map((l) => ({ id: l.id }));
@@ -13,6 +15,10 @@ export default function ListingPage({ params }: { params: { id: string } }) {
   if (!listing) notFound();
 
   return (
+    <EarlyAccessGate
+      earlyAccess={isEarlyAccess(listing)}
+      hoursLeft={hoursUntilPublic(listing)}
+    >
     <main className="mx-auto max-w-4xl px-4 py-6">
       <Link
         href={listing.vertical === "eiendom" ? "/eiendom" : "/bil"}
@@ -76,6 +82,7 @@ export default function ListingPage({ params }: { params: { id: string } }) {
         </div>
       </div>
     </main>
+    </EarlyAccessGate>
   );
 }
 
