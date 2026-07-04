@@ -32,38 +32,26 @@ mkdirSync("output/emails", { recursive: true });
 
 for (const [dealer, cars] of Object.entries(byDealer)) {
   const car = cars[0];
-  const subject = `${car.make} ${car.model}-annonsen deres på FINN — vi gjorde den bedre (gratis demo)`;
-  const body = `Hei!
+  const subject = `Vi forbedret ${car.make} ${car.model}-annonsen deres på FINN (gratis demo vedlagt)`;
+  const body = `Hei ${dealer}!
 
-FINNs egen analyse av 155 000 bilannonser viser at 93 % av kjøperne
-ser på bildene først — og at en bil som står usolgt koster forhandler
-rundt 300 kr dagen.
+FINNs egen analyse av 155 000 bilannonser viser at 93 % av kjøperne ser på bildene først, og at en bil som står usolgt koster forhandler rundt 300 kr dagen. Med bedre annonser selger dere raskere.
 
-Vi hjelper bilforhandlere å selge raskere på FINN: profesjonelle
-bilder, komplett salgstekst generert fra regnummeret, og prisanalyse
-mot markedet.
+Vi hjelper bilforhandlere med nettopp dette på FINN: profesjonelle bilder, komplett og søkeoptimalisert salgstekst, og en spec-linje og prisanalyse bygget på hva de mest solgte forhandlerne faktisk gjør.
 
-For å vise hva vi mener tok vi ${cars.length === 1 ? "en av deres annonser" : cars.length + " av deres annonser"} og
-optimaliserte ${cars.length === 1 ? "den" : "dem"} — se vedlagt demo (kun delt med dere):
+For å vise hva vi mener, tok vi ${cars.length === 1 ? "en av deres egne annonser" : cars.length + " av deres egne annonser"} og optimaliserte ${cars.length === 1 ? "den" : "dem"}. Den vedlagte demoen (kun delt med dere) viser før og etter, med en poengscore på hvor annonsen står i dag mot hva den kan bli.
 
-    → Vedlagt: demo for ${dealer}
+Det tok under fem minutter. Tenk samme løft på hele lagerbeholdningen, hver gang dere legger ut en bil.
 
-Det tok under 5 minutter per bil. Tenk hele lagerbeholdningen,
-automatisk, hver gang dere legger ut en bil.
+Vi tilbyr en uforpliktende pilot: vi optimaliserer fem av deres aktive annonser gratis. Liker dere resultatet, tar vi praten videre.
 
-Uforpliktende pilot: vi optimaliserer 5 av deres aktive annonser
-gratis. Liker dere resultatet, snakker vi videre.
-
-Interessert? Svar på denne e-posten.
+Er dette interessant? Svar på denne e-posten, så avtaler vi en kort prat.
 
 Vennlig hilsen
-${SENDER.name}${SENDER.phone ? `\n${SENDER.phone}` : ""}
-${SENDER.email}
+${SENDER.name}
+${SENDER.email}${SENDER.phone ? `\n${SENDER.phone}` : ""}
 
---
-Denne henvendelsen er sendt til firmaadressen deres som en
-bedriftshenvendelse. Ønsker dere ikke flere e-poster fra oss,
-svar «stopp» så fjerner vi dere umiddelbart.`;
+Denne henvendelsen er sendt til firmaadressen deres som en bedriftshenvendelse. Ønsker dere ikke flere e-poster fra oss, svar «stopp», så fjerner vi dere umiddelbart.`;
 
   const file = `output/emails/${slug(dealer)}.txt`;
   writeFileSync(
