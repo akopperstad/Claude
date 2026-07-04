@@ -4,9 +4,13 @@ ATTACHMENT: output/car4sale-as.html
 
 Hei!
 
-Vi hjelper bilforhandlere å selge raskere på FINN med bedre annonser:
-profesjonelt behandlede bilder, komplett salgstekst generert fra
-regnummeret, og prisanalyse mot markedet.
+FINNs egen analyse av 155 000 bilannonser viser at 93 % av kjøperne
+ser på bildene først — og at en bil som står usolgt koster forhandler
+rundt 300 kr dagen.
+
+Vi hjelper bilforhandlere å selge raskere på FINN: profesjonelle
+bilder, komplett salgstekst generert fra regnummeret, og prisanalyse
+mot markedet.
 
 For å vise hva vi mener tok vi en av deres annonser og
 optimaliserte den — se vedlagt demo (kun delt med dere):
@@ -19,11 +23,11 @@ automatisk, hver gang dere legger ut en bil.
 Uforpliktende pilot: vi optimaliserer 5 av deres aktive annonser
 gratis. Liker dere resultatet, snakker vi videre.
 
-Interessert? Svar på denne e-posten eller ring meg.
+Interessert? Svar på denne e-posten.
 
 Vennlig hilsen
-[DITT NAVN]
-[TELEFON] · [DIN-EPOST]
+Arne Kopperstad
+post@pilhammer.no
 
 --
 Denne henvendelsen er sendt til firmaadressen deres som en

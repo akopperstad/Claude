@@ -48,6 +48,7 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
             <h3 class="title-after">${c.newTitle}</h3>
             <p class="price">${nok(car.price.amount)} <span class="verdict">✓ ${c.priceVerdict}</span></p>
             <div class="chips">${specs.map((s) => `<span>${s}</span>`).join("")}</div>
+            ${c.trust ? `<div class="trust">${c.trust.map((t) => `<span>✓ ${t}</span>`).join("")}</div>` : ""}
             <div class="desc">${c.newDescription.replace(/\n/g, "<br>")}</div>
             <div class="thumbs">
               <img src="${img64(`images/enhanced/${car.id}-1.jpg`)}" alt="">
@@ -85,6 +86,13 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
   .verdict { font-size:12px; font-weight:600; color:#059e6f; background:#e3fcf3; padding:3px 8px; border-radius:99px; margin-left:6px; }
   .problems { list-style:none; font-size:13px; color:#d91f0a; display:flex; flex-direction:column; gap:5px; }
   .chips span { display:inline-block; background:#f1f9ff; color:#0063fb; font-size:12px; font-weight:600; padding:4px 10px; border-radius:99px; margin:0 6px 10px 0; }
+  .trust span { display:inline-block; background:#e3fcf3; color:#059e6f; font-size:12px; font-weight:600; padding:4px 10px; border-radius:99px; margin:0 6px 10px 0; }
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; max-width:1100px; margin:0 auto; padding:18px 24px 0; }
+  @media (max-width:800px){ .stats{ grid-template-columns:repeat(2,1fr); } }
+  .stat { background:#fff; border:1px solid #dedee3; border-radius:10px; padding:14px; text-align:center; }
+  .stat b { display:block; font-size:20px; color:#0063fb; }
+  .stat small { color:#47474f; font-size:11.5px; line-height:1.35; display:block; margin-top:3px; }
+  .stats-src { text-align:center; font-size:11px; color:#84848f; margin-top:8px; }
   .desc { font-size:14px; line-height:1.55; color:#26262d; background:#fafafa; border:1px solid #eee; padding:14px; border-radius:8px; }
   .thumbs { display:flex; gap:10px; margin-top:10px; }
   .thumbs img { width:calc(50% - 5px); border-radius:6px; }
@@ -98,12 +106,20 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
   <h1>Hei ${dealer} 👋</h1>
   <p>Vi tok ${cars.length === 1 ? "en av annonsene deres" : cars.length + " av annonsene deres"} på FINN — og viste hva 5 minutter med verktøyet vårt gjør.</p>
 </header>
+<div class="stats">
+  <div class="stat"><b>93 %</b><small>av bilkjøpere ser på bildene først</small></div>
+  <div class="stat"><b>10–29</b><small>bilder gir raskest salg — færre enn 5 skader salget</small></div>
+  <div class="stat"><b>300 kr</b><small>daglig lagerkostnad per bil som står usolgt</small></div>
+  <div class="stat"><b>14–21</b><small>dager til salg for riktig priset, komplett annonse</small></div>
+</div>
+<div class="stats-src">Kilde: FINNs egen analyse av 155 000 bilannonser og FINNs eksperttips for forhandlere</div>
 <div class="wrap">
 ${blocks}
 </div>
 <footer>
   <h2>Bedre bilder. Bedre tekst. Riktig pris. Raskere salg.</h2>
-  <p>Automatisk annonseoptimalisering for bilforhandlere: profesjonelle bilder, komplett salgstekst fra regnummer, og prisanalyse mot markedet — for hele lagerbeholdningen. Svar på e-posten for en uforpliktende pilot på 5 biler.</p>
+  <p>Automatisk annonseoptimalisering for bilforhandlere: profesjonelle bilder, komplett salgstekst fra regnummer, og prisanalyse mot markedet — for hele lagerbeholdningen.</p>
+  <p style="margin-top:12px"><strong style="color:#fff">Regnestykket:</strong> selger bilen 10 dager raskere, sparer dere ~3 000 kr i lagerkostnad — per bil. Svar på e-posten for en uforpliktende pilot på 5 biler.</p>
 </footer>
 <div class="note">Demonstrasjon basert på deres offentlige FINN-annonser. Kun delt med dere. Bilder og annonser tilhører ${dealer}.</div>
 </body></html>`;

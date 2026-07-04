@@ -5,9 +5,9 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
 
 const SENDER = {
-  name: process.env.SENDER_NAME || "[DITT NAVN]",
-  phone: process.env.SENDER_PHONE || "[TELEFON]",
-  email: process.env.SENDER_EMAIL || "[DIN-EPOST]",
+  name: process.env.SENDER_NAME || "Arne Kopperstad",
+  phone: process.env.SENDER_PHONE || "",
+  email: process.env.SENDER_EMAIL || "post@pilhammer.no",
 };
 
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -26,9 +26,13 @@ for (const [dealer, cars] of Object.entries(byDealer)) {
   const subject = `${car.make} ${car.model}-annonsen deres på FINN — vi gjorde den bedre (gratis demo)`;
   const body = `Hei!
 
-Vi hjelper bilforhandlere å selge raskere på FINN med bedre annonser:
-profesjonelt behandlede bilder, komplett salgstekst generert fra
-regnummeret, og prisanalyse mot markedet.
+FINNs egen analyse av 155 000 bilannonser viser at 93 % av kjøperne
+ser på bildene først — og at en bil som står usolgt koster forhandler
+rundt 300 kr dagen.
+
+Vi hjelper bilforhandlere å selge raskere på FINN: profesjonelle
+bilder, komplett salgstekst generert fra regnummeret, og prisanalyse
+mot markedet.
 
 For å vise hva vi mener tok vi ${cars.length === 1 ? "en av deres annonser" : cars.length + " av deres annonser"} og
 optimaliserte ${cars.length === 1 ? "den" : "dem"} — se vedlagt demo (kun delt med dere):
@@ -41,11 +45,11 @@ automatisk, hver gang dere legger ut en bil.
 Uforpliktende pilot: vi optimaliserer 5 av deres aktive annonser
 gratis. Liker dere resultatet, snakker vi videre.
 
-Interessert? Svar på denne e-posten eller ring meg.
+Interessert? Svar på denne e-posten.
 
 Vennlig hilsen
-${SENDER.name}
-${SENDER.phone} · ${SENDER.email}
+${SENDER.name}${SENDER.phone ? `\n${SENDER.phone}` : ""}
+${SENDER.email}
 
 --
 Denne henvendelsen er sendt til firmaadressen deres som en
