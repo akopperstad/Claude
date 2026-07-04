@@ -34,6 +34,10 @@ export default function Header() {
         </Link>
 
         <div className="ml-auto flex items-center gap-5 text-sm text-finn-gray">
+          <Link href="/selger" className="hidden items-center gap-1.5 hover:text-finn-blue sm:flex">
+            <IconTag />
+            Mine annonser
+          </Link>
           <button className="hidden items-center gap-1.5 hover:text-finn-blue sm:flex">
             <IconBell />
             Varslinger
@@ -55,6 +59,15 @@ export default function Header() {
         </div>
       </div>
     </header>
+  );
+}
+
+function IconTag() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M12 2H2v10l9.3 9.3a2 2 0 0 0 2.8 0l7.2-7.2a2 2 0 0 0 0-2.8z" />
+      <circle cx="7" cy="7" r="1.5" />
+    </svg>
   );
 }
 
