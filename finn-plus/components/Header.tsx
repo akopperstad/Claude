@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { usePlus } from "./PlusContext";
+import PlusBadge from "./PlusBadge";
 
 export default function Header() {
+  const { isPlus } = usePlus();
   return (
     <header className="border-b border-finn-border bg-white">
       <div className="mx-auto flex max-w-6xl items-center gap-6 px-4 py-3">
@@ -9,6 +14,23 @@ export default function Header() {
             FINN
           </span>
           <span className="text-3xl font-bold text-finn-blue">.no</span>
+        </Link>
+
+        <Link
+          href="/plus"
+          className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium ${
+            isPlus
+              ? "bg-finn-plus-light text-finn-plus"
+              : "bg-finn-plus text-white hover:opacity-90"
+          }`}
+        >
+          {isPlus ? (
+            <>
+              <PlusBadge size="sm" /> Medlem
+            </>
+          ) : (
+            <>Prøv FINN+</>
+          )}
         </Link>
 
         <div className="ml-auto flex items-center gap-5 text-sm text-finn-gray">

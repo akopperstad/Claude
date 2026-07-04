@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { allListings, formatKm, formatPrice, getListing } from "@/lib/listings";
 import ListingImage from "@/components/ListingImage";
+import PriceInsight from "@/components/PriceInsight";
 
 export function generateStaticParams() {
   return allListings.map((l) => ({ id: l.id }));
@@ -62,6 +63,8 @@ export default function ListingPage({ params }: { params: { id: string } }) {
             </>
           )}
         </dl>
+
+        <PriceInsight listing={listing} />
 
         <div className="mt-6 flex gap-3">
           <button className="rounded-lg bg-finn-blue px-6 py-3 font-medium text-white hover:bg-finn-blue-hover">
