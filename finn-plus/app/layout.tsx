@@ -22,7 +22,10 @@ export default function RootLayout({
           {children}
           <DemoToggle />
           <footer className="mt-16 border-t border-finn-border bg-finn-bg py-8 text-center text-xs text-finn-gray-2">
-            Konseptprototype for demonstrasjon — ikke tilknyttet FINN.no / Schibsted.
+            Konseptprototype for demonstrasjon — ikke tilknyttet FINN.no / Schibsted.{" "}
+            <a href="/pitch" className="text-finn-blue hover:underline">
+              Forretningscase →
+            </a>
           </footer>
         </PlusProvider>
       </body>
