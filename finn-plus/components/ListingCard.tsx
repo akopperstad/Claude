@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Listing } from "@/lib/types";
 import { formatKm, formatPrice } from "@/lib/listings";
 import ListingImage from "./ListingImage";
+import PriceBadge from "./PriceBadge";
 
 export default function ListingCard({ listing }: { listing: Listing }) {
   return (
@@ -9,7 +10,10 @@ export default function ListingCard({ listing }: { listing: Listing }) {
       href={`/listing/${listing.id}`}
       className="group flex flex-col overflow-hidden rounded-lg border border-finn-border bg-white shadow-card transition-shadow hover:shadow-card-hover"
     >
-      <ListingImage image={listing.image} className="aspect-[4/3] w-full" />
+      <div className="relative">
+        <ListingImage image={listing.image} className="aspect-[4/3] w-full" />
+        <PriceBadge listing={listing} />
+      </div>
       <div className="flex flex-1 flex-col gap-1 p-3">
         <span className="text-xs text-finn-gray-2">{listing.location}</span>
         <h3 className="text-sm font-medium leading-snug text-finn-ink group-hover:underline">
