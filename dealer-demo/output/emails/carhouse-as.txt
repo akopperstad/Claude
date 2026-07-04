@@ -1,0 +1,31 @@
+TO: (fylles fra data/prospects-emails.json eller manuelt)
+SUBJECT: Toyota Corolla-annonsen deres på FINN — vi gjorde den bedre (gratis demo)
+ATTACHMENT: output/carhouse-as.html
+
+Hei!
+
+Vi hjelper bilforhandlere å selge raskere på FINN med bedre annonser:
+profesjonelt behandlede bilder, komplett salgstekst generert fra
+regnummeret, og prisanalyse mot markedet.
+
+For å vise hva vi mener tok vi en av deres annonser og
+optimaliserte den — se vedlagt demo (kun delt med dere):
+
+    → Vedlagt: demo for CARHOUSE AS
+
+Det tok under 5 minutter per bil. Tenk hele lagerbeholdningen,
+automatisk, hver gang dere legger ut en bil.
+
+Uforpliktende pilot: vi optimaliserer 5 av deres aktive annonser
+gratis. Liker dere resultatet, snakker vi videre.
+
+Interessert? Svar på denne e-posten eller ring meg.
+
+Vennlig hilsen
+[DITT NAVN]
+[TELEFON] · [DIN-EPOST]
+
+--
+Denne henvendelsen er sendt til firmaadressen deres som en
+bedriftshenvendelse. Ønsker dere ikke flere e-poster fra oss,
+svar «stopp» så fjerner vi dere umiddelbart.
