@@ -1,4 +1,5 @@
 import { ListingBase } from "@/lib/types";
+import { PHOTO_IDS } from "@/lib/photos";
 
 const PATHS: Record<ListingBase["image"]["icon"], JSX.Element> = {
   house: (
@@ -33,14 +34,32 @@ const PATHS: Record<ListingBase["image"]["icon"], JSX.Element> = {
   ),
 };
 
-/** Photo placeholder: soft gradient + line icon. Keeps prototype fully offline. */
+/** Listing photo when one exists in /public/listings, otherwise a gradient
+ *  + line-icon placeholder so the prototype still works without assets. */
 export default function ListingImage({
   image,
+  listingId,
+  alt = "",
   className = "",
 }: {
   image: ListingBase["image"];
+  listingId?: string;
+  alt?: string;
   className?: string;
 }) {
+  if (listingId && PHOTO_IDS.has(listingId)) {
+    return (
+      <div className={`relative overflow-hidden ${className}`}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`/listings/${listingId}.jpg`}
+          alt={alt}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      </div>
+    );
+  }
+
   const { hue, icon } = image;
   return (
     <div

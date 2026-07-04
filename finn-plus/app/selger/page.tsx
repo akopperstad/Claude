@@ -39,7 +39,7 @@ function SellerCard({ listing }: { listing: Listing }) {
   return (
     <section className="overflow-hidden rounded-lg border border-finn-border bg-white shadow-card">
       <div className="flex items-center gap-4 border-b border-finn-border p-4">
-        <ListingImage image={listing.image} className="h-16 w-24 shrink-0 rounded-md" />
+        <ListingImage image={listing.image} listingId={listing.id} alt={listing.title} className="h-16 w-24 shrink-0 rounded-md" />
         <div className="min-w-0">
           <Link href={`/listing/${listing.id}`} className="block truncate font-medium hover:underline">
             {listing.title}

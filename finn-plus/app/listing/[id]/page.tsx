@@ -29,6 +29,8 @@ export default function ListingPage({ params }: { params: { id: string } }) {
 
       <ListingImage
         image={listing.image}
+        listingId={listing.id}
+        alt={listing.title}
         className="mt-4 aspect-[16/9] w-full rounded-lg"
       />
 

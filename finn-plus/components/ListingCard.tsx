@@ -23,6 +23,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
         <div className="relative">
           <ListingImage
             image={listing.image}
+            listingId={listing.id}
             className="aspect-[4/3] w-full blur-md"
           />
           <div className="absolute inset-0 flex items-center justify-center bg-white/40">
@@ -53,7 +54,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
       className="group flex flex-col overflow-hidden rounded-lg border border-finn-border bg-white shadow-card transition-shadow hover:shadow-card-hover"
     >
       <div className="relative">
-        <ListingImage image={listing.image} className="aspect-[4/3] w-full" />
+        <ListingImage image={listing.image} listingId={listing.id} alt={listing.title} className="aspect-[4/3] w-full" />
         <PriceBadge listing={listing} />
         {early && isPlus && (
           <span className="absolute bottom-2 left-2 rounded-full bg-finn-plus px-2 py-1 text-[11px] font-bold text-white shadow-card">
