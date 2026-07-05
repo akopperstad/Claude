@@ -158,3 +158,40 @@ re-imagined) — geometry lock on real photos is bucket 2 goal #1.
   (already the product's core interaction) plus a simple "geometri
   kontrollert" badge backed by the internal checks. Overlays live in the
   eval pipeline and checkpoint reports only.
+
+### 2026-07-05 — Interview round 2: goal review (new session)
+
+Full app + goal review conducted; founder re-interviewed in three rounds.
+Priorities re-locked as follows.
+
+- **A16 — Definition of done, exterior (founder's own list):**
+  1. All four nivåer render as their cards promise.
+  2. The free-text prompt field is operational across the flow.
+  3. **Iterative editing:** a follow-up instruction ("paint it red" → "…and
+     remove the bushes") edits the *previous render*, not the original photo
+     — render chain, not restart. This is the headline gap.
+  4. finn.no listing import works (paste listing URL → photos into project).
+
+  Acceptance = **founder field test**: 3–5 real houses end-to-end without
+  apologizing. Everything else from the code review (report download,
+  håndverker lead flow, render gallery) is backlog, not blocking.
+- **A17 — finn.no import un-deferred.** The v1 deferral ("legal/ToS review
+  first") is overridden by founder for local beta use: user pastes a finn
+  URL, listing photos are fetched into their project. Flag stands: a proper
+  ToS/legal review is still required before this ships on a public URL —
+  listing photos carry photographer/broker copyright.
+- **A18 — Pricing model: homedesigns.ai reference.** Founder wants tiers
+  "along the same lines": subscription tiers with monthly render quotas +
+  yearly discount. Replaces the A9/A12 three-card layout on the pricing
+  page; buttons say "kommer snart" / join waitlist. Payment rails are
+  explicitly deferred until the app is otherwise fully operational
+  (supersedes A15's beta-payment timing; org.nr still pending, only Gemini
+  API billing is in place).
+- **A19 — Launch posture: local until done.** No public URL yet; field
+  testing on localhost. Geometry stance for the beta: ship honest — best-of-3
+  interim per A7, and the unbacked "geometri kontrollert" claim is softened
+  until segmentation exists.
+- **A20 — Roadmap order after exterior is done:**
+  deploy (public beta) → interior restyling → payment.
+  Floor plan optimization stays deferred (stage three). This re-times D1's
+  stage two but does not change the sequence: exterior completes first.
