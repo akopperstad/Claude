@@ -4,8 +4,11 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-const COUNT = 2600; // total motes in the depth field
-const NODES = 90; // brighter "fleet" nodes among them
+// Fewer motes on small screens to keep phones smooth. This module only ever
+// evaluates on the client (imported with ssr:false), so window is available.
+const IS_MOBILE = typeof window !== "undefined" && window.innerWidth < 768;
+const COUNT = IS_MOBILE ? 1200 : 2600; // total motes in the depth field
+const NODES = IS_MOBILE ? 45 : 90; // brighter "fleet" nodes among them
 
 const vertexShader = /* glsl */ `
   attribute float aSize;

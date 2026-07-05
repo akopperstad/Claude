@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 /**
  * Lead capture endpoint.
  *
- * Validates the walkthrough request and returns success. Wiring the actual
- * delivery (email via SMTP / CRM webhook) is the remaining integration —
- * plug the destination in where marked once credentials are provided.
+ * Validates the walkthrough request, then delivers it by email when SMTP is
+ * configured. To activate delivery, set these environment variables:
+ *   SMTP_URL   e.g. smtp://user:pass@smtp.host:587
+ *   LEADS_TO   destination inbox (defaults to hello@seawise.no)
+ *   LEADS_FROM from address (defaults to LEADS_TO)
+ * Without SMTP_URL the lead is logged and accepted (safe no-op for previews).
  */
 export async function POST(req: Request) {
   let body: Record<string, unknown>;
@@ -30,9 +34,34 @@ export async function POST(req: Request) {
     message: String(body.message ?? "").trim(),
   };
 
-  // TODO: deliver the lead — SMTP (nodemailer), Resend, or a CRM webhook.
-  // Requires destination credentials (e.g. SEAWISE_LEADS_TO + SMTP_URL).
-  console.log("[seawise] new lead", lead);
+  const smtp = process.env.SMTP_URL;
+  if (!smtp) {
+    console.log("[seawise] new lead (SMTP not configured — logging only)", lead);
+    return NextResponse.json({ ok: true });
+  }
 
-  return NextResponse.json({ ok: true });
+  const to = process.env.LEADS_TO || "hello@seawise.no";
+  const from = process.env.LEADS_FROM || to;
+  try {
+    const transport = nodemailer.createTransport(smtp);
+    await transport.sendMail({
+      to,
+      from,
+      replyTo: email,
+      subject: `New walkthrough request — ${name}${lead.company ? ` (${lead.company})` : ""}`,
+      text: [
+        `Name:    ${name}`,
+        `Email:   ${email}`,
+        `Company: ${lead.company || "—"}`,
+        `Role:    ${lead.role || "—"}`,
+        `Fleet:   ${lead.fleet || "—"}`,
+        "",
+        lead.message || "(no message)",
+      ].join("\n"),
+    });
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("[seawise] lead email failed", err);
+    return NextResponse.json({ error: "Delivery failed" }, { status: 502 });
+  }
 }

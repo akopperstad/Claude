@@ -2,6 +2,7 @@ import Reveal from "@/components/Reveal";
 import HeroBackground from "@/components/HeroBackground";
 import ProductShowcase from "@/components/ProductShowcase";
 import ContactForm from "@/components/ContactForm";
+import Logo from "@/components/Logo";
 
 export default function Home() {
   return (
@@ -12,9 +13,8 @@ export default function Home() {
       {/* Nav */}
       <header className="fixed inset-x-0 top-0 z-50">
         <nav className="shell flex items-center justify-between py-6">
-          <a href="#top" className="flex items-center gap-2.5 font-display text-lg tracking-tight">
-            <span className="h-2 w-2 rounded-full bg-sea-signal shadow-[0_0_12px] shadow-sea-signal" />
-            Seawise
+          <a href="#top" aria-label="Seawise home">
+            <Logo />
           </a>
           <div className="hidden items-center gap-9 text-sm text-sea-mist md:flex">
             <a href="#problem" className="transition-colors hover:text-sea-foam">The problem</a>
@@ -214,10 +214,7 @@ export default function Home() {
       </section>
 
       <footer className="shell flex flex-col items-center justify-between gap-4 border-t border-sea-steel/15 py-10 text-sm text-sea-mist sm:flex-row">
-        <span className="flex items-center gap-2.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-sea-signal" />
-          Seawise
-        </span>
+        <Logo className="text-base" />
         <span>© 2026 Seawise AS</span>
       </footer>
     </main>
