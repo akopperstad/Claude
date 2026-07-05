@@ -13,6 +13,11 @@ import type { PaletteScheme } from '@pipeline/palette';
  */
 
 export interface RenderRecord {
+  id: string;
+  /** set when this render is a chained edit of an earlier render */
+  parentId?: string;
+  /** the follow-up instruction that produced a chained edit */
+  instruction?: string;
   level: Level;
   target: string;
   imageUrl: string; // route-served or provider URL

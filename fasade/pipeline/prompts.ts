@@ -50,6 +50,25 @@ export function buildPrompt(
   );
 }
 
+/**
+ * Prompt for a chained edit (A16.3): the source image is a PREVIOUS RENDER,
+ * and the instruction is the user's free-text delta ("…og fjern buskene").
+ * Free-form and nivå-agnostic by decision — the user may ask for structural
+ * changes — so there is no hard structural negative here; the only guard is
+ * "change nothing the instruction doesn't ask for", which is what makes it
+ * an edit instead of a re-generation.
+ */
+export function buildEditPrompt(house: HouseAnalysis, instruction: string): string {
+  return (
+    'This is a photo edit, not a re-generation. Apply ONLY this change to the ' +
+    `image: ${instruction.trim()}. ` +
+    `The image shows a ${house.buildingType}. ` +
+    'Change nothing the instruction does not ask for: keep every other detail, ' +
+    'the surroundings, the lighting and the exact camera angle unchanged. ' +
+    'Photorealistic.'
+  );
+}
+
 function changeSentence(house: HouseAnalysis, req: RenderRequest): string {
   // Owner wishes only apply to the loose transforms; the strict levels'
   // whole promise is that nothing else changes.

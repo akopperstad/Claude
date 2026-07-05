@@ -3,7 +3,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { analyzeHouse } from '@pipeline/analyze';
-import { buildPrompt } from '@pipeline/prompts';
+import { buildEditPrompt, buildPrompt } from '@pipeline/prompts';
 import { suggestPalette, type PaletteScheme } from '@pipeline/palette';
 import { renderWithGemini } from '@pipeline/geminiProvider';
 import { HiggsfieldProvider } from '@pipeline/higgsfieldProvider';
@@ -79,6 +79,55 @@ export interface RenderOutcome {
   demoSubstituted: boolean;
 }
 
+/** Resolve an app-served image URL back to the file that produced it. */
+export function imageFilePath(imageUrl: string): string | null {
+  const render = imageUrl.match(/^\/api\/render\/([a-f0-9]{12}\.(?:png|jpg))$/);
+  if (render) return path.join(process.cwd(), 'data', 'renders', render[1]);
+  if (imageUrl.startsWith('/demo/')) {
+    return path.join(process.cwd(), 'public', imageUrl.slice(1));
+  }
+  return null;
+}
+
+async function generateWithGemini(filePath: string, prompt: string): Promise<string> {
+  const bytes = await readFile(filePath);
+  const mime = filePath.endsWith('.png') ? 'image/png' : 'image/jpeg';
+  const result = await renderWithGemini(
+    bytes.toString('base64'),
+    mime,
+    prompt,
+    process.env.GEMINI_API_KEY!,
+  );
+  const ext = result.mimeType.includes('png') ? 'png' : 'jpg';
+  const name = `${randomUUID().replace(/-/g, '').slice(0, 12)}.${ext}`;
+  const dir = path.join(process.cwd(), 'data', 'renders');
+  await mkdir(dir, { recursive: true });
+  await writeFile(path.join(dir, name), Buffer.from(result.base64, 'base64'));
+  return `/api/render/${name}`;
+}
+
+/**
+ * Chained edit (A16.3): applies a free-text instruction to a PREVIOUS render
+ * so follow-ups accumulate ("rød" → "…og fjern buskene") instead of
+ * restarting from the original photo.
+ */
+export async function renderEdit(
+  sourceImageUrl: string,
+  analysis: HouseAnalysis,
+  instruction: string,
+): Promise<RenderOutcome> {
+  const target = instruction.trim();
+  if (hasGemini) {
+    const filePath = imageFilePath(sourceImageUrl);
+    if (!filePath) throw new Error('fant ikke kildebildet for justeringen');
+    const prompt = buildEditPrompt(analysis, target);
+    const imageUrl = await generateWithGemini(filePath, prompt);
+    return { imageUrl, target, demoSubstituted: false };
+  }
+  // No provider: keep the flow clickable in demo mode, honestly labeled.
+  return { imageUrl: sourceImageUrl, target, demoSubstituted: true };
+}
+
 export async function renderLevel(
   demo: boolean,
   photoPath: string,
@@ -98,20 +147,8 @@ export async function renderLevel(
     const filePath = demo
       ? path.join(process.cwd(), 'public', photoPath)
       : photoPath;
-    const bytes = await readFile(filePath);
-    const mime = filePath.endsWith('.png') ? 'image/png' : 'image/jpeg';
-    const result = await renderWithGemini(
-      bytes.toString('base64'),
-      mime,
-      prompt,
-      process.env.GEMINI_API_KEY!,
-    );
-    const ext = result.mimeType.includes('png') ? 'png' : 'jpg';
-    const name = `${randomUUID().replace(/-/g, '').slice(0, 12)}.${ext}`;
-    const dir = path.join(process.cwd(), 'data', 'renders');
-    await mkdir(dir, { recursive: true });
-    await writeFile(path.join(dir, name), Buffer.from(result.base64, 'base64'));
-    return { imageUrl: `/api/render/${name}`, target, demoSubstituted: false };
+    const imageUrl = await generateWithGemini(filePath, prompt);
+    return { imageUrl, target, demoSubstituted: false };
   }
 
   if (hasHiggsfield) {

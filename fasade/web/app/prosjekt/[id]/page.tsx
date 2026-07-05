@@ -12,6 +12,9 @@ interface EstimateLine {
   highNok: number;
 }
 interface RenderRecord {
+  id?: string;
+  parentId?: string;
+  instruction?: string;
   level: Level;
   target: string;
   imageUrl: string;
@@ -65,6 +68,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [emailState, setEmailState] = useState<'idle' | 'sent'>('idle');
+  const [juster, setJuster] = useState('');
 
   useEffect(() => {
     void fetch(`/api/prosjekt/${params.id}`)
@@ -94,7 +98,15 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
 
   const beforeUrl = project.demo ? project.photoPath : `/api/bilde/${project.id}`;
 
-  async function render() {
+  // Chain of the shown render (A16.3): walk parent links, oldest first.
+  const byId = new Map(project.renders.filter((r) => r.id).map((r) => [r.id!, r]));
+  const chain: RenderRecord[] = [];
+  for (let cur = result as RenderRecord | undefined; cur; ) {
+    chain.unshift(cur);
+    cur = cur.parentId ? byId.get(cur.parentId) : undefined;
+  }
+
+  async function render(edit?: { baseRenderId: string; instruction: string }) {
     setBusy(true);
     setError(null);
     // Typical generative render: 20-45 s. The bar eases toward 90% on that
@@ -124,14 +136,15 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
     }, 900);
     try {
       const valgtFarge = egenFarge.trim() || farge;
+      const payload = edit ?? {
+        level,
+        ...(level <= 2 && valgtFarge ? { target: valgtFarge } : {}),
+        ...(level >= 3 && wishes.trim() ? { wishes: wishes.trim() } : {}),
+      };
       const res = await fetch(`/api/prosjekt/${project!.id}/render`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          level,
-          ...(level <= 2 && valgtFarge ? { target: valgtFarge } : {}),
-          ...(level >= 3 && wishes.trim() ? { wishes: wishes.trim() } : {}),
-        }),
+        body: JSON.stringify(payload),
       });
       const text = await res.text();
       const data = text ? JSON.parse(text) : {};
@@ -139,6 +152,8 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       setProgress(100);
       setStage('Ferdig!');
       setResult(data);
+      setProject((p) => (p ? { ...p, renders: [...p.renders, data] } : p));
+      if (edit) setJuster('');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'rendering feilet');
     } finally {
@@ -255,6 +270,42 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
               {result.demoSubstituted &&
                 ' · Demo-modus: eksempelrender vist — koble til render-API for ditt bilde'}
             </p>
+            {chain.length > 1 && (
+              <div className="chips" style={{ marginTop: 10 }}>
+                {chain.map((r, i) => (
+                  <button
+                    key={r.id ?? i}
+                    className={`chip-farge${r === result ? ' valgt' : ''}`}
+                    onClick={() => setResult(r)}
+                    title="Vis dette steget — neste justering bygger på steget du ser"
+                  >
+                    {i + 1}. {r.instruction ?? r.target}
+                  </button>
+                ))}
+              </div>
+            )}
+            {result.id && (
+              <form
+                style={{ display: 'flex', gap: 8, marginTop: 12 }}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (juster.trim() && result?.id)
+                    void render({ baseRenderId: result.id, instruction: juster.trim() });
+                }}
+              >
+                <input
+                  className="felt"
+                  style={{ margin: 0, flex: 1 }}
+                  maxLength={400}
+                  placeholder="Juster videre — f.eks. «og fjern buskene foran»"
+                  value={juster}
+                  onChange={(e) => setJuster(e.target.value)}
+                />
+                <button className="btn" type="submit" disabled={busy || !juster.trim()}>
+                  {busy ? 'Justerer …' : 'Juster'}
+                </button>
+              </form>
+            )}
           </div>
           <div>
             {result.palette && (
