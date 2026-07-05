@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --shell-px: clamp(1.25rem, 5vw, 5rem);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-sea-abyss text-sea-foam font-sans antialiased;
+    /* Lenis drives scroll; keep native smooth off to avoid double-easing */
+    scroll-behavior: auto;
+  }
+
+  ::selection {
+    background: theme("colors.sea.signal");
+    color: theme("colors.sea.abyss");
+  }
+
+  /* Lenis */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: theme("maxWidth.shell");
+    margin-inline: auto;
+    padding-inline: var(--shell-px);
+  }
+
+  /* Elements that reveal on scroll start hidden; GSAP animates them in. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    will-change: opacity, transform;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
