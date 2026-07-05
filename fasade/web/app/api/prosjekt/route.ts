@@ -22,7 +22,18 @@ export async function POST(req: NextRequest) {
       if (!body.finnImageUrl.startsWith('https://images.finncdn.no/dynamic/')) {
         return NextResponse.json({ error: 'ugyldig bildekilde' }, { status: 400 });
       }
-      const res = await fetch(body.finnImageUrl);
+      // The sized renditions (1600w etc.) are re-encoded and slightly
+      // upscaled/downscaled; /dynamic/original/ serves the untouched photo.
+      // Explicit Accept keeps finncdn's content negotiation from handing us
+      // a heavily compressed AVIF. Fall back to the given rendition for old
+      // listings without an original.
+      const original = body.finnImageUrl.replace(
+        /\/dynamic\/(?:\d+w|\d+x\d+c?)\//,
+        '/dynamic/original/',
+      );
+      const accept = { headers: { Accept: 'image/png,image/jpeg' } };
+      let res = await fetch(original, accept);
+      if (!res.ok) res = await fetch(body.finnImageUrl, accept);
       if (!res.ok) {
         return NextResponse.json({ error: 'klarte ikke hente bildet' }, { status: 502 });
       }
