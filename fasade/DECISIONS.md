@@ -245,3 +245,21 @@ roof surface, frames and doors.
   chain for refinement. The swipe-based style-discovery funnel REMAINS
   deferred to post-deploy (per original D-list) — pre-traffic it is a demo,
   not discovery.
+
+### 2026-07-05 — Engagement mechanics (founder "trending prompts" idea, refined)
+
+- **A25 — Honest engagement, consumption later.** Founder proposed
+  "trending prompts" to provoke token usage. COO challenge accepted: with
+  payment off, renders are pure COGS, and fake "trending" without users is
+  fake social proof. Locked instead:
+  - **«Populære ideer» chips** on the chain field — editorially curated
+    one-tap follow-ups (bålpanne, utekjøkken, basseng, garasje...),
+    honestly labeled. Becomes data-driven trending when real traffic exists.
+  - **Anonymous local telemetry** — append-only jsonl per render event:
+    level, style, staging, chained/chip source, instruction text. No photos,
+    no identity beyond the quota cookie. Feeds trending, product learning,
+    pricing decisions.
+  - **Share card** — before/after image with Vøling watermark, one-tap
+    download. Pre-payment the K-factor beats token counts.
+  - Seasonal chip packs: noted, not now. Consumption-maximizing mechanics
+    re-evaluated when payment lands (they become the upsell engine).

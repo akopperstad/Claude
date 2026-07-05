@@ -45,6 +45,17 @@ const NIVAER: { level: Level; navn: string; body: string; tag: string; poeng: nu
   { level: 4, navn: 'Visjon', body: 'Full arkitektonisk forvandling på samme tomt.', tag: 'Gratis i beta', poeng: 3 },
 ];
 
+/** «Populære ideer» (A25): editorial one-tap follow-ups for the chain. */
+const IDEER: string[] = [
+  'Bålpanne på uteplassen',
+  'Utekjøkken med grill',
+  'Basseng i hagen',
+  'Drivhus i hjørnet av hagen',
+  'Ny dobbel garasje',
+  'Hagebelysning langs gangstien',
+  'Levegg ved terrassen',
+];
+
 const FARGER: { navn: string; hex: string }[] = [
   { navn: 'Klassisk hvit', hex: '#EFEDE6' },
   { navn: 'Rørosrød', hex: '#7C2A22' },
@@ -114,7 +125,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
     cur = cur.parentId ? byId.get(cur.parentId) : undefined;
   }
 
-  async function render(edit?: { baseRenderId: string; instruction: string }) {
+  async function render(edit?: { baseRenderId: string; instruction: string; source?: 'chip' | 'text' }) {
     setBusy(true);
     setError(null);
     // Typical generative render: 20-45 s. The bar eases toward 90% on that
@@ -173,6 +184,55 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       clearInterval(ticker);
       setBusy(false);
     }
+  }
+
+  /** Share card (A25): before/after side by side with the Vøling watermark. */
+  async function shareCard() {
+    if (!result) return;
+    const load = (src: string) =>
+      new Promise<HTMLImageElement>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+    const [before, after] = await Promise.all([load(beforeUrl), load(result.imageUrl)]);
+    const H = 900;
+    const wB = Math.round((before.width / before.height) * H);
+    const wA = Math.round((after.width / after.height) * H);
+    const footer = 110;
+    const canvas = document.createElement('canvas');
+    canvas.width = wB + wA;
+    canvas.height = H + footer;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.fillStyle = '#faf9f6';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(before, 0, 0, wB, H);
+    ctx.drawImage(after, wB, 0, wA, H);
+    const tag = (text: string, x: number) => {
+      ctx.fillStyle = 'rgba(20,24,20,0.78)';
+      ctx.fillRect(x, 24, 118, 46);
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 24px system-ui, sans-serif';
+      ctx.fillText(text, x + 20, 55);
+    };
+    tag('FØR', 24);
+    tag('ETTER', wB + 24);
+    ctx.fillStyle = '#2e4636';
+    ctx.font = 'bold 34px system-ui, sans-serif';
+    ctx.fillText('vøling', 32, H + 68);
+    ctx.fillStyle = '#5c6660';
+    ctx.font = '26px system-ui, sans-serif';
+    ctx.fillText('Se huset ditt i ny drakt · illustrasjon', 152, H + 68);
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'voling-for-etter.png';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }, 'image/png');
   }
 
   return (
@@ -368,12 +428,32 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
               </div>
             )}
             {result.id && (
+              <div className="valg" style={{ marginTop: 12 }}>
+                <span className="eyebrow">Populære ideer</span>
+                <div className="chips">
+                  {IDEER.map((idee) => (
+                    <button
+                      key={idee}
+                      className="chip-farge"
+                      disabled={busy}
+                      onClick={() => {
+                        if (result?.id)
+                          void render({ baseRenderId: result.id, instruction: idee, source: 'chip' });
+                      }}
+                    >
+                      + {idee}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {result.id && (
               <form
                 style={{ display: 'flex', gap: 8, marginTop: 12 }}
                 onSubmit={(e) => {
                   e.preventDefault();
                   if (juster.trim() && result?.id)
-                    void render({ baseRenderId: result.id, instruction: juster.trim() });
+                    void render({ baseRenderId: result.id, instruction: juster.trim(), source: 'text' });
                 }}
               >
                 <input
@@ -433,6 +513,13 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
             >
               Last ned bilde
             </a>
+            <button
+              className="btn ghost"
+              onClick={() => void shareCard()}
+              style={{ width: '100%', marginTop: 10 }}
+            >
+              Del før/etter-bilde
+            </button>
             <div className="kort" style={{ marginTop: 18 }}>
               <span className="eyebrow">Få rapporten på e-post</span>
               {emailState === 'sent' ? (

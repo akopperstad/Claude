@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getProject, save, type RenderRecord } from '@/lib/store';
 import { paletteFor, renderEdit, renderLevel, visionBriefFor } from '@/lib/rendering';
 import { consumeQuota, DAILY_LIMIT } from '@/lib/quota';
+import { logEvent } from '@/lib/telemetry';
 import { estimate } from '@pipeline/estimate';
 import { LEVELS, type Level } from '@pipeline/levels';
 import { EXTERIOR_STYLES } from '@pipeline/presets';
@@ -147,6 +148,17 @@ export async function POST(
 
   project.renders.push(record);
   await save(project);
+
+  await logEvent({
+    kind: 'render',
+    level,
+    chained,
+    source: chained ? (body?.source === 'chip' ? 'chip' : 'text') : undefined,
+    styleId: record.styleId,
+    staging: record.staging,
+    instruction: record.instruction,
+    demoSubstituted,
+  });
 
   const res = NextResponse.json({ ...record, demoSubstituted });
   res.cookies.set('vid', visitorId, {
