@@ -1,5 +1,6 @@
 import Reveal from "@/components/Reveal";
 import HeroBackground from "@/components/HeroBackground";
+import ProductMock from "@/components/ProductMock";
 
 export default function Home() {
   return (
@@ -70,28 +71,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Motion-proof section — placeholder content, real sections land per bucket. */}
+      {/* The problem — the old guard. */}
       <section id="problem" className="shell py-[16vh]">
         <Reveal>
-          <p className="font-mono text-eyebrow uppercase text-sea-mist">01 — Foundation</p>
-          <h2 className="mt-6 max-w-3xl font-display text-display-md">
-            The motion backbone is live.
+          <p className="font-mono text-eyebrow uppercase text-sea-mist">01 — The problem</p>
+          <h2 className="mt-6 max-w-4xl font-display text-display-md">
+            The software running the world’s fleets is stuck in the last
+            century.
           </h2>
+          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-sea-mist">
+            Operators still stitch their day together across dated systems,
+            disconnected spreadsheets and paper trails. The tools are slow,
+            siloed and painful — so good people spend their hours fighting the
+            software instead of running the ship.
+          </p>
         </Reveal>
 
         <Reveal stagger className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-sea-steel/25 bg-sea-steel/25 md:grid-cols-3">
           {[
             {
-              k: "Smooth scroll",
-              d: "Lenis drives an eased scroll position that every animation reads from.",
+              k: "Siloed",
+              d: "Operations, compliance, crew and maintenance each live in their own disconnected tool. Nothing talks.",
             },
             {
-              k: "Scroll choreography",
-              d: "GSAP ScrollTrigger reveals and pins content as you move down the page.",
+              k: "Slow",
+              d: "Legacy interfaces built decades ago. Every task takes more clicks, more waiting, more workarounds.",
             },
             {
-              k: "WebGL-ready",
-              d: "React Three Fiber is wired for a living hero — the next bucket.",
+              k: "Opaque",
+              d: "No single view of the fleet. Answers mean chasing people and re-keying numbers between systems.",
             },
           ].map((c) => (
             <div key={c.k} className="reveal bg-sea-deep p-8">
@@ -102,13 +110,48 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* placeholder sections so the scroll has length to demonstrate motion */}
+      {/* The platform — Nautech. */}
       <section id="platform" className="shell border-t border-sea-steel/15 py-[16vh]">
         <Reveal>
-          <p className="font-mono text-eyebrow uppercase text-sea-mist">02 — Platform</p>
-          <h2 className="mt-6 max-w-3xl font-display text-display-md text-sea-mist/50">
-            Placeholder. Real content lands bucket by bucket.
+          <p className="font-mono text-eyebrow uppercase text-sea-mist">02 — The platform</p>
+          <h2 className="mt-6 max-w-4xl font-display text-display-md">
+            One system for the whole operation.
           </h2>
+          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-sea-mist">
+            <span className="text-sea-foam">Nautech</span> is the Seawise fleet
+            OS — operations, compliance, crew, maintenance and intelligence in
+            one maritime ERP. It starts with the Safety Management System and
+            grows into the entire operation.
+          </p>
+        </Reveal>
+
+        <Reveal className="mt-14">
+          <ProductMock />
+          <p className="mt-4 font-mono text-[0.7rem] uppercase tracking-wider text-sea-mist/50">
+            Brand render — real product views swap in from Nautech.
+          </p>
+        </Reveal>
+
+        <Reveal stagger className="mt-16 grid grid-cols-2 gap-x-10 gap-y-5 md:grid-cols-3 lg:grid-cols-4">
+          {[
+            "Command Center",
+            "Fleet",
+            "Crew",
+            "Maintenance",
+            "Supply",
+            "HSEQ",
+            "Security",
+            "Documents",
+            "Finance",
+            "Commercial",
+            "Intelligence",
+            "Compliance",
+          ].map((m) => (
+            <div key={m} className="reveal flex items-center gap-3 border-t border-sea-steel/15 pt-4 text-sea-foam">
+              <span className="h-1 w-1 rounded-full bg-sea-signal" />
+              {m}
+            </div>
+          ))}
         </Reveal>
       </section>
 
