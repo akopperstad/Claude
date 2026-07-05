@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { BP } from "@/lib/basePath";
 
 const MODULES = [
   { file: "command-center", label: "Command Center", d: "Real-time fleet overview — bridge data, status, quick actions." },
@@ -63,7 +64,7 @@ export default function ProductExplorer() {
     if (window.innerWidth < 768) return;
     MODULES.forEach((x) => {
       const img = new Image();
-      img.src = `/product/${x.file}.png`;
+      img.src = `${BP}/product/${x.file}.png`;
     });
   }, []);
 
@@ -117,7 +118,7 @@ export default function ProductExplorer() {
             <div
               key={m.file}
               className="absolute inset-0 animate-[fadein_0.45s_ease-out_forwards] bg-cover bg-top opacity-0"
-              style={{ backgroundImage: `url(/product/${m.file}.png)` }}
+              style={{ backgroundImage: `url(${BP}/product/${m.file}.png)` }}
             />
           </div>
         </figure>
@@ -137,7 +138,7 @@ export default function ProductExplorer() {
             </div>
             <div
               className="aspect-[16/10] bg-cover bg-top"
-              style={{ backgroundImage: `url(/product/${x.file}.png)` }}
+              style={{ backgroundImage: `url(${BP}/product/${x.file}.png)` }}
             />
           </figure>
         ))}

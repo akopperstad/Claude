@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 // R3F canvas must never SSR
 const HeroCanvas = dynamic(() => import("./HeroCanvas"), { ssr: false });
 
+import { BP } from "@/lib/basePath";
+
 /**
  * Layered hero backdrop:
  *  1. base depth gradient (always)
@@ -59,7 +61,7 @@ export default function HeroBackground() {
       <div
         ref={plate}
         className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-screen"
-        style={{ backgroundImage: "url(/hero-deep.jpg)" }}
+        style={{ backgroundImage: `url(${BP}/hero-deep.jpg)` }}
       />
       {/* 3. live field */}
       {mounted && animate && (
