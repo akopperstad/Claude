@@ -60,3 +60,25 @@ No doubt." Renders convince; tech proof stands. Additions locked at checkpoint:
   feature per founder).
 - **A4 — Real-photo stress test pending.** Founder supplies real phone photos;
   bucket 1 test set was photorealistic demo assets.
+
+### 2026-07-05 — Real-photo stress test + four-level model
+
+Stress test on a real finn listing (finnkode 462003966): visjonsmodus
+convinced immediately; the precise repaint drifted (roof form, window layout
+re-imagined) — geometry lock on real photos is bucket 2 goal #1.
+
+- **A5 — Four transformation levels** replace the two-mode split (A1's modes
+  become the ends of a ladder). Drift tolerance, technical strategy, and
+  pricing all scale with level:
+  1. **Farge** — repaint only; geometry sacred.
+  2. **Overflater** — materials swap (kledning, roof surface, frames, doors);
+     no new elements.
+  3. **Oppgradering** — new windows in existing openings, entrance, patio,
+     lighting, landscaping; house stays recognizably itself. (Validated twice:
+     e2 refresh in bucket 1 and the founder's friend asking for exactly this.)
+  4. **Visjon** — full architectural reimagining.
+- **A6 — Global visuals disclaimer.** Everything the product outputs is
+  labeled as visualization ("illustrasjon"), the pattern Norwegian consumers
+  already know from prospekter. No buildability vetting anywhere; level 3–4
+  additive elements get a contextual "tiltak kan være søknadspliktige" hint.
+  Renders are inspiration, not engineering.
