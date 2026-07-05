@@ -131,6 +131,16 @@ re-imagined) — geometry lock on real photos is bucket 2 goal #1.
   fargerapport + kostnadsestimat). Vipps + kort. Undercuts US tools ($17–49)
   because our nivå-1 COGS is near zero.
 
+### 2026-07-05 — Bucket 4 field-finding: render backend (A14)
+
+- **A14 — Production generative renders run on Google's Gemini API** (the
+  nano banana family maker-direct; key from aistudio.google.com, free tier
+  covers validation). Field-tested during founder's local setup: Higgsfield's
+  platform API exposes no image-edit models (Soul/DoP/Popcorn only — auth
+  and request pattern verified live, model catalog confirmed by founder), so
+  the consumer-app model we validated in buckets 1–2 is unreachable there.
+  Higgsfield stays the prototyping lab via the chat connector.
+
 ### 2026-07-05 — Bucket 2 checkpoint: A7 ratified with modification
 
 - **A7 ratified.** Segmentation-based nivå 1–2, generative nivå 3–4,

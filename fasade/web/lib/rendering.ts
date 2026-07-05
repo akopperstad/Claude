@@ -1,8 +1,11 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { readFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
+import path from 'node:path';
 import { analyzeHouse } from '@pipeline/analyze';
 import { buildPrompt } from '@pipeline/prompts';
 import { suggestPalette, type PaletteScheme } from '@pipeline/palette';
+import { renderWithGemini } from '@pipeline/geminiProvider';
 import { HiggsfieldProvider } from '@pipeline/higgsfieldProvider';
 import { LEVELS, type Level } from '@pipeline/levels';
 import type { HouseAnalysis, RenderRequest } from '@pipeline/types';
@@ -17,6 +20,7 @@ import type { HouseAnalysis, RenderRequest } from '@pipeline/types';
  */
 
 export const hasAnthropic = Boolean(process.env.ANTHROPIC_API_KEY);
+export const hasGemini = Boolean(process.env.GEMINI_API_KEY);
 export const hasHiggsfield = Boolean(
   process.env.HIGGSFIELD_API_KEY && process.env.HIGGSFIELD_API_SECRET,
 );
@@ -77,25 +81,47 @@ export interface RenderOutcome {
 
 export async function renderLevel(
   demo: boolean,
-  photoUrl: string,
+  photoPath: string,
   analysis: HouseAnalysis,
   level: Level,
   target: string,
 ): Promise<RenderOutcome> {
-  if (!hasHiggsfield) {
-    // No provider: demo projects get their pre-baked render; uploaded photos
-    // can't be rendered yet — surface that honestly.
-    if (demo) return { ...DEMO_RENDERS[level], demoSubstituted: false };
-    return { ...DEMO_RENDERS[level], demoSubstituted: true };
-  }
-  const spec = LEVELS[level];
   const request: RenderRequest = {
     transform: level === 1 ? 'repaint' : level === 2 ? 'cladding' : 'refresh',
     target,
   };
   const prompt = buildPrompt(analysis, request, level);
-  const provider = new HiggsfieldProvider();
-  const result = await provider.render(photoUrl, prompt, request);
-  void spec;
-  return { imageUrl: result.imageUrl, target, demoSubstituted: false };
+
+  if (hasGemini) {
+    const filePath = demo
+      ? path.join(process.cwd(), 'public', photoPath)
+      : photoPath;
+    const bytes = await readFile(filePath);
+    const mime = filePath.endsWith('.png') ? 'image/png' : 'image/jpeg';
+    const result = await renderWithGemini(
+      bytes.toString('base64'),
+      mime,
+      prompt,
+      process.env.GEMINI_API_KEY!,
+    );
+    const ext = result.mimeType.includes('png') ? 'png' : 'jpg';
+    const name = `${randomUUID().slice(0, 12)}.${ext}`;
+    const dir = path.join(process.cwd(), 'data', 'renders');
+    await mkdir(dir, { recursive: true });
+    await writeFile(path.join(dir, name), Buffer.from(result.base64, 'base64'));
+    return { imageUrl: `/api/render/${name}`, target, demoSubstituted: false };
+  }
+
+  if (hasHiggsfield) {
+    const spec = LEVELS[level];
+    void spec;
+    const provider = new HiggsfieldProvider();
+    const result = await provider.render(photoPath, prompt, request);
+    return { imageUrl: result.imageUrl, target, demoSubstituted: false };
+  }
+
+  // No provider: demo projects get their pre-baked render; uploaded photos
+  // can't be rendered yet — surface that honestly.
+  if (demo) return { ...DEMO_RENDERS[level], demoSubstituted: false };
+  return { ...DEMO_RENDERS[level], demoSubstituted: true };
 }
