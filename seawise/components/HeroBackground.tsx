@@ -59,7 +59,7 @@ export default function HeroBackground() {
       <div
         ref={plate}
         className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-screen"
-        style={{ backgroundImage: "url(/hero-deep.png)" }}
+        style={{ backgroundImage: "url(/hero-deep.jpg)" }}
       />
       {/* 3. live field */}
       {mounted && animate && (

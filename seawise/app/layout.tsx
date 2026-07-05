@@ -39,13 +39,13 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://seawise.no",
     siteName: "Seawise",
-    images: ["/hero-deep.png"],
+    images: ["/og.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Seawise — The modern maritime fleet OS",
     description: "The modern operating system for fleet operators.",
-    images: ["/hero-deep.png"],
+    images: ["/og.png"],
   },
 };
 

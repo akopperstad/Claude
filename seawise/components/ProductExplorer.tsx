@@ -57,17 +57,20 @@ export default function ProductExplorer() {
     };
   }, []);
 
+  // Preload all screens (desktop only) so hover swaps are instant without
+  // costing mobile visitors ~2 MB they never see.
+  useEffect(() => {
+    if (window.innerWidth < 768) return;
+    MODULES.forEach((x) => {
+      const img = new Image();
+      img.src = `/product/${x.file}.png`;
+    });
+  }, []);
+
   const m = MODULES[active];
 
   return (
     <>
-      {/* preload all screens so swaps are instant */}
-      <div className="hidden" aria-hidden>
-        {MODULES.map((x) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img key={x.file} src={`/product/${x.file}.png`} alt="" loading="eager" />
-        ))}
-      </div>
 
       {/* Desktop: list drives the frame */}
       <div className="hidden gap-14 md:grid md:grid-cols-[minmax(230px,0.72fr)_2fr]">
