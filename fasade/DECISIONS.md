@@ -195,3 +195,22 @@ Priorities re-locked as follows.
   deploy (public beta) → interior restyling → payment.
   Floor plan optimization stays deferred (stage three). This re-times D1's
   stage two but does not change the sequence: exterior completes first.
+
+### 2026-07-05 — Staging rules (founder + COO discussion)
+
+- **A21 — "Rydd & vask" staging ladder, tiered and toggleable, never
+  silent.** Founder's initial idea (always-on global rules: remove satellite
+  dishes, clean junk, powerwash surfaces) was challenged and refined: silent
+  edits would break the nivå 1–2 "alt annet urørt" promise and the slider
+  trust anchor (A8), and inject drift by design (bucket 2 lesson). Locked
+  model instead:
+  - **S1 Rydd** — movable junk away (bins, hoses, tarps, trailers).
+  - **S2 Vask** — visual powerwash: roof, cladding, driveway.
+  - **S3 Stell** — lawn mowed, hedges trimmed.
+  - **S4 Fjern installasjoner** — parabol, visible cables, old antennas
+    (rides inside the same toggle, founder decision).
+  One customer-facing toggle at every level ("Vis huset nyvasket og ryddet"):
+  default ON at nivå 3–4, default OFF at nivå 1–2. When applied, the result
+  is labeled ("Inkluderer rydding og vask") so the before/after comparison
+  stays honest. Staging operations map to real services → cost-estimate
+  lines (A10) and håndverker lead types. Build lands in Bucket 7.
