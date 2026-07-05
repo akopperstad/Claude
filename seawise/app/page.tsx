@@ -223,6 +223,45 @@ export default function Home() {
             </p>
           </Reveal>
         </div>
+
+        {/* Numbers that hold. */}
+        <Reveal stagger className="mt-24 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-sea-steel/20 bg-sea-steel/20 lg:grid-cols-4">
+          {[
+            ["12", "modules in one system"],
+            ["A–Z", "of the operation covered"],
+            ["2025", "founded in Norway"],
+            ["1", "login for the whole fleet"],
+          ].map(([v, k]) => (
+            <div key={k} className="reveal bg-sea-deep/90 p-8">
+              <p className="font-display text-4xl text-sea-foam md:text-5xl">{v}</p>
+              <p className="mt-2 text-sm text-sea-mist">{k}</p>
+            </div>
+          ))}
+        </Reveal>
+
+        {/* The people behind it. */}
+        <Reveal className="mt-24">
+          <p className="font-mono text-eyebrow uppercase text-sea-mist">The people behind it</p>
+          <div className="mt-8 grid gap-10 sm:grid-cols-2 lg:max-w-2xl">
+            {[
+              { i: "AK", n: "Arne Kopperstad", r: "Chief Executive Officer" },
+              { i: "KK", n: "Kristian Kopperstad", r: "Chief Operating Officer" },
+            ].map((p) => (
+              <div key={p.i} className="flex items-center gap-5">
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-sea-signal/40 bg-sea-signal/10 font-display text-lg text-sea-signal">
+                  {p.i}
+                </span>
+                <div>
+                  <p className="text-lg text-sea-foam">{p.n}</p>
+                  <p className="text-sm text-sea-mist">{p.r}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-8 max-w-md text-sea-mist">
+            Maritime operators first, software company second.
+          </p>
+        </Reveal>
       </section>
 
       {/* Contact — the one action. */}
