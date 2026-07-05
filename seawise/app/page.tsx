@@ -6,6 +6,7 @@ import NavBar from "@/components/NavBar";
 import Cursor from "@/components/Cursor";
 import Intro from "@/components/Intro";
 import DepthMeter from "@/components/DepthMeter";
+import Constellation from "@/components/Constellation";
 
 /** Chart-style section header: number · rule line · label · coordinates. */
 function SectionHead({
@@ -46,7 +47,7 @@ export default function Home() {
 
       {/* Hero */}
       <section id="top" className="relative flex min-h-[100svh] items-end">
-        <div className="shell w-full pb-[10vh] pt-40">
+        <div className="shell w-full pb-[10vh] pt-40" data-parallax="-12">
           <Reveal stagger className="max-w-5xl">
             <p className="reveal font-mono text-eyebrow uppercase text-sea-signal">
               The Fleet OS · Built in Norway
@@ -88,49 +89,53 @@ export default function Home() {
         </div>
       </section>
 
-      {/* The problem — editorial ledger, offset right. */}
+      {/* The problem — pinned narrative: headline holds while pains scroll past. */}
       <section id="problem" className="shell py-[18vh]">
-        <SectionHead no="01" label="The problem" coord="62°28′N · 006°09′E" offset>
-          The software running the world’s fleets is stuck in the last century.
-        </SectionHead>
+        <div className="grid gap-16 md:grid-cols-[1fr_1.25fr] md:gap-20">
+          <div className="md:sticky md:top-36 md:self-start">
+            <SectionHead no="01" label="The problem" coord="62°28′N · 006°09′E">
+              The software running the world’s fleets is stuck in the last
+              century.
+            </SectionHead>
+            <Reveal>
+              <p className="mt-8 max-w-xl text-lg leading-relaxed text-sea-mist">
+                Operators still stitch their day together across dated systems,
+                disconnected spreadsheets and paper trails. The tools are slow,
+                siloed and painful — so good people spend their hours fighting
+                the software instead of running the ship.
+              </p>
+            </Reveal>
+          </div>
 
-        <Reveal className="md:ml-[16%]">
-          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-sea-mist">
-            Operators still stitch their day together across dated systems,
-            disconnected spreadsheets and paper trails. The tools are slow,
-            siloed and painful — so good people spend their hours fighting the
-            software instead of running the ship.
-          </p>
-        </Reveal>
-
-        <Reveal stagger className="mt-20">
-          {[
-            {
-              n: "01",
-              k: "Siloed",
-              d: "Operations, compliance, crew and maintenance each live in their own disconnected tool. Nothing talks.",
-            },
-            {
-              n: "02",
-              k: "Slow",
-              d: "Legacy interfaces built decades ago. Every task takes more clicks, more waiting, more workarounds.",
-            },
-            {
-              n: "03",
-              k: "Opaque",
-              d: "No single view of the fleet. Answers mean chasing people and re-keying numbers between systems.",
-            },
-          ].map((row) => (
-            <div
-              key={row.k}
-              className="reveal grid items-baseline gap-4 border-t border-sea-steel/20 py-10 md:grid-cols-[6rem_1fr_1.4fr] md:gap-10"
-            >
-              <span className="font-mono text-sm text-sea-signal">/{row.n}</span>
-              <h3 className="font-display text-3xl md:text-4xl">{row.k}</h3>
-              <p className="max-w-xl text-lg text-sea-mist">{row.d}</p>
-            </div>
-          ))}
-        </Reveal>
+          <div>
+            {[
+              {
+                n: "01",
+                k: "Siloed",
+                d: "Operations, compliance, crew and maintenance each live in their own disconnected tool. Nothing talks.",
+              },
+              {
+                n: "02",
+                k: "Slow",
+                d: "Legacy interfaces built decades ago. Every task takes more clicks, more waiting, more workarounds.",
+              },
+              {
+                n: "03",
+                k: "Opaque",
+                d: "No single view of the fleet. Answers mean chasing people and re-keying numbers between systems.",
+              },
+            ].map((row) => (
+              <Reveal
+                key={row.k}
+                className="border-t border-sea-steel/20 py-14 first:border-t-0 md:py-20"
+              >
+                <span className="font-mono text-sm text-sea-signal">/{row.n}</span>
+                <h3 className="mt-4 font-display text-4xl md:text-5xl">{row.k}</h3>
+                <p className="mt-5 max-w-xl text-lg text-sea-mist">{row.d}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* The platform — Nautech. */}
@@ -148,7 +153,13 @@ export default function Home() {
           </p>
         </Reveal>
 
-        <Reveal stagger className="mt-16 grid grid-cols-2 gap-x-10 md:grid-cols-3 lg:grid-cols-4">
+        {/* Desktop: the data-sea resolves into the system map. */}
+        <div className="mt-10">
+          <Constellation />
+        </div>
+
+        {/* Mobile: plain module index. */}
+        <Reveal stagger className="mt-14 grid grid-cols-2 gap-x-8 md:hidden">
           {[
             "Command Center",
             "Fleet",

@@ -37,7 +37,17 @@ export default function SmoothScroll({
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
 
+    // Scroll-scrub parallax for any [data-parallax="<yPercent>"] element.
+    const tweens = gsap.utils.toArray<HTMLElement>("[data-parallax]").map((el) =>
+      gsap.to(el, {
+        yPercent: parseFloat(el.dataset.parallax || "0"),
+        ease: "none",
+        scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
+      })
+    );
+
     return () => {
+      tweens.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); });
       gsap.ticker.remove(raf);
       lenis.destroy();
     };
