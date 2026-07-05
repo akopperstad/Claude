@@ -47,6 +47,8 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
   const [project, setProject] = useState<Project | null>(null);
   const [level, setLevel] = useState<Level>(1);
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [stage, setStage] = useState('');
   const [result, setResult] = useState<(RenderRecord & { demoSubstituted?: boolean }) | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -81,18 +83,39 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
   async function render() {
     setBusy(true);
     setError(null);
+    // Typical generative render: 20-45 s. The bar eases toward 90% on that
+    // clock and only hits 100% on a real response — honest, never stuck.
+    const started = Date.now();
+    const STAGES: [number, string][] = [
+      [0, 'Leser bildet …'],
+      [3, 'Analyserer fasade og omgivelser …'],
+      [8, 'Genererer visualisering — tar vanligvis 20–45 sekunder'],
+      [30, 'Legger siste hånd på detaljene …'],
+    ];
+    setProgress(4);
+    setStage(STAGES[0][1]);
+    const ticker = setInterval(() => {
+      const s = (Date.now() - started) / 1000;
+      setProgress(Math.min(90, Math.round((s / 45) * 100)));
+      const current = STAGES.filter(([at]) => s >= at).at(-1);
+      if (current) setStage(current[1]);
+    }, 900);
     try {
       const res = await fetch(`/api/prosjekt/${project!.id}/render`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ level }),
       });
-      const data = await res.json();
+      const text = await res.text();
+      const data = text ? JSON.parse(text) : {};
       if (!res.ok) throw new Error(data?.error ?? 'rendering feilet');
+      setProgress(100);
+      setStage('Ferdig!');
       setResult(data);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'rendering feilet');
     } finally {
+      clearInterval(ticker);
       setBusy(false);
     }
   }
@@ -142,6 +165,14 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
           <button className="btn" disabled={busy} onClick={() => void render()}>
             {busy ? 'Lager visualisering …' : 'Lag visualisering →'}
           </button>
+          {busy && (
+            <div className="progress" role="status" aria-live="polite">
+              <div className="bar">
+                <div className="fill" style={{ width: `${progress}%` }} />
+              </div>
+              <div className="stage">{stage}</div>
+            </div>
+          )}
         </div>
         {error && <div className="hint">{error}</div>}
       </section>

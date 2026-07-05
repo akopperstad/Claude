@@ -435,3 +435,32 @@ footer.site {
   color: var(--muted);
   font-size: 15px;
 }
+
+/* render progress */
+.progress {
+  margin: 18px 0 6px;
+  max-width: 560px;
+}
+.progress .bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.progress .fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: var(--gran);
+  transition: width 0.9s ease;
+}
+.progress .stage {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .progress .fill {
+    transition: none;
+  }
+}
