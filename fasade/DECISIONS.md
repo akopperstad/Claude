@@ -39,4 +39,24 @@ Amendments section — never a silent drift.
 
 ## Amendments
 
-_(none yet)_
+### 2026-07-05 — Bucket 1 checkpoint: PASSED (D9)
+
+Founder verdict: "I would pay for this service once it was fully operational.
+No doubt." Renders convince; tech proof stands. Additions locked at checkpoint:
+
+- **A1 — Two product modes.** *Presis modus*: geometry-locked edits (paint,
+  cladding, window frames, roof surface) that map to buyable products and
+  leads. *Visjonsmodus*: explicitly aspirational architectural reimagining
+  (window placement, roof form, solar, patio, garage, tilbygg) sold as "what
+  it could be" — drives dream conversion and arkitekt/håndverker leads.
+  Additive/structural changes live ONLY in visjonsmodus with a clear
+  "illustrasjon — ikke byggeteknisk vurdert, tiltak kan være søknadspliktige"
+  framing.
+- **A2 — Color input is dual.** User picks exact color OR asks for AI
+  suggestions ("overrask meg"). Both are first-class in the product flow.
+- **A3 — Showcase strategy: fixer-uppers.** Marketing showcases use dated
+  houses (oppussingsobjekt) transformed dramatically, not new builds.
+  Window-replacement/possibility renders are the highlight ("dealbreaker"
+  feature per founder).
+- **A4 — Real-photo stress test pending.** Founder supplies real phone photos;
+  bucket 1 test set was photorealistic demo assets.
