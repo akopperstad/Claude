@@ -26,6 +26,7 @@ export const metadata: Metadata = {
     description:
       "The modern operating system for fleet operators. Built by maritime operators.",
     type: "website",
+    images: ["/hero-deep.png"],
   },
 };
 

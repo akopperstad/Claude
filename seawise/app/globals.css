@@ -52,6 +52,12 @@
   }
 }
 
+@keyframes fadein {
+  to {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1 !important;

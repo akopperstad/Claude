@@ -1,17 +1,11 @@
 import Reveal from "@/components/Reveal";
+import HeroBackground from "@/components/HeroBackground";
 
 export default function Home() {
   return (
     <main className="relative overflow-clip">
-      {/* subtle depth gradient — placeholder for the WebGL ocean in bucket 2 */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(120% 80% at 70% 0%, #0A1826 0%, #060C14 42%, #04070C 100%)",
-        }}
-      />
+      {/* Living WebGL depth field + cinematic plate behind everything */}
+      <HeroBackground />
 
       {/* Nav */}
       <header className="fixed inset-x-0 top-0 z-50">
