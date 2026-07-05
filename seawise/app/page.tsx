@@ -1,6 +1,7 @@
 import Reveal from "@/components/Reveal";
 import HeroBackground from "@/components/HeroBackground";
 import ProductShowcase from "@/components/ProductShowcase";
+import ContactForm from "@/components/ContactForm";
 
 export default function Home() {
   return (
@@ -151,14 +152,73 @@ export default function Home() {
       {/* Real product showcase — featured shot + module marquee. */}
       <ProductShowcase />
 
-      <footer id="contact" className="shell border-t border-sea-steel/15 py-20">
-        <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
-          <p className="font-display text-display-md">Let’s talk.</p>
-          <div className="text-sm text-sea-mist">
-            <p>Seawise · Norway</p>
-            <p className="mt-1">Contact plumbing arrives in a later bucket.</p>
+      {/* Why Seawise — the competence / trust anchor. */}
+      <section id="why" className="shell border-t border-sea-steel/15 py-[16vh]">
+        <Reveal>
+          <p className="font-mono text-eyebrow uppercase text-sea-mist">04 — Why Seawise</p>
+          <h2 className="mt-6 max-w-4xl font-display text-display-md">
+            Built by maritime operators.
+          </h2>
+          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-sea-mist">
+            Seawise is built by people who understand the operational reality of
+            running a fleet — not software people guessing at it. That
+            competence is in every screen, and it’s something we also bring
+            directly to clients.
+          </p>
+        </Reveal>
+
+        <Reveal stagger className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-sea-steel/25 bg-sea-steel/25 md:grid-cols-2">
+          <div className="reveal bg-sea-deep p-8">
+            <p className="font-mono text-eyebrow uppercase text-sea-signal">Nautech</p>
+            <h3 className="mt-4 font-display text-2xl">The fleet OS</h3>
+            <p className="mt-3 text-sea-mist">
+              One maritime ERP for operations, compliance, crew, maintenance and
+              intelligence — modern software that makes it easy to do a good job.
+            </p>
           </div>
+          <div className="reveal bg-sea-deep p-8">
+            <p className="font-mono text-eyebrow uppercase text-sea-signal">Advisory</p>
+            <h3 className="mt-4 font-display text-2xl">Real-world competence</h3>
+            <p className="mt-3 text-sea-mist">
+              Operational maritime expertise for evaluations, reports and reviews
+              — the hands-on knowledge the legal and advisory world often lacks.
+            </p>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* Contact — the one action. */}
+      <section id="contact" className="shell border-t border-sea-steel/15 py-[16vh]">
+        <div className="grid gap-16 lg:grid-cols-[1fr_1.1fr]">
+          <Reveal>
+            <p className="font-mono text-eyebrow uppercase text-sea-mist">05 — Get in touch</p>
+            <h2 className="mt-6 font-display text-display-md">
+              See Seawise on
+              <br />
+              your fleet.
+            </h2>
+            <p className="mt-8 max-w-md text-lg leading-relaxed text-sea-mist">
+              Book a walkthrough and we’ll show you Nautech against your real
+              operation. No slides — the actual system.
+            </p>
+            <p className="mt-10 font-mono text-sm text-sea-mist">
+              Seawise AS · Norway · Founded 2025
+              <br />
+              hello@seawise.no
+            </p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <ContactForm />
+          </Reveal>
         </div>
+      </section>
+
+      <footer className="shell flex flex-col items-center justify-between gap-4 border-t border-sea-steel/15 py-10 text-sm text-sea-mist sm:flex-row">
+        <span className="flex items-center gap-2.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-sea-signal" />
+          Seawise
+        </span>
+        <span>© 2026 Seawise AS</span>
       </footer>
     </main>
   );
