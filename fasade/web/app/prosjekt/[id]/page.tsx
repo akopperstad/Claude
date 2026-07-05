@@ -39,10 +39,10 @@ interface Project {
 }
 
 const NIVAER: { level: Level; navn: string; body: string; tag: string; poeng: number }[] = [
-  { level: 1, navn: 'Farge', body: 'Kun ny farge på kledningen. Alt annet urørt.', tag: 'Inkludert i gratis', poeng: 1 },
-  { level: 2, navn: 'Overflater', body: 'Ny kledning — tak, karmer og dører harmoniseres.', tag: 'Boligjakt / Prosjekt', poeng: 1 },
-  { level: 3, navn: 'Oppgradering', body: 'Nye vinduer, inngang, platting og AI-palett.', tag: 'Prosjekt', poeng: 2 },
-  { level: 4, navn: 'Visjon', body: 'Full arkitektonisk forvandling på samme tomt.', tag: 'Prosjekt', poeng: 3 },
+  { level: 1, navn: 'Farge', body: 'Kun ny farge på kledningen. Alt annet urørt.', tag: 'Gratis i beta', poeng: 1 },
+  { level: 2, navn: 'Overflater', body: 'Ny kledning — tak, karmer og dører harmoniseres.', tag: 'Gratis i beta', poeng: 1 },
+  { level: 3, navn: 'Oppgradering', body: 'Nye vinduer, inngang, platting og AI-palett.', tag: 'Gratis i beta', poeng: 2 },
+  { level: 4, navn: 'Visjon', body: 'Full arkitektonisk forvandling på samme tomt.', tag: 'Gratis i beta', poeng: 3 },
 ];
 
 const FARGER: { navn: string; hex: string }[] = [

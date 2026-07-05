@@ -20,6 +20,8 @@ export async function consumeQuota(
   visitorId: string,
   cost = 1,
 ): Promise<{ ok: boolean; used: number }> {
+  // Founder/field-test bypass: set VOLING_UNLIMITED=1 in .env.local.
+  if (process.env.VOLING_UNLIMITED === '1') return { ok: true, used: 0 };
   if (!/^[a-f0-9-]{8,40}$/.test(visitorId)) return { ok: false, used: 0 };
   await mkdir(DIR, { recursive: true });
   const file = path.join(DIR, `${visitorId}-${today()}.json`);
