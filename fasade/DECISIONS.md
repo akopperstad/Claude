@@ -116,6 +116,16 @@ re-imagined) — geometry lock on real photos is bucket 2 goal #1.
 - **Naming scope widened:** brand must carry exterior + interior + floor
   plans later — transformation words, not facade words. Candidate list under
   evaluation with founder.
+- **A11 — Brand name: Vøling.** Founder decision. Domains to register:
+  vøling.no (IDN) + voling.no (ASCII twin, canonical for e-post/utland) —
+  both showed no DNS; verify and register at Norid ASAP. Repo directory
+  stays `fasade/` until a rename is worth the churn.
+- **A12 — Payment details delegated to Claude** within A9's two lanes.
+  Working numbers (finalized in the payment bucket): free tier = 3 instant
+  nivå-1 recolors; Boligjakt ≈ 99 kr/mnd (unlimited nivå-1 + monthly
+  generative render quota); Prosjekt ≈ 399 kr one-off (full level ladder +
+  fargerapport + kostnadsestimat). Vipps + kort. Undercuts US tools ($17–49)
+  because our nivå-1 COGS is near zero.
 
 ### 2026-07-05 — Bucket 2 checkpoint: A7 ratified with modification
 
