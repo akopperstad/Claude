@@ -98,6 +98,25 @@ re-imagined) — geometry lock on real photos is bucket 2 goal #1.
   Interim beta mitigation: best-of-3 generation ranked by drift score. Full
   evidence in BUCKET-2-REPORT.md.
 
+### 2026-07-05 — Founder additions during bucket 3
+
+- **A9 — Two payment lanes** (refines D6, founder-proposed): *Boligjakt* —
+  monthly subscription for house hunters visualizing finn candidates
+  (short-lived subscriptions expected and fine; that's the use case), and
+  *Prosjekt* — one-off pay-per-project for owners upgrading their home.
+  Market reference: US competitors run credits (RoomGPT $9–29) and
+  subscriptions (InteriorAI $49–199/mo, HomeDesignsAI $17–29/mo); nobody
+  splits by life situation. The split is the differentiator.
+- **A10 — Rough cost estimates on renders** (founder-proposed): each change
+  element gets a price range ("kledningsbytte: ca 150–250 000 kr") from a
+  per-element rate table (Norwegian sources: Byggstart-class price guides) ×
+  rough quantities from the vision analysis. Wide ranges, clearly labeled
+  "grovt estimat". Doubles as budget-qualification for håndverker lead-gen.
+  Build in bucket 4/5.
+- **Naming scope widened:** brand must carry exterior + interior + floor
+  plans later — transformation words, not facade words. Candidate list under
+  evaluation with founder.
+
 ### 2026-07-05 — Bucket 2 checkpoint: A7 ratified with modification
 
 - **A7 ratified.** Segmentation-based nivå 1–2, generative nivå 3–4,
