@@ -46,9 +46,14 @@ export default function NyPage() {
         </div>
       </nav>
       <section style={{ padding: '48px 0' }}>
-        <h1 style={{ fontSize: 34, letterSpacing: '-0.02em', fontWeight: 600, margin: 0 }}>
+        <span className="eyebrow">Nytt prosjekt</span>
+        <h1 style={{ fontSize: 34, letterSpacing: '-0.02em', fontWeight: 600, margin: '4px 0 0' }}>
           Last opp et bilde av boligen
         </h1>
+        <p style={{ color: 'var(--muted)', margin: '6px 0 0', maxWidth: 520 }}>
+          Hele fasaden i bildet, dagslys, mobilbilde holder. Vi analyserer huset og
+          foreslår hva det kan bli.
+        </p>
         <div
           className={`drop${drag ? ' dragover' : ''}`}
           onClick={() => fileInput.current?.click()}

@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import { CompareSlider } from '@/components/CompareSlider';
+import { StyleStrip } from '@/components/StyleStrip';
+import { Waitlist } from '@/components/Waitlist';
 
 export default function Landing() {
   return (
@@ -8,6 +10,7 @@ export default function Landing() {
       <nav className="site">
         <Logo />
         <div className="links">
+          <a href="#stiler">Stiler</a>
           <a href="#slik">Slik virker det</a>
           <a href="#priser">Priser</a>
           <Link className="btn" href="/ny">
@@ -24,8 +27,8 @@ export default function Landing() {
             Last opp ett bilde. Velg hvor langt du vil gå — fra ny farge til full
             forvandling. Fotorealistisk svar på sekunder.
           </p>
-          <Link className="btn" href="/ny">
-            Prøv gratis — ny farge på sekunder
+          <Link className="btn stor" href="/ny">
+            Prøv gratis nå →
           </Link>
           <div className="trust">
             <span>Ærlig før/etter-sammenligning</span>
@@ -33,8 +36,16 @@ export default function Landing() {
             <span>Grovt kostnadsestimat inkludert</span>
           </div>
         </div>
-        <CompareSlider before="/demo/e7-for.jpg" after="/demo/e7-rod.jpg" />
+        <CompareSlider before="/styles/base.jpg" after="/styles/sort-minimalisme.jpg" />
       </div>
+
+      <section className="block" id="stiler">
+        <h2>Én bolig — syv retninger</h2>
+        <p className="blokklede">
+          Samme hus, syv norske stiler. Trykk på et bilde for å se det stort.
+        </p>
+        <StyleStrip />
+      </section>
 
       <section className="block" id="slik">
         <h2>Slik virker det</h2>
@@ -46,60 +57,74 @@ export default function Landing() {
           </div>
           <div className="step">
             <span className="n">02</span>
-            <b>Velg nivå</b>
+            <b>Velg nivå og stil</b>
             Fra kun ny farge til arkitektonisk visjon — du styrer hvor langt vi går.
           </div>
           <div className="step">
             <span className="n">03</span>
-            <b>Se, sammenlign, planlegg</b>
-            Før/etter-glidebryter, fargeforslag med begrunnelse og grovt prisestimat.
+            <b>Se, juster, planlegg</b>
+            Før/etter-glidebryter, justér med egne ord, fargeforslag og grovt prisestimat.
           </div>
         </div>
       </section>
 
       <section className="block" id="priser">
         <h2>Priser</h2>
+        <p className="blokklede">
+          Gratis mens vi er i beta. Betalte planer lanseres snart — med god margin under
+          utenlandske alternativer.
+        </p>
         <div className="prices">
           <div className="price">
-            <span className="eyebrow">Gratis</span>
+            <span className="eyebrow">Gratis beta</span>
             <span className="amount">0 kr</span>
             <ul>
-              <li>3 fargebytter (nivå 1)</li>
-              <li>Svar på sekunder</li>
+              <li>10 poeng hver dag</li>
+              <li>Alle fire nivåer</li>
               <li>Ingen konto nødvendig</li>
             </ul>
-            <Link className="btn ghost" href="/ny">
+            <Link className="btn" href="/ny">
               Prøv nå
             </Link>
           </div>
-          <div className="price feat">
-            <span className="eyebrow">Boligjakt</span>
+          <div className="price">
+            <span className="eyebrow">Basis</span>
             <span className="amount">
               99 kr<small>/mnd</small>
             </span>
             <ul>
-              <li>Ubegrenset fargebytte</li>
-              <li>15 AI-renders per måned</li>
-              <li>Perfekt mens du er på visning</li>
+              <li>50 poeng per måned</li>
+              <li>Perfekt til boligjakten</li>
               <li>Avslutt når du vil</li>
             </ul>
-            <Link className="btn" href="/ny">
-              Start jakten
-            </Link>
+            <span className="btn ghost kommer">Kommer snart</span>
+          </div>
+          <div className="price feat">
+            <span className="eyebrow">Pro</span>
+            <span className="amount">
+              199 kr<small>/mnd</small>
+            </span>
+            <ul>
+              <li>150 poeng per måned</li>
+              <li>Prioritert kø og høyere oppløsning</li>
+              <li>–20 % ved årlig betaling</li>
+            </ul>
+            <span className="btn ghost kommer">Kommer snart</span>
           </div>
           <div className="price">
             <span className="eyebrow">Prosjekt</span>
             <span className="amount">399 kr</span>
             <ul>
-              <li>Hele nivåstigen for din bolig</li>
-              <li>Fargerapport med begrunnelse</li>
-              <li>Grovt kostnadsestimat</li>
+              <li>Hele nivåstigen for én bolig</li>
+              <li>Fargerapport og kostnadsestimat</li>
               <li>Del med håndverker</li>
             </ul>
-            <Link className="btn ghost" href="/ny">
-              Start prosjekt
-            </Link>
+            <span className="btn ghost kommer">Kommer snart</span>
           </div>
+        </div>
+        <div className="ventelinje">
+          <span>Vil du ha beskjed når betalte planer lanseres?</span>
+          <Waitlist />
         </div>
       </section>
 

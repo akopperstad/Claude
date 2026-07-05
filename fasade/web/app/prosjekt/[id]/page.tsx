@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Logo } from '@/components/Logo';
 import { CompareSlider } from '@/components/CompareSlider';
+import { StyleStrip } from '@/components/StyleStrip';
 import { EXTERIOR_STYLES } from '@pipeline/presets';
 
 type Level = 1 | 2 | 3 | 4;
@@ -320,26 +321,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
           {level >= 2 && (
             <div className="del">
               <span className="label">Stil (valgfritt) — samme hus, syv retninger</span>
-              <div className="stiler">
-                {EXTERIOR_STYLES.filter((s) => s.minLevel <= level).map((s) => (
-                  <button
-                    key={s.id}
-                    className={`stil${styleId === s.id ? ' valgt' : ''}`}
-                    onClick={() => setStyleId(styleId === s.id ? null : s.id)}
-                  >
-                    {/* thumbnails from scripts/gen-style-thumbs.mjs; card works without */}
-                    <img
-                      src={`/styles/${s.id}.jpg`}
-                      alt=""
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
-                    <b>{s.navn}</b>
-                    <span>{s.beskrivelse}</span>
-                  </button>
-                ))}
-              </div>
+              <StyleStrip maxLevel={level} selectedId={styleId} onSelect={setStyleId} />
             </div>
           )}
           <div className="del">
