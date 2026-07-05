@@ -9,7 +9,7 @@ export async function GET(
   _req: NextRequest,
   { params }: { params: { name: string } },
 ) {
-  if (!/^[a-f0-9]{12}\.(png|jpg)$/.test(params.name)) {
+  if (!/^[a-f0-9-]{12}\.(png|jpg)$/.test(params.name)) {
     return NextResponse.json({ error: 'ukjent fil' }, { status: 404 });
   }
   try {

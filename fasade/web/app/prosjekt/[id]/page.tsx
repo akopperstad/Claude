@@ -89,14 +89,14 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
     const STAGES: [number, string][] = [
       [0, 'Leser bildet …'],
       [3, 'Analyserer fasade og omgivelser …'],
-      [8, 'Genererer visualisering — tar vanligvis 20–45 sekunder'],
-      [30, 'Legger siste hånd på detaljene …'],
+      [8, 'Genererer visualisering — tar vanligvis 1–2 minutter'],
+      [70, 'Legger siste hånd på detaljene …'],
     ];
     setProgress(4);
     setStage(STAGES[0][1]);
     const ticker = setInterval(() => {
       const s = (Date.now() - started) / 1000;
-      setProgress(Math.min(90, Math.round((s / 45) * 100)));
+      setProgress(Math.min(90, Math.round((s / 110) * 100)));
       const current = STAGES.filter(([at]) => s >= at).at(-1);
       if (current) setStage(current[1]);
     }, 900);

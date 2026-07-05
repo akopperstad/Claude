@@ -105,7 +105,7 @@ export async function renderLevel(
       process.env.GEMINI_API_KEY!,
     );
     const ext = result.mimeType.includes('png') ? 'png' : 'jpg';
-    const name = `${randomUUID().slice(0, 12)}.${ext}`;
+    const name = `${randomUUID().replace(/-/g, '').slice(0, 12)}.${ext}`;
     const dir = path.join(process.cwd(), 'data', 'renders');
     await mkdir(dir, { recursive: true });
     await writeFile(path.join(dir, name), Buffer.from(result.base64, 'base64'));
