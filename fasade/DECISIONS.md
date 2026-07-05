@@ -74,8 +74,12 @@ re-imagined) — geometry lock on real photos is bucket 2 goal #1.
   2. **Overflater** — materials swap (kledning, roof surface, frames, doors);
      no new elements.
   3. **Oppgradering** — new windows in existing openings, entrance, patio,
-     lighting, landscaping; house stays recognizably itself. (Validated twice:
-     e2 refresh in bucket 1 and the founder's friend asking for exactly this.)
+     lighting, landscaping; house stays recognizably itself — same foundation,
+     AND an AI-optimized color scheme: the analysis step picks a harmonized
+     palette (cladding, trim, door, roof) from the house's light, surroundings
+     and neighborhood instead of keeping or arbitrarily choosing colors.
+     (Validated twice: e2 refresh in bucket 1 and the founder's friend asking
+     for exactly this.)
   4. **Visjon** — full architectural reimagining.
 - **A6 — Global visuals disclaimer.** Everything the product outputs is
   labeled as visualization ("illustrasjon"), the pattern Norwegian consumers
