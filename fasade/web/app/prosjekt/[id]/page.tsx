@@ -86,19 +86,27 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
     // Typical generative render: 20-45 s. The bar eases toward 90% on that
     // clock and only hits 100% on a real response — honest, never stuck.
     const started = Date.now();
-    const STAGES: [number, string][] = [
-      [0, 'Leser bildet …'],
-      [3, 'Analyserer fasade og omgivelser …'],
-      [8, 'Genererer visualisering — tar vanligvis 1–2 minutter'],
-      [70, 'Legger siste hånd på detaljene …'],
+    const FUN = [
+      'Klipper plenen mens vi venter …',
+      'Rister malingsspannet …',
+      'Teiper vinduskarmene …',
+      'Flytter blomsterpottene vekk fra trappa …',
+      'Diskuterer fargevalget med naboen …',
+      'Koker kaffe til malerne …',
+      'Jager katten ut av bildet …',
+      'Retter opp flaggstanga …',
+      'Krysser fingrene for tørkevær …',
+      'Fjerner presenningen …',
     ];
     setProgress(4);
-    setStage(STAGES[0][1]);
+    setStage('Leser bildet …');
     const ticker = setInterval(() => {
       const s = (Date.now() - started) / 1000;
       setProgress(Math.min(90, Math.round((s / 110) * 100)));
-      const current = STAGES.filter(([at]) => s >= at).at(-1);
-      if (current) setStage(current[1]);
+      if (s < 3) setStage('Leser bildet …');
+      else if (s < 8) setStage('Analyserer fasade og omgivelser …');
+      else if (s < 15) setStage('Genererer — tar vanligvis 1–2 minutter');
+      else setStage(FUN[Math.floor((s - 15) / 7) % FUN.length]);
     }, 900);
     try {
       const res = await fetch(`/api/prosjekt/${project!.id}/render`, {
