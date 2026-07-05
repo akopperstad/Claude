@@ -964,3 +964,18 @@ footer.site {
   object-fit: cover;
   display: block;
 }
+
+/* finn private-use confirmation (A27) */
+.finnbekreft {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 13.5px;
+  color: var(--muted);
+  cursor: pointer;
+  max-width: 640px;
+}
+.finnbekreft input {
+  margin-top: 3px;
+}

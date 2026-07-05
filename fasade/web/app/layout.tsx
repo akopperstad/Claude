@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Beacon } from '@/components/Beacon';
 import './tokens.css';
 import './globals.css';
 
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="nb">
-      <body>{children}</body>
+      <body>
+        <Beacon />
+        {children}
+      </body>
     </html>
   );
 }

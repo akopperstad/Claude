@@ -14,6 +14,8 @@ export default function NyPage() {
   const [finnBusy, setFinnBusy] = useState(false);
   const [finnImages, setFinnImages] = useState<string[]>([]);
   const [finnTitle, setFinnTitle] = useState<string | null>(null);
+  // A27: private-use confirmation gates the finn import
+  const [finnBekreft, setFinnBekreft] = useState(false);
 
   async function hentFinn() {
     setFinnBusy(true);
@@ -125,7 +127,7 @@ export default function NyPage() {
             className="justerform"
             onSubmit={(e) => {
               e.preventDefault();
-              if (finnUrl.trim()) void hentFinn();
+              if (finnUrl.trim() && finnBekreft) void hentFinn();
             }}
           >
             <input
@@ -134,10 +136,25 @@ export default function NyPage() {
               value={finnUrl}
               onChange={(e) => setFinnUrl(e.target.value)}
             />
-            <button className="btn" type="submit" disabled={finnBusy || !finnUrl.trim()}>
+            <button
+              className="btn"
+              type="submit"
+              disabled={finnBusy || !finnUrl.trim() || !finnBekreft}
+            >
               {finnBusy ? 'Henter …' : 'Hent bilder'}
             </button>
           </form>
+          <label className="finnbekreft">
+            <input
+              type="checkbox"
+              checked={finnBekreft}
+              onChange={(e) => setFinnBekreft(e.target.checked)}
+            />
+            <span>
+              Jeg bruker dette kun til privat visualisering av en bolig jeg selv vurderer.
+              Bildene tilhører annonsøren/fotografen.
+            </span>
+          </label>
           {finnImages.length > 0 && (
             <>
               {finnTitle && <p className="finntittel">{finnTitle}</p>}

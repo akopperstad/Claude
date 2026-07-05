@@ -22,7 +22,15 @@ export interface RenderEvent {
   demoSubstituted?: boolean;
 }
 
-export async function logEvent(event: RenderEvent): Promise<void> {
+/** Cookieless pageview (A27): path only, no visitor identity. */
+export interface PageviewEvent {
+  kind: 'pageview';
+  path: string;
+}
+
+export type TelemetryEvent = RenderEvent | PageviewEvent;
+
+export async function logEvent(event: TelemetryEvent): Promise<void> {
   try {
     const dir = path.join(process.cwd(), 'data');
     await mkdir(dir, { recursive: true });

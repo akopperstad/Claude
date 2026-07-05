@@ -260,6 +260,21 @@ roof surface, frames and doors.
   the finn-import checkpoint; distribution + org.nr/domener are founder
   homework in parallel.
 
+### 2026-07-05 — Bucket 9: public beta deploy decisions
+
+- **A27 — Deploy: Fly.io (arn), open quota-limited beta, own analytics,
+  finn import ships with friction.** Founder choices at the deploy gate:
+  - Host: Fly.io, Docker standalone build, persistent volume for `data/`.
+    `VOLING_UNLIMITED` never set in prod. Run-book in fasade/web/DEPLOY.md.
+  - Beta gate: open to anyone, the 10-poeng/dag visitor quota is the bill
+    guard (per A15).
+  - Analytics: own cookieless pageview beacon into telemetry.jsonl — path
+    only, no visitor identity, no consent banner needed.
+  - finn.no import: public behind a private-use confirmation checkbox.
+    COO flagged that friction is not a license — ToS/copyright exposure
+    remains until a proper legal review (A17); founder accepted the risk
+    for the beta. Import is not promoted in marketing until reviewed.
+
 ### 2026-07-05 — Engagement mechanics (founder "trending prompts" idea, refined)
 
 - **A25 — Honest engagement, consumption later.** Founder proposed
