@@ -65,7 +65,7 @@ export async function analyzePhoto(photoPath: string): Promise<HouseAnalysis> {
 
 export async function paletteFor(analysis: HouseAnalysis): Promise<PaletteScheme> {
   if (!hasAnthropic) return DEMO_PALETTE;
-  return suggestPalette(analysis);
+  return suggestPalette(analysis, new Anthropic());
 }
 
 export interface RenderOutcome {

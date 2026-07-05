@@ -28,6 +28,9 @@
       ],
       "@pipeline/*": [
         "../pipeline/*"
+      ],
+      "@anthropic-ai/sdk": [
+        "./node_modules/@anthropic-ai/sdk"
       ]
     }
   },

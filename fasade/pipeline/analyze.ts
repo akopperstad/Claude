@@ -1,4 +1,4 @@
-import Anthropic from '@anthropic-ai/sdk';
+import type Anthropic from '@anthropic-ai/sdk';
 import type { HouseAnalysis } from './types';
 
 /**
@@ -21,10 +21,14 @@ Given one photo, return STRICT JSON matching:
 }
 Only describe what is visible. Never guess colors you cannot see.`;
 
+/**
+ * The Anthropic client is injected by the caller: this module stays free of
+ * runtime dependencies so it can be bundled from outside any package root.
+ */
 export async function analyzeHouse(
   imageBase64: string,
   mediaType: 'image/jpeg' | 'image/png',
-  client: Anthropic = new Anthropic(),
+  client: Anthropic,
 ): Promise<HouseAnalysis> {
   const response = await client.messages.create({
     model: 'claude-sonnet-5',

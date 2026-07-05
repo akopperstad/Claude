@@ -1,4 +1,4 @@
-import Anthropic from '@anthropic-ai/sdk';
+import type Anthropic from '@anthropic-ai/sdk';
 import type { HouseAnalysis } from './types';
 
 /**
@@ -38,9 +38,10 @@ Ground every choice in the actual light, landscape and neighborhood described.
 Favor palettes with Norwegian tradition (rørosrød, kystgrå, oker, klassisk
 hvit) when they fit; never propose a color you cannot justify.`;
 
+/** Client injected by caller — keeps this module runtime-dependency-free. */
 export async function suggestPalette(
   house: HouseAnalysis,
-  client: Anthropic = new Anthropic(),
+  client: Anthropic,
 ): Promise<PaletteScheme> {
   const response = await client.messages.create({
     model: 'claude-sonnet-5',

@@ -11,6 +11,7 @@
  * Env: ANTHROPIC_API_KEY, HIGGSFIELD_API_KEY, HIGGSFIELD_API_SECRET.
  */
 
+import Anthropic from '@anthropic-ai/sdk';
 import { analyzeHouse } from './analyze';
 import { buildPrompt } from './prompts';
 import { suggestPalette } from './palette';
@@ -33,16 +34,18 @@ async function main() {
 
   console.error(`[1/4] analyzing house (level ${level} — ${spec.name})`);
   const imageBytes = await fetch(imageUrl).then((r) => r.arrayBuffer());
+  const anthropic = new Anthropic();
   const house = await analyzeHouse(
     Buffer.from(imageBytes).toString('base64'),
     imageUrl.endsWith('.png') ? 'image/png' : 'image/jpeg',
+    anthropic,
   );
   console.error(`      ${house.buildingType}; ${house.cladding}`);
 
   let target = argValue(rest, '--target');
   if (!target && spec.aiPalette) {
     console.error('[2/4] palette engine');
-    const palette = await suggestPalette(house);
+    const palette = await suggestPalette(house, anthropic);
     console.error(`      ${palette.cladding} — ${palette.reasoning}`);
     target =
       level >= 3
