@@ -95,5 +95,15 @@ re-imagined) — geometry lock on real photos is bucket 2 goal #1.
   sometimes, certifies nothing). Nivå 1–2 promises geometry fidelity, so the
   cladding gets segmented and recolored deterministically; generative models
   remain for nivå 3–4 where drift tolerance is part of the definition.
-  Interim beta mitigation: best-of-3 generation ranked by drift score, ghost
-  overlay shown to the customer. Full evidence in BUCKET-2-REPORT.md.
+  Interim beta mitigation: best-of-3 generation ranked by drift score. Full
+  evidence in BUCKET-2-REPORT.md.
+
+### 2026-07-05 — Bucket 2 checkpoint: A7 ratified with modification
+
+- **A7 ratified.** Segmentation-based nivå 1–2, generative nivå 3–4,
+  best-of-3 interim — approved by founder.
+- **A8 — Ghost overlays are internal QA only.** Founder verdict: dizzying,
+  not customer material. Customer-facing trust = the before/after slider
+  (already the product's core interaction) plus a simple "geometri
+  kontrollert" badge backed by the internal checks. Overlays live in the
+  eval pipeline and checkpoint reports only.
