@@ -307,16 +307,24 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
         )}
         {level >= 2 && (
           <div className="valg">
-            <span className="eyebrow">Velg stil (valgfritt)</span>
-            <div className="chips">
+            <span className="eyebrow">Velg stil (valgfritt) — samme hus, syv retninger</span>
+            <div className="stiler">
               {EXTERIOR_STYLES.filter((s) => s.minLevel <= level).map((s) => (
                 <button
                   key={s.id}
-                  className={`chip-farge${styleId === s.id ? ' valgt' : ''}`}
-                  title={s.beskrivelse}
+                  className={`stil${styleId === s.id ? ' valgt' : ''}`}
                   onClick={() => setStyleId(styleId === s.id ? null : s.id)}
                 >
-                  {s.navn}
+                  {/* thumbnails from scripts/gen-style-thumbs.mjs; card works without */}
+                  <img
+                    src={`/styles/${s.id}.jpg`}
+                    alt=""
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                  <b>{s.navn}</b>
+                  <span>{s.beskrivelse}</span>
                 </button>
               ))}
             </div>
