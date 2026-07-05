@@ -120,6 +120,10 @@ re-imagined) — geometry lock on real photos is bucket 2 goal #1.
   vøling.no (IDN) + voling.no (ASCII twin, canonical for e-post/utland) —
   both showed no DNS; verify and register at Norid ASAP. Repo directory
   stays `fasade/` until a rename is worth the churn.
+- **A13 — Logo: direction 1.** Lowercase "vøling" wordmark, clean geometric
+  sans, deep spruce green, the ø-stroke as the single brand gesture. Founder
+  pick ("by far the best"). Spruce green becomes the brand accent across the
+  design system.
 - **A12 — Payment details delegated to Claude** within A9's two lanes.
   Working numbers (finalized in the payment bucket): free tier = 3 instant
   nivå-1 recolors; Boligjakt ≈ 99 kr/mnd (unlimited nivå-1 + monthly

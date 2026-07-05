@@ -1,0 +1,81 @@
+/**
+ * Vøling design tokens (D7: Scandi premium minimal; A13: spruce accent).
+ *
+ * Single source of truth for the product's look. The website (bucket 4)
+ * imports this file; the bucket 3 mockups are built on it verbatim.
+ * Both themes are first-class; components style through tokens only.
+ */
+
+:root {
+  /* grunnfarger */
+  --paper: #faf8f4; /* varm bakgrunn, aldri ren hvit */
+  --card: #ffffff;
+  --ink: #1d1b17;
+  --muted: #837e73;
+  --line: #e7e2d8;
+
+  /* merkevare */
+  --gran: #2e4a3b; /* dyp granfarge — logo, CTA, lenker */
+  --gran-hover: #243b2f;
+  --gran-lys: #e4ede6; /* rolige flater, badges */
+  --gran-ink: #2c5238; /* tekst på gran-lys */
+
+  /* semantikk (ikke aksent) */
+  --varsel-bg: #f3e9d8;
+  --varsel-ink: #7a5a24;
+
+  /* typografi */
+  --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --fs-display: clamp(34px, 5.5vw, 56px);
+  --fs-h2: 24px;
+  --fs-body: 16.5px;
+  --fs-small: 13.5px;
+  --track-label: 0.12em;
+
+  /* form */
+  --radius: 6px;
+  --gap: 8px; /* base; bruk multipler */
+  --maxw: 1080px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #171613;
+    --card: #1e1c18;
+    --ink: #ebe7df;
+    --muted: #98917f;
+    --line: #2e2b25;
+    --gran: #8faf9a;
+    --gran-hover: #a3c0ae;
+    --gran-lys: #22352a;
+    --gran-ink: #a8ccb4;
+    --varsel-bg: #3a3021;
+    --varsel-ink: #d9b36a;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #171613;
+  --card: #1e1c18;
+  --ink: #ebe7df;
+  --muted: #98917f;
+  --line: #2e2b25;
+  --gran: #8faf9a;
+  --gran-hover: #a3c0ae;
+  --gran-lys: #22352a;
+  --gran-ink: #a8ccb4;
+  --varsel-bg: #3a3021;
+  --varsel-ink: #d9b36a;
+}
+:root[data-theme="light"] {
+  --paper: #faf8f4;
+  --card: #ffffff;
+  --ink: #1d1b17;
+  --muted: #837e73;
+  --line: #e7e2d8;
+  --gran: #2e4a3b;
+  --gran-hover: #243b2f;
+  --gran-lys: #e4ede6;
+  --gran-ink: #2c5238;
+  --varsel-bg: #f3e9d8;
+  --varsel-ink: #7a5a24;
+}
