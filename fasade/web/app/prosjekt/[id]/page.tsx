@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Logo } from '@/components/Logo';
 import { CompareSlider } from '@/components/CompareSlider';
 import { EXTERIOR_STYLES } from '@pipeline/presets';
@@ -38,11 +38,11 @@ interface Project {
   renders: RenderRecord[];
 }
 
-const NIVAER: { level: Level; navn: string; body: string; tag: string; poeng: number }[] = [
-  { level: 1, navn: 'Farge', body: 'Kun ny farge på kledningen. Alt annet urørt.', tag: 'Gratis i beta', poeng: 1 },
-  { level: 2, navn: 'Overflater', body: 'Ny kledning — tak, karmer og dører harmoniseres.', tag: 'Gratis i beta', poeng: 1 },
-  { level: 3, navn: 'Oppgradering', body: 'Nye vinduer, inngang, platting og AI-palett.', tag: 'Gratis i beta', poeng: 2 },
-  { level: 4, navn: 'Visjon', body: 'Full arkitektonisk forvandling på samme tomt.', tag: 'Gratis i beta', poeng: 3 },
+const NIVAER: { level: Level; navn: string; body: string; poeng: number }[] = [
+  { level: 1, navn: 'Farge', body: 'Kun ny farge på kledningen. Alt annet urørt.', poeng: 1 },
+  { level: 2, navn: 'Overflater', body: 'Ny kledning — tak, karmer og dører harmoniseres.', poeng: 1 },
+  { level: 3, navn: 'Oppgradering', body: 'Nye vinduer, inngang, platting og AI-palett.', poeng: 2 },
+  { level: 4, navn: 'Visjon', body: 'Full arkitektonisk forvandling på samme tomt.', poeng: 3 },
 ];
 
 /** «Populære ideer» (A25): editorial one-tap follow-ups for the chain. */
@@ -88,6 +88,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
   const [stagingChoice, setStagingChoice] = useState<boolean | null>(null);
   const [insp, setInsp] = useState<{ base64: string; mime: string; name: string } | null>(null);
   const staging = stagingChoice ?? level >= 3;
+  const resultRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     void fetch(`/api/prosjekt/${params.id}`)
@@ -116,6 +117,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
   }
 
   const beforeUrl = project.demo ? project.photoPath : `/api/bilde/${project.id}`;
+  const poeng = NIVAER.find((n) => n.level === level)?.poeng ?? 1;
 
   // Chain of the shown render (A16.3): walk parent links, oldest first.
   const byId = new Map(project.renders.filter((r) => r.id).map((r) => [r.id!, r]));
@@ -178,6 +180,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       setResult(data);
       setProject((p) => (p ? { ...p, renders: [...p.renders, data] } : p));
       if (edit) setJuster('');
+      requestAnimationFrame(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     } catch (e) {
       setError(e instanceof Error ? e.message : 'rendering feilet');
     } finally {
@@ -240,22 +243,22 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       <nav className="site">
         <Logo />
         <div className="links">
-          <span className="eyebrow">{result ? 'Illustrasjon' : 'Steg 2 av 3'}</span>
+          <span className="eyebrow">{result ? 'Illustrasjon' : 'Nytt prosjekt'}</span>
         </div>
       </nav>
 
-      <section style={{ padding: '36px 0 12px' }}>
+      <section className="prosjekt-hode">
         <span className="eyebrow">Analysert</span>
-        <h1 style={{ fontSize: 30, letterSpacing: '-0.02em', fontWeight: 600, margin: '4px 0 4px' }}>
-          {project.analysis.buildingType}
-        </h1>
-        <p style={{ color: 'var(--muted)', margin: 0 }}>
+        <h1>{project.analysis.buildingType}</h1>
+        <p>
           {project.analysis.cladding} · {project.analysis.roof} · {project.analysis.windows}
         </p>
       </section>
 
-      <section style={{ padding: '16px 0 0' }}>
-        <h2 style={{ marginBottom: 4 }}>Hvor langt vil du gå?</h2>
+      <section className="steg-seksjon">
+        <h2>
+          <span className="stegnr">1</span> Hvor langt vil du gå?
+        </h2>
         <div className="nivaer">
           {NIVAER.map((n) => (
             <button
@@ -267,152 +270,183 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
                 if (s && s.minLevel > n.level) setStyleId(null);
               }}
             >
-              <span className="num">Nivå {n.level} · {n.poeng} poeng</span>
+              <span className="num">Nivå {n.level}</span>
               <h3>{n.navn}</h3>
               <p>{n.body}</p>
-              <span className="tag">{n.tag}</span>
+              <span className="tag">{n.poeng} poeng · gratis i beta</span>
             </button>
           ))}
         </div>
-        {level <= 2 && (
-          <div className="valg">
-            <span className="eyebrow">
-              {level === 1 ? 'Velg farge — eller la AI foreslå' : 'Velg kledning — tak, karmer og dører harmoniseres automatisk'}
-            </span>
-            <div className="chips">
-              {FARGER.map((f) => (
-                <button
-                  key={f.navn}
-                  className={`chip-farge${farge === f.navn ? ' valgt' : ''}`}
-                  onClick={() => {
-                    setFarge(farge === f.navn ? null : f.navn);
-                    setEgenFarge('');
-                  }}
-                >
-                  <span className="dot" style={{ background: f.hex }} />
-                  {f.navn}
-                </button>
-              ))}
-            </div>
-            <input
-              className="felt"
-              placeholder="… eller skriv din egen (f.eks. «dyp burgunder»)"
-              value={egenFarge}
-              onChange={(e) => {
-                setEgenFarge(e.target.value);
-                setFarge(null);
-              }}
-            />
-          </div>
-        )}
-        {level >= 2 && (
-          <div className="valg">
-            <span className="eyebrow">Velg stil (valgfritt) — samme hus, syv retninger</span>
-            <div className="stiler">
-              {EXTERIOR_STYLES.filter((s) => s.minLevel <= level).map((s) => (
-                <button
-                  key={s.id}
-                  className={`stil${styleId === s.id ? ' valgt' : ''}`}
-                  onClick={() => setStyleId(styleId === s.id ? null : s.id)}
-                >
-                  {/* thumbnails from scripts/gen-style-thumbs.mjs; card works without */}
-                  <img
-                    src={`/styles/${s.id}.jpg`}
-                    alt=""
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
+      </section>
+
+      <section className="steg-seksjon">
+        <h2>
+          <span className="stegnr">2</span> Tilpass
+        </h2>
+        <div className="panel">
+          {level <= 2 && (
+            <div className="del">
+              <span className="label">
+                {level === 1
+                  ? 'Farge — velg selv, skriv din egen, eller la AI foreslå'
+                  : 'Kledningsfarge — tak, karmer og dører harmoniseres automatisk'}
+              </span>
+              <div className="chips">
+                {FARGER.map((f) => (
+                  <button
+                    key={f.navn}
+                    className={`chip-farge${farge === f.navn ? ' valgt' : ''}`}
+                    onClick={() => {
+                      setFarge(farge === f.navn ? null : f.navn);
+                      setEgenFarge('');
                     }}
-                  />
-                  <b>{s.navn}</b>
-                  <span>{s.beskrivelse}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-        <div className="valg">
-          <span className="eyebrow">Egne ønsker (valgfritt)</span>
-          <textarea
-            className="felt"
-            rows={2}
-            maxLength={400}
-            placeholder={
-              level <= 2
-                ? 'F.eks. «behold døren som den er, litt varmere tone i sola»'
-                : 'F.eks. «legg platting rundt første etasje, bytt inngangsdør til eik»'
-            }
-            value={wishes}
-            onChange={(e) => setWishes(e.target.value)}
-          />
-        </div>
-        {level >= 3 && (
-          <div className="valg">
-            <span className="eyebrow">Inspirasjonsbilde (valgfritt) — «slik vil jeg ha det»</span>
-            <input
-              type="file"
-              accept="image/jpeg,image/png"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (!f) return setInsp(null);
-                const reader = new FileReader();
-                reader.onload = () => {
-                  const url = String(reader.result);
-                  setInsp({
-                    base64: url.slice(url.indexOf(',') + 1),
-                    mime: f.type === 'image/png' ? 'image/png' : 'image/jpeg',
-                    name: f.name,
-                  });
-                };
-                reader.readAsDataURL(f);
-              }}
-            />
-            {insp && (
-              <div className="hint">
-                {insp.name} lastes opp som stilreferanse.{' '}
-                <button className="btn ghost" onClick={() => setInsp(null)}>
-                  Fjern
-                </button>
+                  >
+                    <span className="dot" style={{ background: f.hex }} />
+                    {f.navn}
+                  </button>
+                ))}
               </div>
-            )}
-          </div>
-        )}
-        <div className="valg">
-          <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
-            <input
-              type="checkbox"
-              checked={staging}
-              onChange={(e) => setStagingChoice(e.target.checked)}
-            />
-            <span>
-              <b>Vis huset nyvasket og ryddet</b> — fjerner rot og parabol, vasker tak og
-              kledning, steller hagen. Merkes alltid på resultatet.
-            </span>
-          </label>
-        </div>
-        {level >= 3 && (
-          <div className="hint">
-            Nivå 3–4 kan inneholde tiltak som er søknadspliktige. Alle bilder er
-            visualiseringer.
-          </div>
-        )}
-        <div style={{ margin: '26px 0' }}>
-          <button className="btn" disabled={busy} onClick={() => void render()}>
-            {busy ? 'Lager visualisering …' : 'Lag visualisering →'}
-          </button>
-          {busy && (
-            <div className="progress" role="status" aria-live="polite">
-              <div className="bar">
-                <div className="fill" style={{ width: `${progress}%` }} />
-              </div>
-              <div className="stage">{stage}</div>
+              <input
+                className="felt"
+                placeholder="… eller skriv din egen (f.eks. «dyp burgunder»)"
+                value={egenFarge}
+                onChange={(e) => {
+                  setEgenFarge(e.target.value);
+                  setFarge(null);
+                }}
+              />
             </div>
           )}
+          {level >= 2 && (
+            <div className="del">
+              <span className="label">Stil (valgfritt) — samme hus, syv retninger</span>
+              <div className="stiler">
+                {EXTERIOR_STYLES.filter((s) => s.minLevel <= level).map((s) => (
+                  <button
+                    key={s.id}
+                    className={`stil${styleId === s.id ? ' valgt' : ''}`}
+                    onClick={() => setStyleId(styleId === s.id ? null : s.id)}
+                  >
+                    {/* thumbnails from scripts/gen-style-thumbs.mjs; card works without */}
+                    <img
+                      src={`/styles/${s.id}.jpg`}
+                      alt=""
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                    <b>{s.navn}</b>
+                    <span>{s.beskrivelse}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="del">
+            <span className="label">Egne ønsker (valgfritt)</span>
+            <textarea
+              className="felt"
+              rows={2}
+              maxLength={400}
+              placeholder={
+                level <= 2
+                  ? 'F.eks. «behold døren som den er, litt varmere tone i sola»'
+                  : 'F.eks. «legg platting rundt første etasje, bytt inngangsdør til eik»'
+              }
+              value={wishes}
+              onChange={(e) => setWishes(e.target.value)}
+            />
+          </div>
+          {level >= 3 && (
+            <div className="del">
+              <span className="label">Inspirasjonsbilde (valgfritt) — «slik vil jeg ha det»</span>
+              <div className="upload">
+                <label className="btn ghost">
+                  Velg bilde
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png"
+                    hidden
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (!f) return setInsp(null);
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        const url = String(reader.result);
+                        setInsp({
+                          base64: url.slice(url.indexOf(',') + 1),
+                          mime: f.type === 'image/png' ? 'image/png' : 'image/jpeg',
+                          name: f.name,
+                        });
+                      };
+                      reader.readAsDataURL(f);
+                    }}
+                  />
+                </label>
+                {insp ? (
+                  <span className="filnavn">
+                    {insp.name}
+                    <button className="fjern" onClick={() => setInsp(null)} aria-label="Fjern inspirasjonsbilde">
+                      ×
+                    </button>
+                  </span>
+                ) : (
+                  <span className="filnavn tom">Ingen bilde valgt</span>
+                )}
+              </div>
+            </div>
+          )}
+          <div className="del">
+            <label className="brytervalg">
+              <span className={`bryter${staging ? ' på' : ''}`} aria-hidden>
+                <span className="knott" />
+              </span>
+              <input
+                type="checkbox"
+                hidden
+                checked={staging}
+                onChange={(e) => setStagingChoice(e.target.checked)}
+              />
+              <span className="brytertekst">
+                <b>Vis huset nyvasket og ryddet</b>
+                Fjerner rot og parabol, vasker tak og kledning, steller hagen. Merkes alltid på
+                resultatet.
+              </span>
+            </label>
+          </div>
         </div>
+      </section>
+
+      <section className="steg-seksjon">
+        <h2>
+          <span className="stegnr">3</span> Se resultatet
+        </h2>
+        <div className="cta">
+          <button className="btn stor" disabled={busy} onClick={() => void render()}>
+            {busy ? 'Lager visualisering …' : 'Lag visualisering →'}
+          </button>
+          <span className="poengnote">
+            Bruker {poeng} {poeng === 1 ? 'poeng' : 'poeng'} av dagens gratis kvote
+          </span>
+        </div>
+        {busy && (
+          <div className="progress" role="status" aria-live="polite">
+            <div className="bar">
+              <div className="fill" style={{ width: `${progress}%` }} />
+            </div>
+            <div className="stage">{stage}</div>
+          </div>
+        )}
+        {level >= 3 && !busy && (
+          <div className="hint">
+            Nivå 3–4 kan inneholde tiltak som er søknadspliktige. Alle bilder er visualiseringer.
+          </div>
+        )}
         {error && <div className="hint">{error}</div>}
       </section>
 
       {result && (
-        <div className="resgrid">
+        <div className="resgrid" ref={resultRef}>
           <div>
             <CompareSlider before={beforeUrl} after={result.imageUrl} />
             <p className="illu">
@@ -421,62 +455,64 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
               {result.demoSubstituted &&
                 ' · Demo-modus: eksempelrender vist — koble til render-API for ditt bilde'}
             </p>
-            {chain.length > 1 && (
-              <div className="chips" style={{ marginTop: 10 }}>
-                {chain.map((r, i) => (
-                  <button
-                    key={r.id ?? i}
-                    className={`chip-farge${r === result ? ' valgt' : ''}`}
-                    onClick={() => setResult(r)}
-                    title="Vis dette steget — neste justering bygger på steget du ser"
-                  >
-                    {i + 1}. {r.instruction ?? r.target}
-                  </button>
-                ))}
-              </div>
-            )}
-            {result.id && (
-              <div className="valg" style={{ marginTop: 12 }}>
-                <span className="eyebrow">Populære ideer</span>
-                <div className="chips">
-                  {IDEER.map((idee) => (
+            <div className="kort juster-kort">
+              <span className="eyebrow">Juster videre</span>
+              {chain.length > 1 && (
+                <div className="chips stegrekke">
+                  {chain.map((r, i) => (
                     <button
-                      key={idee}
-                      className="chip-farge"
-                      disabled={busy}
-                      onClick={() => {
-                        if (result?.id)
-                          void render({ baseRenderId: result.id, instruction: idee, source: 'chip' });
-                      }}
+                      key={r.id ?? i}
+                      className={`chip-farge${r === result ? ' valgt' : ''}`}
+                      onClick={() => setResult(r)}
+                      title="Vis dette steget — neste justering bygger på steget du ser"
                     >
-                      + {idee}
+                      {i + 1}. {r.instruction ?? r.target}
                     </button>
                   ))}
                 </div>
-              </div>
-            )}
-            {result.id && (
-              <form
-                style={{ display: 'flex', gap: 8, marginTop: 12 }}
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (juster.trim() && result?.id)
-                    void render({ baseRenderId: result.id, instruction: juster.trim(), source: 'text' });
-                }}
-              >
-                <input
-                  className="felt"
-                  style={{ margin: 0, flex: 1 }}
-                  maxLength={400}
-                  placeholder="Juster videre — f.eks. «og fjern buskene foran»"
-                  value={juster}
-                  onChange={(e) => setJuster(e.target.value)}
-                />
-                <button className="btn" type="submit" disabled={busy || !juster.trim()}>
-                  {busy ? 'Justerer …' : 'Juster'}
-                </button>
-              </form>
-            )}
+              )}
+              {result.id && (
+                <>
+                  <form
+                    className="justerform"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (juster.trim() && result?.id)
+                        void render({ baseRenderId: result.id, instruction: juster.trim(), source: 'text' });
+                    }}
+                  >
+                    <input
+                      className="felt"
+                      maxLength={400}
+                      placeholder="F.eks. «og fjern buskene foran»"
+                      value={juster}
+                      onChange={(e) => setJuster(e.target.value)}
+                    />
+                    <button className="btn" type="submit" disabled={busy || !juster.trim()}>
+                      {busy ? 'Justerer …' : 'Juster'}
+                    </button>
+                  </form>
+                  <span className="label" style={{ marginTop: 14 }}>
+                    Populære ideer
+                  </span>
+                  <div className="chips">
+                    {IDEER.map((idee) => (
+                      <button
+                        key={idee}
+                        className="chip-farge"
+                        disabled={busy}
+                        onClick={() => {
+                          if (result?.id)
+                            void render({ baseRenderId: result.id, instruction: idee, source: 'chip' });
+                        }}
+                      >
+                        + {idee}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
           <div>
             {result.palette && (
@@ -510,24 +546,17 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
               </table>
               <p className="illu">Grovt estimat basert på typiske håndverkerpriser. Ikke et tilbud.</p>
             </div>
-            <a className="btn" href="#" style={{ width: '100%', textAlign: 'center', display: 'block' }}>
-              Få tilbud fra håndverkere i nærheten
-            </a>
-            <a
-              className="btn ghost"
-              href={result.imageUrl}
-              download
-              style={{ width: '100%', textAlign: 'center', display: 'block', marginTop: 10 }}
-            >
-              Last ned bilde
-            </a>
-            <button
-              className="btn ghost"
-              onClick={() => void shareCard()}
-              style={{ width: '100%', marginTop: 10 }}
-            >
-              Del før/etter-bilde
-            </button>
+            <div className="handling">
+              <a className="btn w100" href="#">
+                Få tilbud fra håndverkere i nærheten
+              </a>
+              <a className="btn ghost w100" href={result.imageUrl} download>
+                Last ned bilde
+              </a>
+              <button className="btn ghost w100" onClick={() => void shareCard()}>
+                Del før/etter-bilde
+              </button>
+            </div>
             <div className="kort" style={{ marginTop: 18 }}>
               <span className="eyebrow">Få rapporten på e-post</span>
               {emailState === 'sent' ? (
@@ -536,7 +565,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
                 </p>
               ) : (
                 <form
-                  style={{ display: 'flex', gap: 8, marginTop: 10 }}
+                  className="justerform"
                   onSubmit={async (e) => {
                     e.preventDefault();
                     const res = await fetch('/api/interesse', {
@@ -549,7 +578,6 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
                 >
                   <input
                     className="felt"
-                    style={{ margin: 0, flex: 1 }}
                     type="email"
                     required
                     placeholder="din@epost.no"
