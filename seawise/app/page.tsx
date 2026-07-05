@@ -1,6 +1,6 @@
 import Reveal from "@/components/Reveal";
 import HeroBackground from "@/components/HeroBackground";
-import ProductMock from "@/components/ProductMock";
+import ProductShowcase from "@/components/ProductShowcase";
 
 export default function Home() {
   return (
@@ -125,14 +125,7 @@ export default function Home() {
           </p>
         </Reveal>
 
-        <Reveal className="mt-14">
-          <ProductMock />
-          <p className="mt-4 font-mono text-[0.7rem] uppercase tracking-wider text-sea-mist/50">
-            Brand render — real product views swap in from Nautech.
-          </p>
-        </Reveal>
-
-        <Reveal stagger className="mt-16 grid grid-cols-2 gap-x-10 gap-y-5 md:grid-cols-3 lg:grid-cols-4">
+        <Reveal stagger className="mt-14 grid grid-cols-2 gap-x-10 gap-y-5 md:grid-cols-3 lg:grid-cols-4">
           {[
             "Command Center",
             "Fleet",
@@ -154,6 +147,9 @@ export default function Home() {
           ))}
         </Reveal>
       </section>
+
+      {/* Real product showcase — featured shot + module marquee. */}
+      <ProductShowcase />
 
       <footer id="contact" className="shell border-t border-sea-steel/15 py-20">
         <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
