@@ -26,8 +26,9 @@
 
   /* typografi */
   --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --fs-display: clamp(34px, 5.5vw, 56px);
-  --fs-h2: 24px;
+  --font-mono: ui-monospace, "Cascadia Mono", "Roboto Mono", Menlo, monospace;
+  --fs-display: clamp(44px, 7.2vw, 88px); /* editorial display scale */
+  --fs-h2: clamp(26px, 3.4vw, 40px);
   --fs-body: 16.5px;
   --fs-small: 13.5px;
   --track-label: 0.12em;
