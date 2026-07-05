@@ -11,7 +11,8 @@
  */
 
 const BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
-const DEFAULT_MODEL = 'gemini-3-pro-image-preview';
+/** Tried in order — first is best quality, later ones cover free-tier keys. */
+const MODEL_LADDER = ['gemini-3-pro-image-preview', 'gemini-2.5-flash-image'];
 
 export interface GeminiImageResult {
   base64: string;
@@ -23,7 +24,27 @@ export async function renderWithGemini(
   mimeType: string,
   prompt: string,
   apiKey: string,
-  model: string = process.env.GEMINI_IMAGE_MODEL ?? DEFAULT_MODEL,
+): Promise<GeminiImageResult> {
+  const models = process.env.GEMINI_IMAGE_MODEL
+    ? [process.env.GEMINI_IMAGE_MODEL]
+    : MODEL_LADDER;
+  let lastError: unknown;
+  for (const model of models) {
+    try {
+      return await callGemini(imageBase64, mimeType, prompt, apiKey, model);
+    } catch (err) {
+      lastError = err;
+    }
+  }
+  throw lastError;
+}
+
+async function callGemini(
+  imageBase64: string,
+  mimeType: string,
+  prompt: string,
+  apiKey: string,
+  model: string,
 ): Promise<GeminiImageResult> {
   const res = await fetch(`${BASE}/${model}:generateContent`, {
     method: 'POST',

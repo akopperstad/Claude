@@ -22,13 +22,20 @@ export async function POST(
   const palette = spec.aiPalette || !body?.target ? await paletteFor(project.analysis) : undefined;
   const target: string = body?.target ?? palette?.cladding ?? 'klassisk hvit';
 
-  const outcome = await renderLevel(
-    project.demo,
-    project.photoPath,
-    project.analysis,
-    level,
-    target,
-  );
+  let outcome;
+  try {
+    outcome = await renderLevel(
+      project.demo,
+      project.photoPath,
+      project.analysis,
+      level,
+      target,
+    );
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'rendering feilet';
+    console.error('render failed:', message);
+    return NextResponse.json({ error: `Rendering feilet: ${message}` }, { status: 502 });
+  }
 
   const record = {
     level,
