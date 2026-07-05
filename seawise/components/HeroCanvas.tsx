@@ -102,7 +102,14 @@ function DepthField() {
     current.current.x += (target.current.x - current.current.x) * 0.03;
     current.current.y += (target.current.y - current.current.y) * 0.03;
     if (points.current) {
-      points.current.rotation.y = current.current.x * 0.12 + t * 0.012;
+      // THE DIVE: as the page scrolls, the field rises past the camera —
+      // the viewer sinks. Slight rotation drift deepens the descent.
+      const doc = document.documentElement;
+      const s = doc.scrollHeight > window.innerHeight
+        ? window.scrollY / (doc.scrollHeight - window.innerHeight)
+        : 0;
+      points.current.position.y = s * 34;
+      points.current.rotation.y = current.current.x * 0.12 + t * 0.012 + s * 0.35;
       points.current.rotation.x = -current.current.y * 0.08;
 
       // gentle vertical drift of motes

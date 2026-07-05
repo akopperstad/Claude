@@ -5,6 +5,7 @@ import ContactForm from "@/components/ContactForm";
 import NavBar from "@/components/NavBar";
 import Cursor from "@/components/Cursor";
 import Intro from "@/components/Intro";
+import DepthMeter from "@/components/DepthMeter";
 
 /** Chart-style section header: number · rule line · label · coordinates. */
 function SectionHead({
@@ -41,6 +42,7 @@ export default function Home() {
       {/* Living WebGL depth field + cinematic plate behind everything */}
       <HeroBackground />
       <NavBar />
+      <DepthMeter />
 
       {/* Hero */}
       <section id="top" className="relative flex min-h-[100svh] items-end">
