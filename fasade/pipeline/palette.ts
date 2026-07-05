@@ -38,17 +38,32 @@ Ground every choice in the actual light, landscape and neighborhood described.
 Favor palettes with Norwegian tradition (rørosrød, kystgrå, oker, klassisk
 hvit) when they fit; never propose a color you cannot justify.`;
 
-/** Client injected by caller — keeps this module runtime-dependency-free. */
+/**
+ * Client injected by caller — keeps this module runtime-dependency-free.
+ * `anchorCladding` (A22, nivå 2): the user already chose the cladding; the
+ * engine harmonizes roof/trim/door around it instead of picking its own.
+ */
 export async function suggestPalette(
   house: HouseAnalysis,
   client: Anthropic,
+  anchorCladding?: string,
 ): Promise<PaletteScheme> {
   const response = await client.messages.create({
     model: 'claude-sonnet-5',
     max_tokens: 512,
     system: SYSTEM,
     messages: [
-      { role: 'user', content: JSON.stringify(house) },
+      {
+        role: 'user',
+        content: anchorCladding
+          ? JSON.stringify({
+              house,
+              locked_cladding:
+                `The customer has already chosen the cladding: ${anchorCladding}. ` +
+                'Return it unchanged in "cladding" and harmonize trim, door and roof around it.',
+            })
+          : JSON.stringify(house),
+      },
     ],
   });
   const text = response.content.find((b) => b.type === 'text');

@@ -15,7 +15,11 @@ function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-export async function consumeQuota(visitorId: string): Promise<{ ok: boolean; used: number }> {
+/** A render consumes its nivå's quota weight (A23: 1/1/2/3). */
+export async function consumeQuota(
+  visitorId: string,
+  cost = 1,
+): Promise<{ ok: boolean; used: number }> {
   if (!/^[a-f0-9-]{8,40}$/.test(visitorId)) return { ok: false, used: 0 };
   await mkdir(DIR, { recursive: true });
   const file = path.join(DIR, `${visitorId}-${today()}.json`);
@@ -25,7 +29,7 @@ export async function consumeQuota(visitorId: string): Promise<{ ok: boolean; us
   } catch {
     // first render today
   }
-  if (used >= DAILY_LIMIT) return { ok: false, used };
-  await writeFile(file, JSON.stringify({ used: used + 1 }));
-  return { ok: true, used: used + 1 };
+  if (used + cost > DAILY_LIMIT) return { ok: false, used };
+  await writeFile(file, JSON.stringify({ used: used + cost }));
+  return { ok: true, used: used + cost };
 }

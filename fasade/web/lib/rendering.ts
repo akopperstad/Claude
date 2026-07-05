@@ -3,9 +3,10 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { analyzeHouse } from '@pipeline/analyze';
-import { buildEditPrompt, buildPrompt } from '@pipeline/prompts';
+import { buildEditPrompt, buildPrompt, type PromptOptions } from '@pipeline/prompts';
 import { suggestPalette, type PaletteScheme } from '@pipeline/palette';
-import { renderWithGemini } from '@pipeline/geminiProvider';
+import { draftVisionBrief } from '@pipeline/visionBrief';
+import { renderWithGemini, type GeminiImageInput } from '@pipeline/geminiProvider';
 import { HiggsfieldProvider } from '@pipeline/higgsfieldProvider';
 import { LEVELS, type Level } from '@pipeline/levels';
 import type { HouseAnalysis, RenderRequest } from '@pipeline/types';
@@ -67,9 +68,22 @@ export async function analyzePhoto(photoPath: string): Promise<HouseAnalysis> {
   );
 }
 
-export async function paletteFor(analysis: HouseAnalysis): Promise<PaletteScheme> {
+export async function paletteFor(
+  analysis: HouseAnalysis,
+  anchorCladding?: string,
+): Promise<PaletteScheme> {
   if (!hasAnthropic) return DEMO_PALETTE;
-  return suggestPalette(analysis, new Anthropic());
+  return suggestPalette(analysis, new Anthropic(), anchorCladding);
+}
+
+/** Nivå 4 two-pass (A22): Claude drafts the bold brief, Gemini paints it. */
+export async function visionBriefFor(
+  analysis: HouseAnalysis,
+  style?: string,
+  wishes?: string,
+): Promise<string | undefined> {
+  if (!hasAnthropic) return undefined; // buildPrompt has a bold static fallback
+  return draftVisionBrief(analysis, new Anthropic(), style, wishes);
 }
 
 export interface RenderOutcome {
@@ -89,7 +103,11 @@ export function imageFilePath(imageUrl: string): string | null {
   return null;
 }
 
-async function generateWithGemini(filePath: string, prompt: string): Promise<string> {
+async function generateWithGemini(
+  filePath: string,
+  prompt: string,
+  inspiration?: GeminiImageInput,
+): Promise<string> {
   const bytes = await readFile(filePath);
   const mime = filePath.endsWith('.png') ? 'image/png' : 'image/jpeg';
   const result = await renderWithGemini(
@@ -97,6 +115,7 @@ async function generateWithGemini(filePath: string, prompt: string): Promise<str
     mime,
     prompt,
     process.env.GEMINI_API_KEY!,
+    inspiration,
   );
   const ext = result.mimeType.includes('png') ? 'png' : 'jpg';
   const name = `${randomUUID().replace(/-/g, '').slice(0, 12)}.${ext}`;
@@ -135,19 +154,21 @@ export async function renderLevel(
   level: Level,
   target: string,
   wishes?: string,
+  promptOpts: PromptOptions = {},
+  inspiration?: GeminiImageInput,
 ): Promise<RenderOutcome> {
   const request: RenderRequest = {
     transform: level === 1 ? 'repaint' : level === 2 ? 'cladding' : 'refresh',
     target,
     wishes,
   };
-  const prompt = buildPrompt(analysis, request, level);
+  const prompt = buildPrompt(analysis, request, level, promptOpts);
 
   if (hasGemini) {
     const filePath = demo
       ? path.join(process.cwd(), 'public', photoPath)
       : photoPath;
-    const imageUrl = await generateWithGemini(filePath, prompt);
+    const imageUrl = await generateWithGemini(filePath, prompt, inspiration);
     return { imageUrl, target, demoSubstituted: false };
   }
 

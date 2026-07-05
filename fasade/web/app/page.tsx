@@ -28,7 +28,7 @@ export default function Landing() {
             Prøv gratis — ny farge på sekunder
           </Link>
           <div className="trust">
-            <span>Geometri kontrollert</span>
+            <span>Ærlig før/etter-sammenligning</span>
             <span>Norske farger</span>
             <span>Grovt kostnadsestimat inkludert</span>
           </div>

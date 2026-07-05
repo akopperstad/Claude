@@ -214,3 +214,34 @@ Priorities re-locked as follows.
   is labeled ("Inkluderer rydding og vask") so the before/after comparison
   stays honest. Staging operations map to real services → cost-estimate
   lines (A10) and håndverker lead types. Build lands in Bucket 7.
+
+### 2026-07-05 — Bucket 6 checkpoint PASSED + tier/style decisions
+
+Founder field verdict on the render chain: "honestly works amazing."
+Founder observation confirmed by code audit: nivå 3 and nivå 4 shared the
+same change sentence, which locks "exact building volumes, rooflines and
+proportions" — Visjon was forbidden by its own prompt from doing what its
+card sells. Nivå 2's prompt only swapped cladding while the card promises
+roof surface, frames and doors.
+
+- **A22 — Per-tier prompt recipes.** Each nivå gets its own change recipe:
+  1. *Farge* — unchanged (repaint only, hard negatives).
+  2. *Overflater* — enumerated surface package: user picks cladding; the
+     palette engine harmonizes roof surface, frames and doors around it
+     (founder choice: AI-harmonized package, not per-element pickers).
+  3. *Oppgradering* — explicit upgrade list (windows in existing openings,
+     entrance, platting, lighting, landscaping) + AI palette.
+  4. *Visjon* — **two-pass architect brief**: Claude drafts a bespoke, bold
+     vision for THIS house (roof form, window walls, tilbygg, garage
+     integration, solar...) from the analysis + owner wishes + chosen style;
+     Gemini renders the brief. No volume-preservation clause — only
+     same-plot/same-viewpoint anchors.
+- **A23 — Quota weights 1/1/2/3.** A render costs its nivå's weight against
+  the daily free quota. Protects the API bill, mirrors future pricing,
+  makes tier value legible.
+- **A24 — Style inputs: gallery + inspiration photo + free text.**
+  Curated Norwegian style gallery (nivå 2–4), inspiration-photo upload
+  (nivå 3–4, second image to the render model), free text everywhere, the
+  chain for refinement. The swipe-based style-discovery funnel REMAINS
+  deferred to post-deploy (per original D-list) — pre-traffic it is a demo,
+  not discovery.

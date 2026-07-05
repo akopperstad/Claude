@@ -1,5 +1,6 @@
 import type { HouseAnalysis } from './types';
 import type { Level } from './levels';
+import { stagingEstimateLines } from './staging';
 
 /**
  * Rough cost estimator (A10).
@@ -46,7 +47,7 @@ function line(label: string, qty: number, [low, high]: readonly [number, number]
   return { label, lowNok: round(qty * low), highNok: round(qty * high) };
 }
 
-export function estimate(house: HouseAnalysis, level: Level): Estimate {
+export function estimate(house: HouseAnalysis, level: Level, staging = false): Estimate {
   const area = facadeArea(house);
   const lines: EstimateLine[] = [];
   switch (level) {
@@ -66,6 +67,7 @@ export function estimate(house: HouseAnalysis, level: Level): Estimate {
       lines.push(line('Totalrenovering av fasade og uteområde (~200 m² BRA)', 200, RATES.totalrenovPerM2Bra));
       break;
   }
+  if (staging) lines.push(...stagingEstimateLines());
   return {
     lines,
     totalLowNok: lines.reduce((s, l) => s + l.lowNok, 0),

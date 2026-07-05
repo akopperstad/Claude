@@ -19,11 +19,18 @@ export interface GeminiImageResult {
   mimeType: string;
 }
 
+export interface GeminiImageInput {
+  base64: string;
+  mimeType: string;
+}
+
 export async function renderWithGemini(
   imageBase64: string,
   mimeType: string,
   prompt: string,
   apiKey: string,
+  /** Optional style-inspiration image (A24) sent alongside the house photo. */
+  inspiration?: GeminiImageInput,
 ): Promise<GeminiImageResult> {
   const models = process.env.GEMINI_IMAGE_MODEL
     ? [process.env.GEMINI_IMAGE_MODEL]
@@ -31,7 +38,7 @@ export async function renderWithGemini(
   let lastError: unknown;
   for (const model of models) {
     try {
-      return await callGemini(imageBase64, mimeType, prompt, apiKey, model);
+      return await callGemini(imageBase64, mimeType, prompt, apiKey, model, inspiration);
     } catch (err) {
       lastError = err;
     }
@@ -45,6 +52,7 @@ async function callGemini(
   prompt: string,
   apiKey: string,
   model: string,
+  inspiration?: GeminiImageInput,
 ): Promise<GeminiImageResult> {
   const res = await fetch(`${BASE}/${model}:generateContent`, {
     method: 'POST',
@@ -57,6 +65,9 @@ async function callGemini(
         {
           parts: [
             { inline_data: { mime_type: mimeType, data: imageBase64 } },
+            ...(inspiration
+              ? [{ inline_data: { mime_type: inspiration.mimeType, data: inspiration.base64 } }]
+              : []),
             { text: prompt },
           ],
         },

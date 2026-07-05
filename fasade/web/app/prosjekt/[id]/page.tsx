@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Logo } from '@/components/Logo';
 import { CompareSlider } from '@/components/CompareSlider';
+import { EXTERIOR_STYLES } from '@pipeline/presets';
 
 type Level = 1 | 2 | 3 | 4;
 
@@ -20,6 +21,8 @@ interface RenderRecord {
   imageUrl: string;
   estimate: { lines: EstimateLine[]; totalLowNok: number; totalHighNok: number };
   palette?: { cladding: string; trim: string; door: string; roof: string; reasoning: string };
+  staging?: boolean;
+  styleId?: string;
 }
 interface Project {
   id: string;
@@ -35,11 +38,11 @@ interface Project {
   renders: RenderRecord[];
 }
 
-const NIVAER: { level: Level; navn: string; body: string; tag: string }[] = [
-  { level: 1, navn: 'Farge', body: 'Kun ny farge på kledningen. Alt annet urørt.', tag: 'Inkludert i gratis' },
-  { level: 2, navn: 'Overflater', body: 'Ny kledning, takflate, karmer og dører.', tag: 'Boligjakt / Prosjekt' },
-  { level: 3, navn: 'Oppgradering', body: 'Nye vinduer, inngang, platting og AI-palett.', tag: 'Prosjekt' },
-  { level: 4, navn: 'Visjon', body: 'Full arkitektonisk forvandling på samme tomt.', tag: 'Prosjekt' },
+const NIVAER: { level: Level; navn: string; body: string; tag: string; poeng: number }[] = [
+  { level: 1, navn: 'Farge', body: 'Kun ny farge på kledningen. Alt annet urørt.', tag: 'Inkludert i gratis', poeng: 1 },
+  { level: 2, navn: 'Overflater', body: 'Ny kledning — tak, karmer og dører harmoniseres.', tag: 'Boligjakt / Prosjekt', poeng: 1 },
+  { level: 3, navn: 'Oppgradering', body: 'Nye vinduer, inngang, platting og AI-palett.', tag: 'Prosjekt', poeng: 2 },
+  { level: 4, navn: 'Visjon', body: 'Full arkitektonisk forvandling på samme tomt.', tag: 'Prosjekt', poeng: 3 },
 ];
 
 const FARGER: { navn: string; hex: string }[] = [
@@ -69,6 +72,11 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
   const [email, setEmail] = useState('');
   const [emailState, setEmailState] = useState<'idle' | 'sent'>('idle');
   const [juster, setJuster] = useState('');
+  const [styleId, setStyleId] = useState<string | null>(null);
+  // null = follow the level default (on at nivå 3-4, off at 1-2, A21)
+  const [stagingChoice, setStagingChoice] = useState<boolean | null>(null);
+  const [insp, setInsp] = useState<{ base64: string; mime: string; name: string } | null>(null);
+  const staging = stagingChoice ?? level >= 3;
 
   useEffect(() => {
     void fetch(`/api/prosjekt/${params.id}`)
@@ -138,8 +146,13 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       const valgtFarge = egenFarge.trim() || farge;
       const payload = edit ?? {
         level,
+        staging,
         ...(level <= 2 && valgtFarge ? { target: valgtFarge } : {}),
-        ...(level >= 3 && wishes.trim() ? { wishes: wishes.trim() } : {}),
+        ...(level >= 2 && styleId ? { styleId } : {}),
+        ...(wishes.trim() ? { wishes: wishes.trim() } : {}),
+        ...(level >= 3 && insp
+          ? { inspirationBase64: insp.base64, inspirationMime: insp.mime }
+          : {}),
       };
       const res = await fetch(`/api/prosjekt/${project!.id}/render`, {
         method: 'POST',
@@ -188,9 +201,13 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
             <button
               key={n.level}
               className={`niva${level === n.level ? ' valgt' : ''}`}
-              onClick={() => setLevel(n.level)}
+              onClick={() => {
+                setLevel(n.level);
+                const s = EXTERIOR_STYLES.find((x) => x.id === styleId);
+                if (s && s.minLevel > n.level) setStyleId(null);
+              }}
             >
-              <span className="num">Nivå {n.level}</span>
+              <span className="num">Nivå {n.level} · {n.poeng} poeng</span>
               <h3>{n.navn}</h3>
               <p>{n.body}</p>
               <span className="tag">{n.tag}</span>
@@ -199,7 +216,9 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
         </div>
         {level <= 2 && (
           <div className="valg">
-            <span className="eyebrow">Velg farge — eller la AI foreslå</span>
+            <span className="eyebrow">
+              {level === 1 ? 'Velg farge — eller la AI foreslå' : 'Velg kledning — tak, karmer og dører harmoniseres automatisk'}
+            </span>
             <div className="chips">
               {FARGER.map((f) => (
                 <button
@@ -226,24 +245,87 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
             />
           </div>
         )}
+        {level >= 2 && (
+          <div className="valg">
+            <span className="eyebrow">Velg stil (valgfritt)</span>
+            <div className="chips">
+              {EXTERIOR_STYLES.filter((s) => s.minLevel <= level).map((s) => (
+                <button
+                  key={s.id}
+                  className={`chip-farge${styleId === s.id ? ' valgt' : ''}`}
+                  title={s.beskrivelse}
+                  onClick={() => setStyleId(styleId === s.id ? null : s.id)}
+                >
+                  {s.navn}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        <div className="valg">
+          <span className="eyebrow">Egne ønsker (valgfritt)</span>
+          <textarea
+            className="felt"
+            rows={2}
+            maxLength={400}
+            placeholder={
+              level <= 2
+                ? 'F.eks. «behold døren som den er, litt varmere tone i sola»'
+                : 'F.eks. «legg platting rundt første etasje, bytt inngangsdør til eik»'
+            }
+            value={wishes}
+            onChange={(e) => setWishes(e.target.value)}
+          />
+        </div>
         {level >= 3 && (
-          <>
-            <div className="valg">
-              <span className="eyebrow">Egne ønsker (valgfritt)</span>
-              <textarea
-                className="felt"
-                rows={2}
-                maxLength={400}
-                placeholder="F.eks. «legg platting rundt første etasje, bytt inngangsdør til eik»"
-                value={wishes}
-                onChange={(e) => setWishes(e.target.value)}
-              />
-            </div>
-            <div className="hint">
-              Nivå 3–4 kan inneholde tiltak som er søknadspliktige. Alle bilder er
-              visualiseringer.
-            </div>
-          </>
+          <div className="valg">
+            <span className="eyebrow">Inspirasjonsbilde (valgfritt) — «slik vil jeg ha det»</span>
+            <input
+              type="file"
+              accept="image/jpeg,image/png"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (!f) return setInsp(null);
+                const reader = new FileReader();
+                reader.onload = () => {
+                  const url = String(reader.result);
+                  setInsp({
+                    base64: url.slice(url.indexOf(',') + 1),
+                    mime: f.type === 'image/png' ? 'image/png' : 'image/jpeg',
+                    name: f.name,
+                  });
+                };
+                reader.readAsDataURL(f);
+              }}
+            />
+            {insp && (
+              <div className="hint">
+                {insp.name} lastes opp som stilreferanse.{' '}
+                <button className="btn ghost" onClick={() => setInsp(null)}>
+                  Fjern
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+        <div className="valg">
+          <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={staging}
+              onChange={(e) => setStagingChoice(e.target.checked)}
+            />
+            <span>
+              <b>Vis huset nyvasket og ryddet</b> — fjerner rot og parabol, vasker tak og
+              kledning, steller hagen. Merkes alltid på resultatet.
+            </span>
+          </label>
+        </div>
+        {level >= 3 && (
+          <div className="hint">
+            Nivå 3–4 kan inneholde tiltak som er søknadspliktige. Alle bilder er
+            visualiseringer.
+          </div>
         )}
         <div style={{ margin: '26px 0' }}>
           <button className="btn" disabled={busy} onClick={() => void render()}>
@@ -267,6 +349,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
             <CompareSlider before={beforeUrl} after={result.imageUrl} />
             <p className="illu">
               Illustrasjon · Nivå {result.level}: {result.target}
+              {result.staging && ' · Inkluderer rydding og vask'}
               {result.demoSubstituted &&
                 ' · Demo-modus: eksempelrender vist — koble til render-API for ditt bilde'}
             </p>

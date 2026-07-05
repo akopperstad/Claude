@@ -23,6 +23,10 @@ export interface RenderRecord {
   imageUrl: string; // route-served or provider URL
   estimate: Estimate;
   palette?: PaletteScheme;
+  /** "Rydd & vask" applied (A21) — result must be labeled. */
+  staging?: boolean;
+  /** Style gallery pick (A24). */
+  styleId?: string;
   createdAt: string;
 }
 
