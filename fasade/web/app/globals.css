@@ -917,3 +917,50 @@ footer.site {
 .price .btn.ghost {
   margin-top: auto;
 }
+
+/* finn.no import (A16.4/A17) */
+.finnimport {
+  margin-top: 32px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+}
+.finnimport .justerform .felt {
+  max-width: none;
+}
+.finntittel {
+  margin: 14px 0 0;
+  font-weight: 600;
+  font-size: 15px;
+}
+.finnvelg {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.finnbilder {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.finnbilder button {
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background: none;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.finnbilder button:hover {
+  border-color: var(--gran);
+  transform: translateY(-2px);
+}
+.finnbilder img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}

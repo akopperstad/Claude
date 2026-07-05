@@ -146,6 +146,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       'Retter opp flaggstanga …',
       'Krysser fingrene for tørkevær …',
       'Fjerner presenningen …',
+      'Venter på plan og bygg …',
     ];
     setProgress(4);
     setStage('Leser bildet …');

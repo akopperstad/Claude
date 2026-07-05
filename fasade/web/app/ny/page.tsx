@@ -10,8 +10,33 @@ export default function NyPage() {
   const [busy, setBusy] = useState(false);
   const [drag, setDrag] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [finnUrl, setFinnUrl] = useState('');
+  const [finnBusy, setFinnBusy] = useState(false);
+  const [finnImages, setFinnImages] = useState<string[]>([]);
+  const [finnTitle, setFinnTitle] = useState<string | null>(null);
 
-  async function createProject(body: FormData | { demo: true }) {
+  async function hentFinn() {
+    setFinnBusy(true);
+    setError(null);
+    setFinnImages([]);
+    try {
+      const res = await fetch('/api/finn', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: finnUrl.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error ?? 'klarte ikke hente annonsen');
+      setFinnImages(data.images);
+      setFinnTitle(data.title ?? null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'klarte ikke hente annonsen');
+    } finally {
+      setFinnBusy(false);
+    }
+  }
+
+  async function createProject(body: FormData | { demo: true } | { finnImageUrl: string }) {
     setBusy(true);
     setError(null);
     try {
@@ -94,7 +119,48 @@ export default function NyPage() {
           <span>☀️ Dagslys funker best</span>
           <span>📱 Mobilbilde er godt nok</span>
         </div>
-        <div className="analyse" style={{ marginTop: 36 }}>
+        <div className="finnimport">
+          <span className="label">Vurderer du en bolig på FINN?</span>
+          <form
+            className="justerform"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (finnUrl.trim()) void hentFinn();
+            }}
+          >
+            <input
+              className="felt"
+              placeholder="Lim inn lenken til annonsen — f.eks. finn.no/realestate/…"
+              value={finnUrl}
+              onChange={(e) => setFinnUrl(e.target.value)}
+            />
+            <button className="btn" type="submit" disabled={finnBusy || !finnUrl.trim()}>
+              {finnBusy ? 'Henter …' : 'Hent bilder'}
+            </button>
+          </form>
+          {finnImages.length > 0 && (
+            <>
+              {finnTitle && <p className="finntittel">{finnTitle}</p>}
+              <p className="finnvelg">Velg bildet av fasaden:</p>
+              <div className="finnbilder">
+                {finnImages.map((src) => (
+                  <button
+                    key={src}
+                    disabled={busy}
+                    onClick={() => void createProject({ finnImageUrl: src })}
+                  >
+                    <img src={src} alt="" loading="lazy" />
+                  </button>
+                ))}
+              </div>
+              <p className="illu">
+                Bildene tilhører annonsøren/fotografen. Kun til din egen private
+                visualisering i betaperioden.
+              </p>
+            </>
+          )}
+        </div>
+        <div className="analyse" style={{ marginTop: 20 }}>
           <b>Har du ikke bilde for hånden?</b> Prøv med eksempelhuset vårt.{' '}
           <button
             className="btn ghost"
