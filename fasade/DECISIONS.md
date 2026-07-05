@@ -86,3 +86,14 @@ re-imagined) — geometry lock on real photos is bucket 2 goal #1.
   already know from prospekter. No buildability vetting anywhere; level 3–4
   additive elements get a contextual "tiltak kan være søknadspliktige" hint.
   Renders are inspiration, not engineering.
+
+### 2026-07-05 — Bucket 2: nivå 1–2 technique change (A7, pending ratification)
+
+- **A7 — Nivå 1–2 renders move to segmentation-based recoloring.** Bucket 2
+  eval on real photos falsified both fix hypotheses for generative editing
+  (prompt tuning ≈ naive; model swap ≈ no better; 2k resolution helps
+  sometimes, certifies nothing). Nivå 1–2 promises geometry fidelity, so the
+  cladding gets segmented and recolored deterministically; generative models
+  remain for nivå 3–4 where drift tolerance is part of the definition.
+  Interim beta mitigation: best-of-3 generation ranked by drift score, ghost
+  overlay shown to the customer. Full evidence in BUCKET-2-REPORT.md.

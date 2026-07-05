@@ -1,41 +1,62 @@
 import type { HouseAnalysis, RenderRequest } from './types';
+import { LEVELS, type Level } from './levels';
 
 /**
  * Builds the generation prompt for one transform of one analyzed house.
  *
- * Structure (validated in the bucket 1 A/B test, winning model nano_banana_pro):
- *   1. One imperative sentence describing ONLY the change, referencing the
- *      cladding/element as it actually looks in the photo.
- *   2. An explicit preservation clause enumerating everything that must stay
- *      identical — geometry, roof, windows, surroundings, lighting, camera.
- *   3. "Photorealistic." terminator.
+ * Two prompt frames, selected by the level's strictGeometry flag:
  *
- * The preservation clause is derived from the vision analysis, never from a
- * fixed template: wrong claims about the house (e.g. trim color) are obeyed
- * by the model and become drift.
+ * STRICT (levels 1-3) — the bucket 2 experiment showed real photos need more
+ * than a keep-list. The frame that held geometry:
+ *   1. "This is a photo edit, not a re-generation." — reframes the task.
+ *   2. The change sentence, naming the element as it looks in the photo.
+ *   3. An exhaustive description of the house's volumes from the vision
+ *      analysis — the model preserves what the prompt proves it has seen.
+ *   4. A hard negative: do not move/resize/add/remove structural elements.
+ *   5. Keep-list of surroundings + lighting + camera, from the analysis.
+ *
+ * FREE (level 4) — aspirational reimagining; only plot context is pinned.
+ *
+ * Everything about the house comes from the vision analysis, never from a
+ * template: models obey wrong claims (bucket 1 finding).
  */
-export function buildPrompt(house: HouseAnalysis, req: RenderRequest): string {
+export function buildPrompt(
+  house: HouseAnalysis,
+  req: RenderRequest,
+  level: Level,
+): string {
+  const spec = LEVELS[level];
   const change = changeSentence(house, req);
-  const keep = [
-    'same building geometry',
-    house.roof,
-    `same window positions and sizes with ${house.windows}`,
-    ...house.surroundings,
-    house.lighting,
-    'camera angle',
-  ].join(', ');
-  return `${change} Keep everything else exactly identical: ${keep}. Photorealistic.`;
+
+  if (!spec.strictGeometry) {
+    const keep = [...house.surroundings, house.lighting, 'the exact camera angle'].join(', ');
+    return (
+      `${change} Keep the same plot layout so it is recognizably the same property: ${keep}. ` +
+      'Photorealistic architectural photography.'
+    );
+  }
+
+  const description =
+    `The photo shows a ${house.buildingType} with ${house.cladding}, ${house.roof} ` +
+    `and ${house.windows}.`;
+  const hardNegative =
+    'Do not move, resize, add or remove any window, door, roof plane, dormer, ' +
+    'chimney, balcony, railing or building volume.';
+  const keep = [...house.surroundings, house.lighting, 'the exact camera angle'].join(', ');
+
+  return (
+    `This is a photo edit, not a re-generation. ${change} ${description} ` +
+    `${hardNegative} Keep ${keep}. Photorealistic.`
+  );
 }
 
 function changeSentence(house: HouseAnalysis, req: RenderRequest): string {
   switch (req.transform) {
     case 'repaint':
-      return `Repaint this ${house.buildingType}'s ${house.cladding} in ${req.target}.`;
+      return `Change ONLY the color of the ${house.cladding} to ${req.target}.`;
     case 'cladding':
-      return `Replace this ${house.buildingType}'s ${house.cladding} with ${req.target}.`;
+      return `Replace the ${house.cladding} with ${req.target}.`;
     case 'refresh':
-      // For refresh, target is a full curated instruction (from a style preset),
-      // e.g. sørlandsstil: white cladding + white trim + sage doors + lanterns.
-      return `Renovate this ${house.buildingType}: ${req.target}.`;
+      return `Renovate this ${house.buildingType} while keeping its exact building volumes, rooflines and proportions unchanged: ${req.target}.`;
   }
 }
