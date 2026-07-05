@@ -28,7 +28,7 @@ const config: Config = {
       },
       fontSize: {
         // fluid editorial scale
-        "display-xl": ["clamp(3.5rem, 9vw, 9rem)", { lineHeight: "0.95", letterSpacing: "-0.03em" }],
+        "display-xl": ["clamp(3.75rem, 10vw, 10.5rem)", { lineHeight: "0.92", letterSpacing: "-0.035em" }],
         "display-lg": ["clamp(2.75rem, 6vw, 6rem)", { lineHeight: "1.0", letterSpacing: "-0.02em" }],
         "display-md": ["clamp(2rem, 4vw, 3.5rem)", { lineHeight: "1.05", letterSpacing: "-0.015em" }],
         eyebrow: ["0.8125rem", { lineHeight: "1", letterSpacing: "0.28em" }],

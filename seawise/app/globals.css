@@ -23,6 +23,16 @@
     color: theme("colors.sea.abyss");
   }
 
+  /* custom cursor active: hide the native one */
+  html.has-cursor,
+  html.has-cursor a,
+  html.has-cursor button,
+  html.has-cursor select,
+  html.has-cursor input,
+  html.has-cursor textarea {
+    cursor: none;
+  }
+
   /* Lenis */
   html.lenis,
   html.lenis body {
