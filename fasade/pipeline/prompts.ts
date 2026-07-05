@@ -51,12 +51,18 @@ export function buildPrompt(
 }
 
 function changeSentence(house: HouseAnalysis, req: RenderRequest): string {
+  // Owner wishes only apply to the loose transforms; the strict levels'
+  // whole promise is that nothing else changes.
+  const wishes =
+    req.transform === 'refresh' && req.wishes?.trim()
+      ? ` The owner also wishes: ${req.wishes.trim()}.`
+      : '';
   switch (req.transform) {
     case 'repaint':
       return `Change ONLY the color of the ${house.cladding} to ${req.target}.`;
     case 'cladding':
       return `Replace the ${house.cladding} with ${req.target}.`;
     case 'refresh':
-      return `Renovate this ${house.buildingType} while keeping its exact building volumes, rooflines and proportions unchanged: ${req.target}.`;
+      return `Renovate this ${house.buildingType} while keeping its exact building volumes, rooflines and proportions unchanged: ${req.target}.${wishes}`;
   }
 }

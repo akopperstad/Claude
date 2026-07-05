@@ -47,6 +47,12 @@ export interface RenderRequest {
    * Style presets (presets.ts) expand to these fragments.
    */
   target: string;
+  /**
+   * Optional free-text owner wishes ("legg platting rundt første etasje"),
+   * folded into the change instruction. Levels 3-4 only — strict levels
+   * must not accept arbitrary structural asks.
+   */
+  wishes?: string;
 }
 
 export interface RenderResult {

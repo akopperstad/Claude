@@ -141,6 +141,14 @@ re-imagined) — geometry lock on real photos is bucket 2 goal #1.
   the consumer-app model we validated in buckets 1–2 is unreachable there.
   Higgsfield stays the prototyping lab via the chat connector.
 
+### 2026-07-05 — Bucket 5 kickoff
+
+- **A15 — Beta-first launch.** Vøling ships as a free, quota-limited beta as
+  soon as bucket 5-light + deploy are done; payment (Vipps + Stripe live)
+  switches on when org.nr exists. Rationale: founder field-testing surfaced
+  four real bugs in hours; beta users multiply that learning while the
+  paperwork grinds. Revenue timing is gated on org.nr either way.
+
 ### 2026-07-05 — Bucket 2 checkpoint: A7 ratified with modification
 
 - **A7 ratified.** Segmentation-based nivå 1–2, generative nivå 3–4,

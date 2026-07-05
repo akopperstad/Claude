@@ -85,10 +85,12 @@ export async function renderLevel(
   analysis: HouseAnalysis,
   level: Level,
   target: string,
+  wishes?: string,
 ): Promise<RenderOutcome> {
   const request: RenderRequest = {
     transform: level === 1 ? 'repaint' : level === 2 ? 'cladding' : 'refresh',
     target,
+    wishes,
   };
   const prompt = buildPrompt(analysis, request, level);
 

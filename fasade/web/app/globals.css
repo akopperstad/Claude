@@ -436,6 +436,54 @@ footer.site {
   font-size: 15px;
 }
 
+/* level options */
+.valg {
+  margin-top: 24px;
+}
+.chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+.chip-farge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 14px/1 var(--font);
+  color: var(--ink);
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.chip-farge.valgt {
+  border-color: var(--gran);
+  background: var(--gran-lys);
+}
+.chip-farge .dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+}
+.felt {
+  width: 100%;
+  max-width: 560px;
+  margin-top: 6px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--ink);
+  font: 15px/1.5 var(--font);
+}
+.felt:focus {
+  outline: none;
+  border-color: var(--gran);
+}
+
 /* render progress */
 .progress {
   margin: 18px 0 6px;

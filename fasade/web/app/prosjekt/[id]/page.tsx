@@ -39,6 +39,15 @@ const NIVAER: { level: Level; navn: string; body: string; tag: string }[] = [
   { level: 4, navn: 'Visjon', body: 'Full arkitektonisk forvandling på samme tomt.', tag: 'Prosjekt' },
 ];
 
+const FARGER: { navn: string; hex: string }[] = [
+  { navn: 'Klassisk hvit', hex: '#EFEDE6' },
+  { navn: 'Rørosrød', hex: '#7C2A22' },
+  { navn: 'Kystgrå', hex: '#A8A59B' },
+  { navn: 'Mørk grå', hex: '#3E3C38' },
+  { navn: 'Oker', hex: '#C08A2D' },
+  { navn: 'Skogsgrønn', hex: '#3F5240' },
+];
+
 function kr(n: number): string {
   return `${Math.round(n / 1000)} 000 kr`;
 }
@@ -46,11 +55,16 @@ function kr(n: number): string {
 export default function ProsjektPage({ params }: { params: { id: string } }) {
   const [project, setProject] = useState<Project | null>(null);
   const [level, setLevel] = useState<Level>(1);
+  const [farge, setFarge] = useState<string | null>(null);
+  const [egenFarge, setEgenFarge] = useState('');
+  const [wishes, setWishes] = useState('');
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState('');
   const [result, setResult] = useState<(RenderRecord & { demoSubstituted?: boolean }) | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+  const [emailState, setEmailState] = useState<'idle' | 'sent'>('idle');
 
   useEffect(() => {
     void fetch(`/api/prosjekt/${params.id}`)
@@ -109,10 +123,15 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       else setStage(FUN[Math.floor((s - 15) / 7) % FUN.length]);
     }, 900);
     try {
+      const valgtFarge = egenFarge.trim() || farge;
       const res = await fetch(`/api/prosjekt/${project!.id}/render`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ level }),
+        body: JSON.stringify({
+          level,
+          ...(level <= 2 && valgtFarge ? { target: valgtFarge } : {}),
+          ...(level >= 3 && wishes.trim() ? { wishes: wishes.trim() } : {}),
+        }),
       });
       const text = await res.text();
       const data = text ? JSON.parse(text) : {};
@@ -163,11 +182,53 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
             </button>
           ))}
         </div>
-        {level >= 3 && (
-          <div className="hint">
-            Nivå 3–4 kan inneholde tiltak som er søknadspliktige. Alle bilder er
-            visualiseringer.
+        {level <= 2 && (
+          <div className="valg">
+            <span className="eyebrow">Velg farge — eller la AI foreslå</span>
+            <div className="chips">
+              {FARGER.map((f) => (
+                <button
+                  key={f.navn}
+                  className={`chip-farge${farge === f.navn ? ' valgt' : ''}`}
+                  onClick={() => {
+                    setFarge(farge === f.navn ? null : f.navn);
+                    setEgenFarge('');
+                  }}
+                >
+                  <span className="dot" style={{ background: f.hex }} />
+                  {f.navn}
+                </button>
+              ))}
+            </div>
+            <input
+              className="felt"
+              placeholder="… eller skriv din egen (f.eks. «dyp burgunder»)"
+              value={egenFarge}
+              onChange={(e) => {
+                setEgenFarge(e.target.value);
+                setFarge(null);
+              }}
+            />
           </div>
+        )}
+        {level >= 3 && (
+          <>
+            <div className="valg">
+              <span className="eyebrow">Egne ønsker (valgfritt)</span>
+              <textarea
+                className="felt"
+                rows={2}
+                maxLength={400}
+                placeholder="F.eks. «legg platting rundt første etasje, bytt inngangsdør til eik»"
+                value={wishes}
+                onChange={(e) => setWishes(e.target.value)}
+              />
+            </div>
+            <div className="hint">
+              Nivå 3–4 kan inneholde tiltak som er søknadspliktige. Alle bilder er
+              visualiseringer.
+            </div>
+          </>
         )}
         <div style={{ margin: '26px 0' }}>
           <button className="btn" disabled={busy} onClick={() => void render()}>
@@ -238,6 +299,40 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
             >
               Last ned bilde
             </a>
+            <div className="kort" style={{ marginTop: 18 }}>
+              <span className="eyebrow">Få rapporten på e-post</span>
+              {emailState === 'sent' ? (
+                <p style={{ fontSize: 14.5, margin: '8px 0 0', color: 'var(--gran-ink)' }}>
+                  Takk! Vi holder deg oppdatert.
+                </p>
+              ) : (
+                <form
+                  style={{ display: 'flex', gap: 8, marginTop: 10 }}
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const res = await fetch('/api/interesse', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ email, projectId: project.id }),
+                    });
+                    if (res.ok) setEmailState('sent');
+                  }}
+                >
+                  <input
+                    className="felt"
+                    style={{ margin: 0, flex: 1 }}
+                    type="email"
+                    required
+                    placeholder="din@epost.no"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <button className="btn" type="submit">
+                    Send
+                  </button>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       )}
