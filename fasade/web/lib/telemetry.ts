@@ -17,6 +17,8 @@ export interface RenderEvent {
   styleId?: string;
   staging?: boolean;
   instruction?: string;
+  driftScore?: number;
+  candidates?: number;
   demoSubstituted?: boolean;
 }
 

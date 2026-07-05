@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
+import { driftScore } from '@/lib/driftScore';
 import { analyzeHouse } from '@pipeline/analyze';
 import { buildEditPrompt, buildPrompt, type PromptOptions } from '@pipeline/prompts';
 import { suggestPalette, type PaletteScheme } from '@pipeline/palette';
@@ -91,6 +92,10 @@ export interface RenderOutcome {
   target: string;
   /** set when demo mode substituted a canned render */
   demoSubstituted: boolean;
+  /** best-of-N edge-dice score at nivå 1-2 (A7 interim) — ranking, not certificate */
+  driftScore?: number;
+  /** how many candidates were generated and ranked */
+  candidates?: number;
 }
 
 /** Resolve an app-served image URL back to the file that produced it. */
@@ -103,26 +108,67 @@ export function imageFilePath(imageUrl: string): string | null {
   return null;
 }
 
-async function generateWithGemini(
+async function generateRaw(
   filePath: string,
   prompt: string,
   inspiration?: GeminiImageInput,
-): Promise<string> {
+): Promise<{ base64: string; mimeType: string }> {
   const bytes = await readFile(filePath);
   const mime = filePath.endsWith('.png') ? 'image/png' : 'image/jpeg';
-  const result = await renderWithGemini(
+  return renderWithGemini(
     bytes.toString('base64'),
     mime,
     prompt,
     process.env.GEMINI_API_KEY!,
     inspiration,
   );
+}
+
+async function saveRender(result: { base64: string; mimeType: string }): Promise<string> {
   const ext = result.mimeType.includes('png') ? 'png' : 'jpg';
   const name = `${randomUUID().replace(/-/g, '').slice(0, 12)}.${ext}`;
   const dir = path.join(process.cwd(), 'data', 'renders');
   await mkdir(dir, { recursive: true });
   await writeFile(path.join(dir, name), Buffer.from(result.base64, 'base64'));
   return `/api/render/${name}`;
+}
+
+async function generateWithGemini(
+  filePath: string,
+  prompt: string,
+  inspiration?: GeminiImageInput,
+): Promise<string> {
+  return saveRender(await generateRaw(filePath, prompt, inspiration));
+}
+
+/**
+ * Nivå 1-2 (A7 interim): three candidates in parallel, ranked by edge-dice
+ * drift score against the source, best one wins. Score is a ranking signal,
+ * not a certificate (bucket 2 finding).
+ */
+async function generateBestOf3(
+  filePath: string,
+  prompt: string,
+): Promise<{ imageUrl: string; score: number; candidates: number }> {
+  const src = await readFile(filePath);
+  const srcMime = filePath.endsWith('.png') ? 'image/png' : 'image/jpeg';
+  const attempts = await Promise.allSettled(
+    [0, 1, 2].map(() => generateRaw(filePath, prompt)),
+  );
+  const ok = attempts.flatMap((a) => (a.status === 'fulfilled' ? [a.value] : []));
+  if (!ok.length) throw (attempts[0] as PromiseRejectedResult).reason;
+  const scored = ok
+    .map((r) => ({
+      r,
+      score: driftScore(src, srcMime, Buffer.from(r.base64, 'base64'), r.mimeType),
+    }))
+    .sort((a, b) => b.score - a.score);
+  const best = scored[0];
+  return {
+    imageUrl: await saveRender(best.r),
+    score: Math.round(best.score * 100) / 100,
+    candidates: ok.length,
+  };
 }
 
 /**
@@ -168,6 +214,16 @@ export async function renderLevel(
     const filePath = demo
       ? path.join(process.cwd(), 'public', photoPath)
       : photoPath;
+    if (level <= 2) {
+      const best = await generateBestOf3(filePath, prompt);
+      return {
+        imageUrl: best.imageUrl,
+        target,
+        demoSubstituted: false,
+        driftScore: best.score,
+        candidates: best.candidates,
+      };
+    }
     const imageUrl = await generateWithGemini(filePath, prompt, inspiration);
     return { imageUrl, target, demoSubstituted: false };
   }

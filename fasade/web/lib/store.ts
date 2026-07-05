@@ -27,6 +27,10 @@ export interface RenderRecord {
   staging?: boolean;
   /** Style gallery pick (A24). */
   styleId?: string;
+  /** Best-of-N edge-dice score, nivå 1-2 only (A7 interim). */
+  driftScore?: number;
+  /** Candidates generated and ranked for this render. */
+  candidates?: number;
   createdAt: string;
 }
 

@@ -24,6 +24,7 @@ interface RenderRecord {
   palette?: { cladding: string; trim: string; door: string; roof: string; reasoning: string };
   staging?: boolean;
   styleId?: string;
+  candidates?: number;
 }
 interface Project {
   id: string;
@@ -433,6 +434,8 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
             <CompareSlider before={beforeUrl} after={result.imageUrl} />
             <p className="illu">
               Illustrasjon · Nivå {result.level}: {result.target}
+              {(result.candidates ?? 0) > 1 &&
+                ` · Geometri rangert — beste av ${result.candidates}`}
               {result.staging && ' · Inkluderer rydding og vask'}
               {result.demoSubstituted &&
                 ' · Demo-modus: eksempelrender vist — koble til render-API for ditt bilde'}

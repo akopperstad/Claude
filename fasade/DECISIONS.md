@@ -246,6 +246,20 @@ roof surface, frames and doors.
   deferred to post-deploy (per original D-list) — pre-traffic it is a demo,
   not discovery.
 
+### 2026-07-05 — A7 interim mitigation built (pre-deploy trust gate)
+
+- **A26 — Best-of-3 live at nivå 1–2.** Founder chose to close the geometry
+  worry before the finn.no bucket. Nivå 1–2 renders generate three
+  candidates in parallel; a TypeScript port of the bucket-2 edge-dice
+  metric (validated here: identical 1.00, same-house restyle 0.73–0.83,
+  unrelated house 0.28) ranks them against the source and the best wins.
+  Scores + candidate counts go to render records and telemetry. Result is
+  labeled "Geometri rangert — beste av N" — the honest form of A8's badge.
+  Nivå 1–2 COGS triples at beta scale; accepted until A7 segmentation.
+  Remaining worries parked deliberately: ugly-photo stress test folds into
+  the finn-import checkpoint; distribution + org.nr/domener are founder
+  homework in parallel.
+
 ### 2026-07-05 — Engagement mechanics (founder "trending prompts" idea, refined)
 
 - **A25 — Honest engagement, consumption later.** Founder proposed

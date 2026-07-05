@@ -137,6 +137,8 @@ export async function POST(
         palette,
         staging,
         styleId: style?.id,
+        driftScore: outcome.driftScore,
+        candidates: outcome.candidates,
         createdAt: new Date().toISOString(),
       };
     }
@@ -157,6 +159,8 @@ export async function POST(
     styleId: record.styleId,
     staging: record.staging,
     instruction: record.instruction,
+    driftScore: record.driftScore,
+    candidates: record.candidates,
     demoSubstituted,
   });
 
