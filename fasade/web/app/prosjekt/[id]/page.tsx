@@ -69,8 +69,13 @@ const FARGER: { navn: string; hex: string }[] = [
   { navn: 'Skogsgrønn', hex: '#3F5240' },
 ];
 
+/* «65 000 kr», «450 000 kr», «3,2 mill. kr» — aldri «3000 000 kr». */
 function kr(n: number): string {
-  return `${Math.round(n / 1000)} 000 kr`;
+  if (n >= 1_000_000) {
+    const m = (n / 1_000_000).toLocaleString('nb-NO', { maximumFractionDigits: 1 });
+    return `${m} mill. kr`;
+  }
+  return `${n.toLocaleString('nb-NO')} kr`;
 }
 
 /* Tegnet inline-SVG-pil (§5.3) — aldri ikonfont eller tekstglyf. */
