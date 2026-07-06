@@ -1,8 +1,9 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/Logo';
+import { EXTERIOR_STYLES } from '@pipeline/presets';
 import './ny.css';
 
 export default function NyPage() {
@@ -17,6 +18,14 @@ export default function NyPage() {
   const [finnTitle, setFinnTitle] = useState<string | null>(null);
   // A27: private-use confirmation gates the finn import
   const [finnBekreft, setFinnBekreft] = useState(false);
+  // Style carried in from the landing (deep-link intent).
+  const [valgtStil, setValgtStil] = useState<string | null>(null);
+
+  useEffect(() => {
+    const stil = new URLSearchParams(window.location.search).get('stil');
+    const s = stil ? EXTERIOR_STYLES.find((x) => x.id === stil) : undefined;
+    if (s) setValgtStil(s.navn);
+  }, []);
 
   async function hentFinn() {
     setFinnBusy(true);
@@ -51,7 +60,9 @@ export default function NyPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? 'noe gikk galt');
-      router.push(`/prosjekt/${data.id}`);
+      // Carry a style chosen on the landing into the workbench (deep-link intent).
+      const stil = new URLSearchParams(window.location.search).get('stil');
+      router.push(`/prosjekt/${data.id}${stil ? `?stil=${encodeURIComponent(stil)}` : ''}`);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'noe gikk galt');
       setBusy(false);
@@ -82,6 +93,11 @@ export default function NyPage() {
         <span className="eyebrow">Nytt prosjekt</span>
         <h1>Ett bilde er alt som skal til.</h1>
         <p>Last opp et foto av fasaden. Rett forfra, i dagslys, med hele huset i bildet.</p>
+        {valgtStil && (
+          <p className="valgt-stil">
+            Du valgte <b>{valgtStil}</b>. Last opp et bilde, så viser vi huset ditt i den stilen.
+          </p>
+        )}
       </header>
       <main className="ny-hoved">
         <div

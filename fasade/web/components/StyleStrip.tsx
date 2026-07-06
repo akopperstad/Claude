@@ -1,21 +1,27 @@
 'use client';
 
+import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { EXTERIOR_STYLES, type ExteriorStyle } from '@pipeline/presets';
 
 /**
- * The style gallery as a single scroll-snapped row of even cards, with a
- * lightbox preview (click the image) that pages through the styles.
- * Selectable on the project page (onSelect set); browse-only on the landing.
+ * The style gallery as an even grid of cards, with a lightbox preview
+ * (click the image) that pages through the styles.
+ *   onSelect  -> project page: pick a style for the current render.
+ *   tryHref   -> landing: the preview routes into the funnel with the style
+ *                pre-selected (kills the browse-only dead end).
+ * Browse-only if neither is set.
  */
 export function StyleStrip({
   maxLevel = 4,
   selectedId = null,
   onSelect,
+  tryHref,
 }: {
   maxLevel?: number;
   selectedId?: string | null;
   onSelect?: (id: string | null) => void;
+  tryHref?: (id: string) => string;
 }) {
   const styles = EXTERIOR_STYLES.filter((s) => s.minLevel <= maxLevel);
   const [open, setOpen] = useState<number | null>(null);
@@ -127,6 +133,11 @@ export function StyleStrip({
                 >
                   Velg denne stilen
                 </button>
+              )}
+              {!onSelect && tryHref && (
+                <Link className="btn" href={tryHref(vis.id)}>
+                  Prøv denne stilen på ditt hus
+                </Link>
               )}
             </div>
             <button className="lysboks-pil venstre" onClick={() => step(-1)} aria-label="Forrige stil">

@@ -187,7 +187,7 @@ export default function Landing() {
               Kuratert for norsk byggeskikk og norsk lys, fra sørlandshvit til sort minimalisme.
             </p>
             <div className="avsloring">
-              <StyleStrip />
+              <StyleStrip tryHref={(id) => `/ny?stil=${id}`} />
             </div>
             <div className="stripefot avsloring">
               <p className="illu">Alle bildene er generert av Vøling på samme hus.</p>

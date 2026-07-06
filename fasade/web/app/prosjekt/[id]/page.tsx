@@ -113,6 +113,15 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
         if (last) {
           setResult(last);
           setLevel(last.level);
+          return;
+        }
+        // Style deep-linked from the landing: pre-select it and jump to the
+        // level where styles apply, so intent carries all the way through.
+        const stil = new URLSearchParams(window.location.search).get('stil');
+        const valgt = stil ? EXTERIOR_STYLES.find((s) => s.id === stil) : undefined;
+        if (valgt) {
+          setStyleId(valgt.id);
+          setLevel(Math.max(2, valgt.minLevel) as Level);
         }
       });
   }, [params.id]);
