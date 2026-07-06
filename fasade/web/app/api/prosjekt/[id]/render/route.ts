@@ -145,10 +145,19 @@ export async function POST(
       };
     }
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'rendering feilet';
-    console.error('render failed:', message);
+    const raw = err instanceof Error ? err.message : String(err);
+    const cause = (err as { cause?: { code?: string } })?.cause?.code;
+    console.error('render failed:', raw, cause ?? '');
     await refundQuota(visitorId, quotaCost);
-    return NextResponse.json({ error: `Rendering feilet: ${message}` }, { status: 502 });
+    // A network-layer failure ("fetch failed", "Connection error", ECONN…)
+    // means we could not reach the render/analysis service — say so plainly.
+    const networky = /fetch failed|connection|ECONN|ENOTFOUND|ETIMEDOUT|EAI_AGAIN|socket|network|utilgjengelig/i.test(
+      raw + ' ' + (cause ?? ''),
+    );
+    const melding = networky
+      ? 'Kunne ikke nå render-tjenesten. Sjekk nettforbindelsen og API-nøkkelen, og prøv igjen. Poenget er ikke brukt.'
+      : `Rendering feilet: ${raw}`;
+    return NextResponse.json({ error: melding }, { status: 502 });
   }
 
   project.renders.push(record);
