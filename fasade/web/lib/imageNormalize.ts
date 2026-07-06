@@ -17,29 +17,44 @@ export function normalizePhoto(
   bytes: Buffer,
   ext: 'png' | 'jpg',
 ): { bytes: Buffer; ext: 'png' | 'jpg' } {
+  // Detect by magic bytes, not the passed ext/content-type — finn and browser
+  // uploads mislabel formats, and feeding PNG bytes to jpeg-js throws.
+  const isPng =
+    bytes.length > 8 &&
+    bytes[0] === 0x89 &&
+    bytes[1] === 0x50 &&
+    bytes[2] === 0x4e &&
+    bytes[3] === 0x47;
+  const isJpeg = bytes.length > 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  const realExt: 'png' | 'jpg' = isPng ? 'png' : isJpeg ? 'jpg' : ext;
+
   let width: number;
   let height: number;
   let rgba: Uint8Array;
   try {
-    if (ext === 'png') {
+    if (isPng) {
       const png = PNG.sync.read(bytes);
       width = png.width;
       height = png.height;
       rgba = new Uint8Array(png.data);
-    } else {
+    } else if (isJpeg) {
       const img = jpeg.decode(bytes, { useTArray: true, maxMemoryUsageInMB: 1024 });
       width = img.width;
       height = img.height;
       rgba = new Uint8Array(img.data);
+    } else {
+      // Unknown format (e.g. WebP/HEIC) — store as-is; the render model still
+      // accepts it, we just skip normalization.
+      return { bytes, ext: realExt };
     }
   } catch {
-    return { bytes, ext }; // undecodable: store as-is, better than failing the upload
+    return { bytes, ext: realExt }; // undecodable: store as-is, better than failing the upload
   }
 
   const long = Math.max(width, height);
   const needsResize = long > MAX_EDGE;
-  const needsReencode = ext === 'png' || bytes.length > MAX_PASSTHROUGH_BYTES;
-  if (!needsResize && !needsReencode) return { bytes, ext };
+  const needsReencode = realExt === 'png' || bytes.length > MAX_PASSTHROUGH_BYTES;
+  if (!needsResize && !needsReencode) return { bytes, ext: realExt };
 
   let outW = width;
   let outH = height;

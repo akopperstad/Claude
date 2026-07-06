@@ -156,25 +156,33 @@ async function generateWithGemini(
 async function generateBestOf3(
   filePath: string,
   prompt: string,
-): Promise<{ imageUrl: string; score: number; candidates: number; model: string }> {
+): Promise<{ imageUrl: string; score?: number; candidates: number; model: string }> {
   const src = await readFile(filePath);
-  const srcMime = filePath.endsWith('.png') ? 'image/png' : 'image/jpeg';
   const attempts = await Promise.allSettled(
     [0, 1, 2].map(() => generateRaw(filePath, prompt)),
   );
   const ok = attempts.flatMap((a) => (a.status === 'fulfilled' ? [a.value] : []));
   if (!ok.length) throw (attempts[0] as PromiseRejectedResult).reason;
-  const scored = ok
-    .map((r) => ({
-      r,
-      score: driftScore(src, srcMime, Buffer.from(r.base64, 'base64'), r.mimeType),
-    }))
-    .sort((a, b) => b.score - a.score);
-  const best = scored[0];
+
+  // Scoring is a RANKING aid, never a gate: a decode failure must not fail a
+  // render whose candidates already generated. Unscorable candidates rank last.
+  const scored = ok.map((r) => {
+    let score: number | null = null;
+    try {
+      score = driftScore(src, Buffer.from(r.base64, 'base64'));
+    } catch (err) {
+      console.warn('drift score skipped:', err instanceof Error ? err.message : err);
+    }
+    return { r, score };
+  });
+  const ranked = scored.filter((s) => s.score !== null).sort((a, b) => b.score! - a.score!);
+  const best = ranked[0] ?? scored[0];
   return {
     imageUrl: await saveRender(best.r),
-    score: Math.round(best.score * 100) / 100,
-    candidates: ok.length,
+    // Only claim "beste av N" when we actually ranked ≥2; otherwise the label
+    // would overclaim. score omitted when we couldn't measure it.
+    score: best.score != null ? Math.round(best.score * 100) / 100 : undefined,
+    candidates: ranked.length >= 2 ? ranked.length : 1,
     model: best.r.model,
   };
 }

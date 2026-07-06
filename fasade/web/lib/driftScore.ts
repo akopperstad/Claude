@@ -19,18 +19,30 @@ interface Gray {
   data: Float32Array; // W*H grayscale
 }
 
-function decode(buf: Buffer, mime: string): { data: Uint8Array; width: number; height: number } {
-  if (mime.includes('png')) {
+/**
+ * Decode by MAGIC BYTES, never the caller's mime string — Gemini's declared
+ * content-type and the file extension both lie sometimes, and feeding PNG
+ * bytes to jpeg-js throws "SOI not found". WebP (which neither decoder
+ * handles) throws a clear, catchable error so the caller can skip scoring.
+ */
+function decode(buf: Buffer): { data: Uint8Array; width: number; height: number } {
+  const isPng =
+    buf.length > 8 && buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47;
+  const isJpeg = buf.length > 3 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff;
+  if (isPng) {
     const png = PNG.sync.read(buf);
     return { data: new Uint8Array(png.data), width: png.width, height: png.height };
   }
-  const img = jpeg.decode(buf, { useTArray: true, maxMemoryUsageInMB: 512 });
-  return { data: new Uint8Array(img.data), width: img.width, height: img.height };
+  if (isJpeg) {
+    const img = jpeg.decode(buf, { useTArray: true, maxMemoryUsageInMB: 512 });
+    return { data: new Uint8Array(img.data), width: img.width, height: img.height };
+  }
+  throw new Error('driftScore: ustøttet bildeformat (verken PNG eller JPEG)');
 }
 
 /** Grayscale + bilinear resample to the common W×H grid. */
-function toGrid(buf: Buffer, mime: string): Gray {
-  const { data, width, height } = decode(buf, mime);
+function toGrid(buf: Buffer): Gray {
+  const { data, width, height } = decode(buf);
   const out = new Float32Array(W * H);
   for (let y = 0; y < H; y++) {
     const sy = (y / (H - 1)) * (height - 1);
@@ -78,10 +90,14 @@ function edges(gray: Gray): Uint8Array {
   return bin;
 }
 
-/** Dice overlap of binarized edges; higher = geometry held better. */
-export function driftScore(source: Buffer, sourceMime: string, render: Buffer, renderMime: string): number {
-  const a = edges(toGrid(source, sourceMime));
-  const b = edges(toGrid(render, renderMime));
+/**
+ * Dice overlap of binarized edges; higher = geometry held better.
+ * Throws if either image can't be decoded — the caller treats scoring as
+ * optional and must never let that failure fail a render.
+ */
+export function driftScore(source: Buffer, render: Buffer): number {
+  const a = edges(toGrid(source));
+  const b = edges(toGrid(render));
   let inter = 0;
   let na = 0;
   let nb = 0;
