@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
+import { Pil } from '@/components/Pil';
 import { EXTERIOR_STYLES, type ExteriorStyle } from '@pipeline/presets';
 
 /**
@@ -102,9 +103,7 @@ export function StyleStrip({
                   ) : (
                     <>
                       Velg
-                      <svg className="pil" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-                        <path d="M1 7h12M8 2l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                      </svg>
+                      <Pil />
                     </>
                   )}
                 </span>

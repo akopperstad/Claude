@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Logo } from '@/components/Logo';
 import { CompareSlider } from '@/components/CompareSlider';
 import { StyleStrip } from '@/components/StyleStrip';
+import { Pil } from '@/components/Pil';
 import { EXTERIOR_STYLES } from '@pipeline/presets';
 import '../prosjekt.css';
 
@@ -81,15 +82,6 @@ function kr(n: number): string {
     return `${m} mill. kr`;
   }
   return `${n.toLocaleString('nb-NO')} kr`;
-}
-
-/* Tegnet inline-SVG-pil (§5.3) — aldri ikonfont eller tekstglyf. */
-function Pil() {
-  return (
-    <svg className="pil" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-      <path d="M1 7h12M8 2l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  );
 }
 
 export default function ProsjektPage({ params }: { params: { id: string } }) {

@@ -1,5 +1,6 @@
 import jpeg from 'jpeg-js';
 import { PNG } from 'pngjs';
+import { detectImageFormat } from '@/lib/imageFormat';
 
 /**
  * Normalizes stored photos so the render pipeline gets a predictable input:
@@ -19,14 +20,10 @@ export function normalizePhoto(
 ): { bytes: Buffer; ext: 'png' | 'jpg' } {
   // Detect by magic bytes, not the passed ext/content-type — finn and browser
   // uploads mislabel formats, and feeding PNG bytes to jpeg-js throws.
-  const isPng =
-    bytes.length > 8 &&
-    bytes[0] === 0x89 &&
-    bytes[1] === 0x50 &&
-    bytes[2] === 0x4e &&
-    bytes[3] === 0x47;
-  const isJpeg = bytes.length > 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
-  const realExt: 'png' | 'jpg' = isPng ? 'png' : isJpeg ? 'jpg' : ext;
+  const fmt = detectImageFormat(bytes);
+  const isPng = fmt === 'png';
+  const isJpeg = fmt === 'jpg';
+  const realExt: 'png' | 'jpg' = fmt ?? ext;
 
   let width: number;
   let height: number;

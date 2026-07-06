@@ -1,5 +1,6 @@
 import jpeg from 'jpeg-js';
 import { PNG } from 'pngjs';
+import { detectImageFormat } from '@/lib/imageFormat';
 
 /**
  * Edge-dice drift score — TypeScript port of fasade/eval/drift_score.py
@@ -26,14 +27,12 @@ interface Gray {
  * handles) throws a clear, catchable error so the caller can skip scoring.
  */
 function decode(buf: Buffer): { data: Uint8Array; width: number; height: number } {
-  const isPng =
-    buf.length > 8 && buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47;
-  const isJpeg = buf.length > 3 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff;
-  if (isPng) {
+  const fmt = detectImageFormat(buf);
+  if (fmt === 'png') {
     const png = PNG.sync.read(buf);
     return { data: new Uint8Array(png.data), width: png.width, height: png.height };
   }
-  if (isJpeg) {
+  if (fmt === 'jpg') {
     const img = jpeg.decode(buf, { useTArray: true, maxMemoryUsageInMB: 512 });
     return { data: new Uint8Array(img.data), width: img.width, height: img.height };
   }
