@@ -36,6 +36,22 @@ export interface PromptOptions {
   brief?: string;
 }
 
+/**
+ * Scene lock — the fix for "it added a garage and blew up the mountains".
+ * The building hard-negative only ever protected the house's own parts; the
+ * surrounding SCENE was left to the analysis keep-list, which never captures
+ * everything. This clause protects the whole world around the house
+ * generically, independent of what the analysis noticed, so every strict
+ * render (and the anchored level-4 frame) leaves the setting untouched.
+ */
+const SCENE_LOCK =
+  'CRITICAL: keep the entire setting pixel-identical to the photo. Do NOT add, ' +
+  'remove, resize or relocate any garage, outbuilding, structure, fence or vehicle. ' +
+  'Do NOT change the ground, driveway, paving, lawn, trees, vegetation, the sky, ' +
+  'the horizon, mountains, hills, water/fjord, or any neighbouring building. Only ' +
+  'the one house named below may change; everything else stays exactly as shot, ' +
+  'from the exact same camera position, angle and lens.';
+
 export function buildPrompt(
   house: HouseAnalysis,
   req: RenderRequest,
@@ -46,32 +62,35 @@ export function buildPrompt(
   const staging = opts.staging ? ` ${stagingFragment()}` : '';
 
   if (!spec.strictGeometry) {
-    // Level 4 — free frame around the architect brief.
+    // Level 4 — bold redesign, but ANCHORED to this exact photo. It is a
+    // renovation of THIS house on THIS site, never a fresh generation.
     const brief =
       opts.brief?.trim() ||
-      `Boldly reimagine this ${house.buildingType} as modern Scandinavian architecture: ` +
+      `Boldly reimagine the main ${house.buildingType} as modern Scandinavian architecture: ` +
         'rework the roof form, enlarge and reposition windows into generous glass sections, ' +
         `integrate the entrance with a covered approach, and reclad in ${req.target}. ` +
         (req.wishes?.trim() ? `The owner also wishes: ${req.wishes.trim()}. ` : '');
-    const keep = [...house.surroundings, house.lighting, 'the same camera viewpoint'].join(', ');
     return (
-      `${brief} Keep the same plot so it is recognizably the same property: ${keep}.` +
+      'This is a bold redesign of the SAME house standing in THIS photograph, on its ' +
+      'existing footprint and site. Redesign ONLY the main house: ' +
+      `${brief} ${SCENE_LOCK} The result must clearly be the same property in the same ` +
+      `place — a dramatic renovation of this house, not a different house or a new scene.` +
       `${staging} Photorealistic architectural photography.`
     );
   }
 
   const change = changeSentence(house, req, level, opts.palette);
   const description =
-    `The photo shows a ${house.buildingType} with ${house.cladding}, ${house.roof} ` +
+    `The one house to edit is a ${house.buildingType} with ${house.cladding}, ${house.roof} ` +
     `and ${house.windows}.`;
   const hardNegative =
     'Do not move, resize, add or remove any window, door, roof plane, dormer, ' +
-    'chimney, balcony, railing or building volume.';
-  const keep = [...house.surroundings, house.lighting, 'the exact camera angle'].join(', ');
+    'chimney, balcony, railing or building volume on that house.';
 
   return (
     `This is a photo edit, not a re-generation. ${change} ${description} ` +
-    `${hardNegative} Keep ${keep}.${staging} Photorealistic.`
+    `${hardNegative} ${SCENE_LOCK}${staging} Photorealistic, matching the original ` +
+    `lighting (${house.lighting}) and camera exactly.`
   );
 }
 
@@ -108,25 +127,33 @@ function changeSentence(
 
   switch (level) {
     case 1:
-      return `Change ONLY the color of the ${house.cladding} to ${req.target}.${wishes}`;
+      return `Change ONLY the colour of that house's ${house.cladding} to ${req.target}. Add nothing.${wishes}`;
     case 2: {
-      // Enumerated surface package (A22): chosen cladding, harmonized rest.
+      // Surface refinish ONLY (A22). Phrased so the model recolours/reclads
+      // the existing walls in place — not "replace" (which it reads as
+      // rebuild) and never adds a new structure.
       const pkg = palette
-        ? ` Refinish the roof surface as ${palette.roof}, repaint the window frames in ${palette.trim}, and refinish the entrance and other doors in ${palette.door} — a harmonized scheme, same positions and sizes.`
+        ? ` In the same coherent scheme, refinish the roof surface as ${palette.roof}, repaint the window frames in ${palette.trim}, and refinish the existing doors in ${palette.door}, all in their exact current positions and sizes.`
         : '';
-      return `Replace the ${house.cladding} with ${req.target}.${pkg}${wishes}`;
+      return (
+        `Refinish this house's exterior SURFACES only. Change its ${house.cladding} to ` +
+        `${req.target} on the exact same wall planes, keeping every window, door and roofline ` +
+        `where it is.${pkg} Do not add any new building, wing, garage or structure; the ` +
+        `footprint and volume are unchanged.${wishes}`
+      );
     }
     case 3:
       return (
-        `Renovate this ${house.buildingType} while keeping its exact building volumes, ` +
-        `rooflines and proportions unchanged: ${req.target}. ` +
-        'Allowed upgrades: replace windows within their existing openings, refresh the ' +
-        'entrance and front door, add or refresh a wooden terrace/platting at ground level, ' +
-        'add discreet outdoor wall lighting, and tidy the landscaping.' +
+        `Upgrade ONLY this one house, keeping its exact building volumes, rooflines and ` +
+        `proportions: ${req.target}. Allowed changes, all on the existing house and its ` +
+        `immediate front: replace windows within their existing openings, refresh the ` +
+        `entrance and front door, add or refresh a wooden terrace/platting at ground level, ` +
+        `add discreet outdoor wall lighting, and tidy the planting right next to the house. ` +
+        `Change nothing about the wider plot, the neighbouring buildings or the landscape.` +
         wishes
       );
     case 4:
-      // Level 4 never reaches here (free frame above), but keep it total.
+      // Level 4 never reaches here (anchored free frame above), but keep it total.
       return `${req.target}.${wishes}`;
   }
 }
