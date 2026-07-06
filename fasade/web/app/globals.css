@@ -170,13 +170,11 @@ nav.site .btn {
   pointer-events: none;
 }
 /* invertert variant — på gran-dyp-flater (bånd/footer) */
-.btn.invert,
 .band .btn:not(.ghost) {
   background: var(--paper);
   color: var(--gran-dyp);
   border-color: transparent;
 }
-.btn.invert:not(:disabled):hover,
 .band .btn:not(.ghost):not(:disabled):hover {
   background: #fff;
 }

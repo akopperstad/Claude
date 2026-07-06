@@ -13,7 +13,7 @@ import {
   type GeminiImageResult,
 } from '@pipeline/geminiProvider';
 import { HiggsfieldProvider } from '@pipeline/higgsfieldProvider';
-import { LEVELS, type Level } from '@pipeline/levels';
+import { type Level } from '@pipeline/levels';
 import type { HouseAnalysis, RenderRequest } from '@pipeline/types';
 
 /**
@@ -246,8 +246,6 @@ export async function renderLevel(
   }
 
   if (hasHiggsfield) {
-    const spec = LEVELS[level];
-    void spec;
     const provider = new HiggsfieldProvider();
     const result = await provider.render(photoPath, prompt, request);
     return { imageUrl: result.imageUrl, target, demoSubstituted: false };

@@ -20,6 +20,3 @@ export interface RenderProvider {
   /** Run one prompt against one uploaded source. */
   render(sourceRef: string, prompt: string, req: RenderRequest): Promise<RenderResult>;
 }
-
-export const CHOSEN_MODEL = 'nano_banana_pro';
-export const CREDITS_PER_RENDER = 2;
