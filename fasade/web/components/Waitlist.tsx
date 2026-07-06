@@ -8,7 +8,7 @@ export function Waitlist() {
   const [sent, setSent] = useState(false);
 
   if (sent) {
-    return <p className="ventetakk">Takk! Du får beskjed når betalte planer lanseres.</p>;
+    return <p className="ventetakk">Takk — du hører fra oss når det åpner.</p>;
   }
   return (
     <form
@@ -32,7 +32,7 @@ export function Waitlist() {
         onChange={(e) => setEmail(e.target.value)}
       />
       <button className="btn" type="submit">
-        Bli varslet
+        Hold meg oppdatert
       </button>
     </form>
   );

@@ -1,0 +1,50 @@
+/*
+ * /prosjekt/[id] — sidespesifikke stiler for verkbenken.
+ * Delte komponentstiler bor i globals.css (eies av systemlaget).
+ */
+
+/* laste-tilstand — spinner-padding flyttet fra inline-stil */
+.laster {
+  padding: 48px 0;
+}
+
+/* resultatet scrollIntoView-es etter render — land under den sticky nav-en (64px + luft) */
+.resgrid {
+  scroll-margin-top: 80px;
+}
+
+/* faktarad under analyse-h1 — «vi så faktisk på huset ditt» (§4.3) */
+.fakta-rad {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+/* tekstavsnitt i sidekort (palett-begrunnelse) — flyttet fra inline-stil */
+.kort-tekst {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* takkelinje i e-postkortet — flyttet fra inline-stil */
+.takk-tekst {
+  font-size: 14.5px;
+  margin: 8px 0 0;
+  color: var(--gran-ink);
+}
+
+/* «Populære ideer»-etiketten — flyttet fra inline margin-top */
+.juster-kort .label {
+  margin-top: 14px;
+}
+
+/* kompakt app-footer: hårlinje + to small-linjer på papir (§5.2) */
+.footer-app p {
+  margin: 0;
+}
+.footer-app p + p {
+  margin-top: 4px;
+}

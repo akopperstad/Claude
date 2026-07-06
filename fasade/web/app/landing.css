@@ -1,0 +1,282 @@
+/*
+ * landing.css — sidespesifikke stiler for app/page.tsx (landing).
+ * Bygger på tokens.css + globals.css; kun landing-egne mønstre bor her.
+ * Doktrine som ellers: hårlinjer bærer hierarki, én aksent (gran), ingen bokseskygger.
+ */
+
+/* kicker: skråstrek @50% i mono-etiketter (KICKER-SKINNE) */
+.skra {
+  opacity: 0.5;
+  font-style: normal;
+}
+
+/* ankerlenker lander under den sticky navigasjonen */
+.sek {
+  scroll-margin-top: 72px;
+}
+
+/* dobbel hårlinje-vakt: tallrekka og neste seksjon deler linje */
+.tallrekke + .sek {
+  border-top: none;
+}
+
+/* hero: trust-raden som egen grid-rad slik at skyveren følger CTA på mobil */
+.hero > .trust {
+  grid-column: 1;
+  grid-row: 2;
+  margin-top: 0;
+}
+.hero-bilde {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  min-width: 0;
+}
+.hero-bilde .illu {
+  margin-top: 14px;
+}
+@media (max-width: 860px) {
+  .hero > .trust {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .hero-bilde {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+/* CTA-stakk i hero: knapp + tekstlenke */
+.hero-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.tekstlenke {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 14px/1 var(--font);
+  color: var(--gran);
+  text-decoration: none;
+}
+.tekstlenke:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+/* stripefot: produktbevis-bildetekst + høyrestilt lenke under stilstripa */
+.stripefot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+}
+.stripefot .illu {
+  margin-top: 8px;
+}
+
+/* nivåer på landing — statiske .niva-kort (verkbenk-gjenkjennelse), eget grid */
+.niva-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.niva.statisk {
+  cursor: default;
+}
+.niva.statisk:hover {
+  border-color: var(--line);
+}
+@media (max-width: 860px) {
+  .niva-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .niva-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* SØYLER — ærlighetsseksjonen: åpningsregel per kolonne, ingen kortbakgrunn */
+.soyler {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 40px;
+}
+.soyle {
+  border-top: 1px solid var(--regel-ink);
+  padding-top: 24px;
+  min-width: 0;
+}
+.soyle b {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+.soyle p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--fs-body);
+  max-width: 60ch;
+}
+@media (max-width: 860px) {
+  .soyler {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* sentrert CTA-par etter «Slik virker det» */
+.cta-par {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+
+/* priser: én målgruppesetning per søyle (§5.11) + fotnote */
+.malgruppe {
+  margin: 12px 0 0;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.prisfot {
+  margin-top: 32px;
+}
+
+/* bånd: sluttappell-layout — tekst kol 1–6, før/etter-par kol 8–12 */
+.band-innhold {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+.band-tekst {
+  grid-column: 1 / span 6;
+}
+.band-tekst .sekttl {
+  margin-bottom: 28px;
+}
+.band-mikro {
+  margin-top: 18px;
+}
+.band-bilder {
+  grid-column: 8 / -1;
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+.band-bilder .fotoramme {
+  aspect-ratio: 16 / 9;
+}
+.fototag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 6;
+  font: 600 10.5px/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--tag-bg);
+  color: var(--tag-ink);
+  padding: 4px 10px;
+  border-radius: var(--radius-chip);
+}
+@media (max-width: 860px) {
+  .band-innhold {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .band-tekst,
+  .band-bilder {
+    grid-column: auto;
+  }
+}
+
+/* venteliste i båndet — etikett, én linje, kun-bunnlinje-skjema (skinn i globals) */
+.band .ventelinje {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  margin-top: 64px;
+  padding-top: 24px;
+}
+.band .ventelinje p {
+  margin: 0;
+  font-size: 15px;
+}
+.band .venteliste {
+  width: 100%;
+  max-width: 480px;
+  flex: none;
+}
+
+/* footer-kolonner inni båndet */
+.fk-om {
+  grid-column: 1 / span 6;
+}
+.fk-om p {
+  margin: 18px 0 0;
+  max-width: 36ch;
+}
+.fk-nav {
+  grid-column: 7 / span 3;
+}
+.fk-merknad {
+  grid-column: 10 / span 3;
+}
+.footer-lenker {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  font-size: 14.5px;
+  justify-items: start;
+}
+.merknader {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: var(--fs-small);
+  line-height: 1.5;
+}
+/* klistre-stripa skal ikke ligge i fokusrekkefølgen når den er skjult (QA §7.2) */
+.klistre-cta {
+  visibility: hidden;
+  transition: transform 0.25s ease-out, visibility 0s 0.25s;
+}
+.klistre-cta.synlig {
+  visibility: visible;
+  transition: transform 0.25s ease-out, visibility 0s;
+}
+
+.footer-bunn {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px 24px;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(237, 242, 234, 0.22);
+  margin-top: 48px;
+  padding-top: 20px;
+  font: 500 11.5px/1.6 var(--font-mono);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+@media (max-width: 860px) {
+  .fk-om,
+  .fk-nav,
+  .fk-merknad {
+    grid-column: auto;
+  }
+}

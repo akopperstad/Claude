@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/Logo';
+import './ny.css';
 
 export default function NyPage() {
   const router = useRouter();
@@ -69,18 +70,20 @@ export default function NyPage() {
       <nav className="site">
         <Logo />
         <div className="links">
-          <span className="eyebrow">Steg 1 av 3</span>
+          <span className="stegviser">
+            <i className="aktiv" />
+            <i />
+            <i />
+            Steg 1 av 3 — Last opp
+          </span>
         </div>
       </nav>
-      <section style={{ padding: '48px 0' }}>
+      <header className="side-hode">
         <span className="eyebrow">Nytt prosjekt</span>
-        <h1 style={{ fontSize: 34, letterSpacing: '-0.02em', fontWeight: 600, margin: '4px 0 0' }}>
-          Last opp et bilde av boligen
-        </h1>
-        <p style={{ color: 'var(--muted)', margin: '6px 0 0', maxWidth: 520 }}>
-          Hele fasaden i bildet, dagslys, mobilbilde holder. Vi analyserer huset og
-          foreslår hva det kan bli.
-        </p>
+        <h1>Ett bilde er alt som skal til.</h1>
+        <p>Last opp et foto av fasaden — rett forfra, i dagslys, med hele huset i bildet.</p>
+      </header>
+      <main className="ny-hoved">
         <div
           className={`drop${drag ? ' dragover' : ''}`}
           onClick={() => fileInput.current?.click()}
@@ -96,15 +99,27 @@ export default function NyPage() {
           }}
         >
           {busy ? (
-            <p className="spinner" style={{ margin: 0 }}>
-              Analyserer bildet …
-            </p>
+            <p className="spinner">Analyserer bildet …</p>
           ) : (
             <>
-              <p style={{ margin: '0 0 8px' }}>
-                <b>Slipp bildet her</b> eller trykk for å velge
+              <svg
+                viewBox="0 0 40 40"
+                width="40"
+                height="40"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                aria-hidden="true"
+              >
+                <path d="M6.5 19 20 7l13.5 12" />
+                <path d="M10 16v17h20V16" />
+                <path d="M17 33v-9.5h6V33" />
+                <path d="M28 12.5V9h3v6.2" />
+              </svg>
+              <p>
+                <b>Slipp bildet her, eller klikk for å velge</b>
               </p>
-              <p style={{ margin: 0, color: 'var(--muted)', fontSize: 14 }}>JPG eller PNG</p>
+              <p className="filkrav">JPG eller PNG · inntil 15 MB</p>
             </>
           )}
           <input
@@ -115,14 +130,31 @@ export default function NyPage() {
             onChange={(e) => onFile(e.target.files?.[0])}
           />
         </div>
-        {error && <div className="hint">{error}</div>}
+        <p className="tillit">Bildet brukes kun til visualiseringen din.</p>
         <div className="tips">
-          <span>📐 Hele fasaden i bildet</span>
-          <span>☀️ Dagslys funker best</span>
-          <span>📱 Mobilbilde er godt nok</span>
+          <span>
+            <span className="nr">01</span>Hele fasaden i bildet
+          </span>
+          <span>
+            <span className="nr">02</span>Dagslys, ikke motlys
+          </span>
+          <span>
+            <span className="nr">03</span>Stå rett foran huset
+          </span>
         </div>
+        <div className="analyse">
+          <b>Vil du bare se hvordan det virker?</b>
+          <button
+            className="btn ghost"
+            disabled={busy}
+            onClick={() => void createProject({ demo: true })}
+          >
+            Prøv eksempelhuset
+          </button>
+        </div>
+        {error && <div className="hint">{error}</div>}
         <div className="finnimport">
-          <span className="label">Vurderer du en bolig på FINN?</span>
+          <span className="label">Har du en finn-annonse?</span>
           <form
             className="justerform"
             onSubmit={(e) => {
@@ -132,7 +164,7 @@ export default function NyPage() {
           >
             <input
               className="felt"
-              placeholder="Lim inn lenken til annonsen — f.eks. finn.no/realestate/…"
+              placeholder="Lim inn lenken til annonsen"
               value={finnUrl}
               onChange={(e) => setFinnUrl(e.target.value)}
             />
@@ -151,14 +183,14 @@ export default function NyPage() {
               onChange={(e) => setFinnBekreft(e.target.checked)}
             />
             <span>
-              Jeg bruker dette kun til privat visualisering av en bolig jeg selv vurderer.
-              Bildene tilhører annonsøren/fotografen.
+              Bildene tilhører annonsens fotograf og megler. Jeg henter dem kun til privat
+              vurdering av boligen.
             </span>
           </label>
           {finnImages.length > 0 && (
             <>
               {finnTitle && <p className="finntittel">{finnTitle}</p>}
-              <p className="finnvelg">Velg bildet av fasaden:</p>
+              <p className="finnvelg">Velg bildet som viser fasaden best.</p>
               <div className="finnbilder">
                 {finnImages.map((src) => (
                   <button
@@ -177,18 +209,7 @@ export default function NyPage() {
             </>
           )}
         </div>
-        <div className="analyse" style={{ marginTop: 20 }}>
-          <b>Har du ikke bilde for hånden?</b> Prøv med eksempelhuset vårt.{' '}
-          <button
-            className="btn ghost"
-            style={{ marginLeft: 12 }}
-            disabled={busy}
-            onClick={() => void createProject({ demo: true })}
-          >
-            Bruk eksempelhus
-          </button>
-        </div>
-      </section>
+      </main>
     </div>
   );
 }

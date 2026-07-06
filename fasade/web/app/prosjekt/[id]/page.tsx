@@ -5,6 +5,7 @@ import { Logo } from '@/components/Logo';
 import { CompareSlider } from '@/components/CompareSlider';
 import { StyleStrip } from '@/components/StyleStrip';
 import { EXTERIOR_STYLES } from '@pipeline/presets';
+import '../prosjekt.css';
 
 type Level = 1 | 2 | 3 | 4;
 
@@ -40,11 +41,12 @@ interface Project {
   renders: RenderRecord[];
 }
 
+/* Nivåtekstene er IDENTISKE med landingens nivåseksjon (gjenkjennelse, §4.3). */
 const NIVAER: { level: Level; navn: string; body: string; poeng: number }[] = [
-  { level: 1, navn: 'Farge', body: 'Kun ny farge på kledningen. Alt annet urørt.', poeng: 1 },
-  { level: 2, navn: 'Overflater', body: 'Ny kledning — tak, karmer og dører harmoniseres.', poeng: 1 },
-  { level: 3, navn: 'Oppgradering', body: 'Nye vinduer, inngang, platting og AI-palett.', poeng: 2 },
-  { level: 4, navn: 'Visjon', body: 'Full arkitektonisk forvandling på samme tomt.', poeng: 3 },
+  { level: 1, navn: 'Farge', body: 'Ny farge på kledningen. Alt annet står urørt.', poeng: 1 },
+  { level: 2, navn: 'Overflater', body: 'Ny kledning, nytt tak, nye lister — huset beholder formen.', poeng: 1 },
+  { level: 3, navn: 'Oppgradering', body: 'Nye vinduer, inngangsparti og beplantning — huset er fortsatt seg selv.', poeng: 2 },
+  { level: 4, navn: 'Visjon', body: 'Full arkitektonisk omtenkning. Se hva huset kunne vært.', poeng: 3 },
 ];
 
 /** «Populære ideer» (A25): editorial one-tap follow-ups for the chain. */
@@ -71,6 +73,15 @@ function kr(n: number): string {
   return `${Math.round(n / 1000)} 000 kr`;
 }
 
+/* Tegnet inline-SVG-pil (§5.3) — aldri ikonfont eller tekstglyf. */
+function Pil() {
+  return (
+    <svg className="pil" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+      <path d="M1 7h12M8 2l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
 export default function ProsjektPage({ params }: { params: { id: string } }) {
   const [project, setProject] = useState<Project | null>(null);
   const [level, setLevel] = useState<Level>(1);
@@ -89,6 +100,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
   // null = follow the level default (on at nivå 3-4, off at 1-2, A21)
   const [stagingChoice, setStagingChoice] = useState<boolean | null>(null);
   const [insp, setInsp] = useState<{ base64: string; mime: string; name: string } | null>(null);
+  const [skrollet, setSkrollet] = useState(false);
   const staging = stagingChoice ?? level >= 3;
   const resultRef = useRef<HTMLDivElement>(null);
 
@@ -105,15 +117,21 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       });
   }, [params.id]);
 
+  // nav.site.skrollet — bunnhårlinjen vises først etter 8px scroll (§5.1)
+  useEffect(() => {
+    const onScroll = () => setSkrollet(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   if (!project) {
     return (
       <div className="wrap">
-        <nav className="site">
+        <nav className={`site${skrollet ? ' skrollet' : ''}`}>
           <Logo />
         </nav>
-        <p className="spinner" style={{ padding: '48px 0' }}>
-          Henter prosjekt …
-        </p>
+        <p className="spinner laster">Henter prosjekt …</p>
       </div>
     );
   }
@@ -212,7 +230,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
     canvas.height = H + footer;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    ctx.fillStyle = '#faf9f6';
+    ctx.fillStyle = '#f7f4ec';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(before, 0, 0, wB, H);
     ctx.drawImage(after, wB, 0, wA, H);
@@ -225,10 +243,10 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
     };
     tag('FØR', 24);
     tag('ETTER', wB + 24);
-    ctx.fillStyle = '#2e4636';
+    ctx.fillStyle = '#2e4a3b';
     ctx.font = 'bold 34px system-ui, sans-serif';
     ctx.fillText('vøling', 32, H + 68);
-    ctx.fillStyle = '#5c6660';
+    ctx.fillStyle = '#6f6a5c';
     ctx.font = '26px system-ui, sans-serif';
     ctx.fillText('Se huset ditt i ny drakt · illustrasjon', 152, H + 68);
     canvas.toBlob((blob) => {
@@ -243,24 +261,31 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="wrap">
-      <nav className="site">
+      <nav className={`site${skrollet ? ' skrollet' : ''}`}>
         <Logo />
         <div className="links">
-          <span className="eyebrow">{result ? 'Illustrasjon' : 'Nytt prosjekt'}</span>
+          <span className="stegviser">
+            <i className="aktiv" />
+            <i className="aktiv" />
+            <i className={result ? 'aktiv' : undefined} />
+            {result ? 'Illustrasjon' : 'Steg 2 av 3 — Tilpass'}
+          </span>
         </div>
       </nav>
 
       <section className="prosjekt-hode">
         <span className="eyebrow">Analysert</span>
         <h1>{project.analysis.buildingType}</h1>
-        <p>
-          {project.analysis.cladding} · {project.analysis.roof} · {project.analysis.windows}
-        </p>
+        <div className="fakta-rad">
+          <span className="fakta">{project.analysis.cladding}</span>
+          <span className="fakta">{project.analysis.roof}</span>
+          <span className="fakta">{project.analysis.windows}</span>
+        </div>
       </section>
 
       <section className="steg-seksjon">
         <h2>
-          <span className="stegnr">1</span> Hvor langt vil du gå?
+          <span className="stegnr gjort">1</span> Hvor langt vil du gå?
         </h2>
         <div className="nivaer">
           {NIVAER.map((n) => (
@@ -276,7 +301,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
               <span className="num">Nivå {n.level}</span>
               <h3>{n.navn}</h3>
               <p>{n.body}</p>
-              <span className="tag">{n.poeng} poeng · gratis i beta</span>
+              <span className="tag">{n.poeng} poeng</span>
             </button>
           ))}
         </div>
@@ -284,16 +309,12 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
 
       <section className="steg-seksjon">
         <h2>
-          <span className="stegnr">2</span> Tilpass
+          <span className={`stegnr${result ? ' gjort' : ''}`}>2</span> Gjør det til ditt.
         </h2>
         <div className="panel">
           {level <= 2 && (
             <div className="del">
-              <span className="label">
-                {level === 1
-                  ? 'Farge — velg selv, skriv din egen, eller la AI foreslå'
-                  : 'Kledningsfarge — tak, karmer og dører harmoniseres automatisk'}
-              </span>
+              <span className="label">Farge på kledningen</span>
               <div className="chips">
                 {FARGER.map((f) => (
                   <button
@@ -311,7 +332,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
               </div>
               <input
                 className="felt"
-                placeholder="… eller skriv din egen (f.eks. «dyp burgunder»)"
+                placeholder="Egen farge — f.eks. ‘dempet salviegrønn’ eller NCS S 7005-G20Y"
                 value={egenFarge}
                 onChange={(e) => {
                   setEgenFarge(e.target.value);
@@ -322,20 +343,20 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
           )}
           {level >= 2 && (
             <div className="del">
-              <span className="label">Stil (valgfritt) — samme hus, syv retninger</span>
+              <span className="label">Velg stil</span>
               <StyleStrip maxLevel={level} selectedId={styleId} onSelect={setStyleId} />
             </div>
           )}
           <div className="del">
-            <span className="label">Egne ønsker (valgfritt)</span>
+            <span className="label">Egne ønsker</span>
             <textarea
               className="felt"
               rows={2}
               maxLength={400}
               placeholder={
                 level <= 2
-                  ? 'F.eks. «behold døren som den er, litt varmere tone i sola»'
-                  : 'F.eks. «legg platting rundt første etasje, bytt inngangsdør til eik»'
+                  ? 'F.eks. ‘behold dørfargen’, ‘litt lysere enn dette’'
+                  : 'F.eks. ‘større vinduer mot hagen’, ‘skifertak’'
               }
               value={wishes}
               onChange={(e) => setWishes(e.target.value)}
@@ -343,7 +364,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
           </div>
           {level >= 3 && (
             <div className="del">
-              <span className="label">Inspirasjonsbilde (valgfritt) — «slik vil jeg ha det»</span>
+              <span className="label">Inspirasjonsbilde (valgfritt)</span>
               <div className="upload">
                 <label className="btn ghost">
                   Velg bilde
@@ -393,8 +414,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
               />
               <span className="brytertekst">
                 <b>Vis huset nyvasket og ryddet</b>
-                Fjerner rot og parabol, vasker tak og kledning, steller hagen. Merkes alltid på
-                resultatet.
+                Fjerner rot, skitt og parabol — og merkes alltid i resultatet.
               </span>
             </label>
           </div>
@@ -403,15 +423,13 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
 
       <section className="steg-seksjon">
         <h2>
-          <span className="stegnr">3</span> Se resultatet
+          <span className={`stegnr${result ? ' gjort' : ''}`}>3</span> Lag illustrasjonen.
         </h2>
-        <div className="cta">
+        <div className={`cta${!result && !busy ? ' klistret' : ''}`}>
           <button className="btn stor" disabled={busy} onClick={() => void render()}>
-            {busy ? 'Lager visualisering …' : 'Lag visualisering →'}
+            {busy ? 'Genererer visualisering …' : `Generer visualisering — ${poeng} poeng`}
           </button>
-          <span className="poengnote">
-            Bruker {poeng} {poeng === 1 ? 'poeng' : 'poeng'} av dagens gratis kvote
-          </span>
+          <span className="poengnote">av 10 gratis poeng i dag</span>
         </div>
         {busy && (
           <div className="progress" role="status" aria-live="polite">
@@ -423,7 +441,8 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
         )}
         {level >= 3 && !busy && (
           <div className="hint">
-            Nivå 3–4 kan inneholde tiltak som er søknadspliktige. Alle bilder er visualiseringer.
+            Nivå 3–4 kan foreslå tiltak som er søknadspliktige. Illustrasjon — ikke byggeteknisk
+            vurdert.
           </div>
         )}
         {error && <div className="hint">{error}</div>}
@@ -432,6 +451,14 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       {result && (
         <div className="resgrid" ref={resultRef}>
           <div>
+            {((result.candidates ?? 0) > 1 || result.staging) && (
+              <div className="merker">
+                {(result.candidates ?? 0) > 1 && (
+                  <span className="merke">Geometri rangert — beste av {result.candidates}</span>
+                )}
+                {result.staging && <span className="merke">Inkluderer rydding og vask</span>}
+              </div>
+            )}
             <CompareSlider before={beforeUrl} after={result.imageUrl} />
             <p className="illu">
               Illustrasjon · Nivå {result.level}: {result.target}
@@ -440,6 +467,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
               {result.staging && ' · Inkluderer rydding og vask'}
               {result.demoSubstituted &&
                 ' · Demo-modus: eksempelrender vist — koble til render-API for ditt bilde'}
+              {' · Dra i linjen.'}
             </p>
             <div className="kort juster-kort">
               <span className="eyebrow">Juster videre</span>
@@ -470,7 +498,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
                     <input
                       className="felt"
                       maxLength={400}
-                      placeholder="F.eks. «og fjern buskene foran»"
+                      placeholder="Beskriv endringen — ‘mal den rød’, ‘fjern hekken’"
                       value={juster}
                       onChange={(e) => setJuster(e.target.value)}
                     />
@@ -478,9 +506,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
                       {busy ? 'Justerer …' : 'Juster'}
                     </button>
                   </form>
-                  <span className="label" style={{ marginTop: 14 }}>
-                    Populære ideer
-                  </span>
+                  <span className="label">Populære ideer</span>
                   <div className="chips">
                     {IDEER.map((idee) => (
                       <button
@@ -503,11 +529,9 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
           <div>
             {result.palette && (
               <div className="kort">
-                <span className="eyebrow">Anbefalt palett</span>
+                <span className="eyebrow">Fargepalett</span>
                 <h3>{result.palette.cladding}</h3>
-                <p style={{ fontSize: 14.5, color: 'var(--muted)', margin: 0 }}>
-                  {result.palette.reasoning}
-                </p>
+                <p className="kort-tekst">{result.palette.reasoning}</p>
               </div>
             )}
             <div className="kort">
@@ -530,25 +554,24 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
                   </tr>
                 </tbody>
               </table>
-              <p className="illu">Grovt estimat basert på typiske håndverkerpriser. Ikke et tilbud.</p>
+              <p className="illu">Ikke et tilbud — grove anslag basert på norske prisguider.</p>
             </div>
             <div className="handling">
               <a className="btn w100" href="#">
                 Få tilbud fra håndverkere i nærheten
+                <Pil />
               </a>
               <a className="btn ghost w100" href={result.imageUrl} download>
-                Last ned bilde
+                Last ned bildet
               </a>
               <button className="btn ghost w100" onClick={() => void shareCard()}>
-                Del før/etter-bilde
+                Del før/etter-bildet
               </button>
             </div>
-            <div className="kort" style={{ marginTop: 18 }}>
+            <div className="kort">
               <span className="eyebrow">Få rapporten på e-post</span>
               {emailState === 'sent' ? (
-                <p style={{ fontSize: 14.5, margin: '8px 0 0', color: 'var(--gran-ink)' }}>
-                  Takk! Vi holder deg oppdatert.
-                </p>
+                <p className="takk-tekst">Sendt — sjekk innboksen.</p>
               ) : (
                 <form
                   className="justerform"
@@ -580,7 +603,10 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
         </div>
       )}
 
-      <footer className="site">© Vøling · Alle bilder er visualiseringer (illustrasjon)</footer>
+      <footer className="site footer-app">
+        <p>© 2026 Vøling — Bygget i Norge</p>
+        <p>Alle bilder er illustrasjoner. Tiltak kan være søknadspliktige — sjekk med kommunen.</p>
+      </footer>
     </div>
   );
 }

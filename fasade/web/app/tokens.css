@@ -1,82 +1,144 @@
 /**
  * Vøling design tokens (D7: Scandi premium minimal; A13: spruce accent).
+ * Revamp FINAL per design/revamp/DESIGN-SPEC.md §2.
  *
- * Single source of truth for the product's look. The website (bucket 4)
- * imports this file; the bucket 3 mockups are built on it verbatim.
- * Both themes are first-class; components style through tokens only.
+ * Single source of truth for the product's look. Components style through
+ * tokens only. Both themes are first-class. Every theme-dependent token is
+ * mirrored in all four blocks (:root, media-dark, [data-theme=dark],
+ * [data-theme=light]); theme-invariant tokens (type, radii, spacing, shadow
+ * composites) live in :root and resolve per theme via --skygge-rgb.
  */
 
 :root {
   /* grunnfarger */
-  --paper: #faf8f4; /* varm bakgrunn, aldri ren hvit */
-  --card: #ffffff;
-  --ink: #1d1b17;
-  --muted: #837e73;
-  --line: #e7e2d8;
+  --paper: #f7f4ec; /* varmt papir — aldri ren hvit */
+  --card: #fffdf8;
+  --ink: #1c1a15;
+  --muted: #6f6a5c; /* ≥4.6:1 på papir (AA) */
+  --line: #e5dfd2;
+  --line-sterk: #cfc8b6;
+  --regel-ink: rgba(28, 26, 21, 0.75); /* åpningsregel over lister/søyler */
 
   /* merkevare */
-  --gran: #2e4a3b; /* dyp granfarge — logo, CTA, lenker */
-  --gran-hover: #243b2f;
-  --gran-lys: #e4ede6; /* rolige flater, badges */
-  --gran-ink: #2c5238; /* tekst på gran-lys */
+  --gran: #2e4a3b; /* dyp granfarge — logo, CTA, lenker (låst, A13) */
+  --gran-hover: #253d30;
+  --gran-kontrast: #f5f8f4; /* tekst/ikoner PÅ gran-fyll — aldri hardkodet #fff */
+  --gran-lys: #e6ede5; /* rolige tonede flater, valgt kort, poeng-chips */
+  --gran-ink: #2b5138; /* tekst på gran-lys */
+  --gran-dyp: #1e3428; /* det ENE fullbredde-aksentmaterialet: bånd + footer */
+  --gran-dyp-ink: #edf2ea;
+  --gran-dyp-mute: #a8bcab;
 
   /* semantikk (ikke aksent) */
-  --varsel-bg: #f3e9d8;
-  --varsel-ink: #7a5a24;
+  --varsel-bg: #f4ead7;
+  --varsel-ink: #74551f;
+  --fokus: #2e4a3b;
+
+  /* foto/overlay */
+  --tag-bg: rgba(20, 19, 15, 0.78); /* FØR/ETTER-piller */
+  --tag-ink: #f7f4ec;
+  --overlay: rgba(20, 19, 15, 0.8); /* lysboks-bakteppe */
+  --fotokant: rgba(32, 36, 29, 0.08); /* innfelt hårlinje på fotorammer */
+  --skygge-rgb: 28 26 21; /* RGB-triplet for skyggealfaer */
 
   /* typografi */
-  --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, "Cascadia Mono", "Roboto Mono", Menlo, monospace;
-  --fs-display: clamp(44px, 7.2vw, 88px); /* editorial display scale */
-  --fs-h2: clamp(26px, 3.4vw, 40px);
-  --fs-body: 16.5px;
+  --font: var(--font-sans, 'Helvetica Neue', Helvetica, Arial, sans-serif);
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono', Menlo, monospace;
+  --fs-display: clamp(38px, 6.4vw, 72px);
+  --fs-h2: clamp(28px, 3.6vw, 42px);
+  --fs-body: 16px;
   --fs-small: 13.5px;
-  --track-label: 0.12em;
+  --track-label: 0.18em;
 
   /* form */
-  --radius: 6px;
+  --radius: 8px; /* knapper, felter, hint, dropzone */
+  --radius-kort: 12px; /* kort, paneler, lysboks */
+  --radius-bilde: 14px; /* fotorammer */
+  --radius-chip: 999px; /* chips, badges, piller, bryter */
   --gap: 8px; /* base; bruk multipler */
-  --maxw: 1080px;
+  --maxw: 1120px;
+
+  /* skygger — kun fotografi og flytende lag, aldri flate tekstkort */
+  --skygge-bilde: 0 1px 2px rgb(var(--skygge-rgb) / 0.05),
+    0 16px 40px -20px rgb(var(--skygge-rgb) / 0.25);
+  --skygge-flyt: 0 8px 24px -8px rgb(var(--skygge-rgb) / 0.18);
+  --skygge-lysboks: 0 24px 64px -16px rgb(var(--skygge-rgb) / 0.35);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #171613;
-    --card: #1e1c18;
-    --ink: #ebe7df;
-    --muted: #98917f;
-    --line: #2e2b25;
-    --gran: #8faf9a;
-    --gran-hover: #a3c0ae;
+    --paper: #161511;
+    --card: #1e1c17; /* bevisst LYSERE enn paper — verdisteg bærer dybden */
+    --ink: #ece8dc;
+    --muted: #a49d8a;
+    --line: #2d2a23;
+    --line-sterk: #4a4433;
+    --regel-ink: rgba(236, 232, 220, 0.65);
+    --gran: #8fb49c;
+    --gran-hover: #a5c6b1;
+    --gran-kontrast: #12231a;
     --gran-lys: #22352a;
-    --gran-ink: #a8ccb4;
-    --varsel-bg: #3a3021;
-    --varsel-ink: #d9b36a;
+    --gran-ink: #a9cfb5;
+    --gran-dyp: #122019;
+    --gran-dyp-ink: #e6ece3;
+    --gran-dyp-mute: #93a897;
+    --varsel-bg: #37301f;
+    --varsel-ink: #d8b46c;
+    --fokus: #8fb49c;
+    --tag-bg: rgba(0, 0, 0, 0.66);
+    --tag-ink: #f7f4ec;
+    --overlay: rgba(8, 7, 4, 0.82);
+    --fotokant: rgba(236, 231, 218, 0.1);
+    --skygge-rgb: 0 0 0;
   }
 }
-:root[data-theme="dark"] {
-  --paper: #171613;
-  --card: #1e1c18;
-  --ink: #ebe7df;
-  --muted: #98917f;
-  --line: #2e2b25;
-  --gran: #8faf9a;
-  --gran-hover: #a3c0ae;
+:root[data-theme='dark'] {
+  --paper: #161511;
+  --card: #1e1c17;
+  --ink: #ece8dc;
+  --muted: #a49d8a;
+  --line: #2d2a23;
+  --line-sterk: #4a4433;
+  --regel-ink: rgba(236, 232, 220, 0.65);
+  --gran: #8fb49c;
+  --gran-hover: #a5c6b1;
+  --gran-kontrast: #12231a;
   --gran-lys: #22352a;
-  --gran-ink: #a8ccb4;
-  --varsel-bg: #3a3021;
-  --varsel-ink: #d9b36a;
+  --gran-ink: #a9cfb5;
+  --gran-dyp: #122019;
+  --gran-dyp-ink: #e6ece3;
+  --gran-dyp-mute: #93a897;
+  --varsel-bg: #37301f;
+  --varsel-ink: #d8b46c;
+  --fokus: #8fb49c;
+  --tag-bg: rgba(0, 0, 0, 0.66);
+  --tag-ink: #f7f4ec;
+  --overlay: rgba(8, 7, 4, 0.82);
+  --fotokant: rgba(236, 231, 218, 0.1);
+  --skygge-rgb: 0 0 0;
 }
-:root[data-theme="light"] {
-  --paper: #faf8f4;
-  --card: #ffffff;
-  --ink: #1d1b17;
-  --muted: #837e73;
-  --line: #e7e2d8;
+:root[data-theme='light'] {
+  --paper: #f7f4ec;
+  --card: #fffdf8;
+  --ink: #1c1a15;
+  --muted: #6f6a5c;
+  --line: #e5dfd2;
+  --line-sterk: #cfc8b6;
+  --regel-ink: rgba(28, 26, 21, 0.75);
   --gran: #2e4a3b;
-  --gran-hover: #243b2f;
-  --gran-lys: #e4ede6;
-  --gran-ink: #2c5238;
-  --varsel-bg: #f3e9d8;
-  --varsel-ink: #7a5a24;
+  --gran-hover: #253d30;
+  --gran-kontrast: #f5f8f4;
+  --gran-lys: #e6ede5;
+  --gran-ink: #2b5138;
+  --gran-dyp: #1e3428;
+  --gran-dyp-ink: #edf2ea;
+  --gran-dyp-mute: #a8bcab;
+  --varsel-bg: #f4ead7;
+  --varsel-ink: #74551f;
+  --fokus: #2e4a3b;
+  --tag-bg: rgba(20, 19, 15, 0.78);
+  --tag-ink: #f7f4ec;
+  --overlay: rgba(20, 19, 15, 0.8);
+  --fotokant: rgba(32, 36, 29, 0.08);
+  --skygge-rgb: 28 26 21;
 }

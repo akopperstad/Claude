@@ -1,0 +1,22 @@
+/* /ny — sidespesifikk finpuss (delte komponenter bor i globals.css) */
+
+.ny-hoved {
+  padding-bottom: 96px;
+}
+
+/* dropzone-tekstlinjer — ingen inline-stiler */
+.drop p {
+  margin: 0;
+}
+.drop .filkrav {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+/* tillitslinje under dropsonen (13.5px muted) */
+.tillit {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--fs-small);
+  line-height: 1.5;
+}
