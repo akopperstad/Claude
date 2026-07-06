@@ -1,0 +1,14 @@
+# Build context for the Vøling image is the repo root (so fasade/pipeline is
+# available). Keep it small and free of local state — the Dockerfile runs
+# `npm ci` + `next build` fresh, so none of the following is needed and some
+# of it (data/, .env) must never be uploaded or baked into a layer.
+**/node_modules
+**/.next
+fasade/web/data
+.git
+.github
+.claude
+**/*.log
+**/.env
+**/.env.local
+**/.env.*.local
