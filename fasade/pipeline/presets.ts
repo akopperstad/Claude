@@ -68,7 +68,7 @@ export const EXTERIOR_STYLES: ExteriorStyle[] = [
   {
     id: 'fjellstil',
     navn: 'Fjellstil',
-    beskrivelse: 'Mørk beis, torv og stein — hytte-DNA for hus.',
+    beskrivelse: 'Mørk beis, torv og stein. Hytte-DNA for hus.',
     minLevel: 2,
     target:
       'dark brown mountain stain (mørk beis) on all cladding, natural stone details at the base, warm outdoor lighting',

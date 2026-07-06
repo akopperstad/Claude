@@ -74,14 +74,14 @@ export default function NyPage() {
             <i className="aktiv" />
             <i />
             <i />
-            Steg 1 av 3 — Last opp
+            Steg 1 av 3 · Last opp
           </span>
         </div>
       </nav>
       <header className="side-hode">
         <span className="eyebrow">Nytt prosjekt</span>
         <h1>Ett bilde er alt som skal til.</h1>
-        <p>Last opp et foto av fasaden — rett forfra, i dagslys, med hele huset i bildet.</p>
+        <p>Last opp et foto av fasaden. Rett forfra, i dagslys, med hele huset i bildet.</p>
       </header>
       <main className="ny-hoved">
         <div

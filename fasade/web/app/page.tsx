@@ -30,13 +30,13 @@ const NIVAER = [
   {
     num: '02',
     navn: 'Overflater',
-    tekst: 'Ny kledning, nytt tak, nye lister — huset beholder formen.',
+    tekst: 'Ny kledning, nytt tak og nye lister. Huset beholder formen.',
     poeng: '1 poeng',
   },
   {
     num: '03',
     navn: 'Oppgradering',
-    tekst: 'Nye vinduer, inngangsparti og beplantning — huset er fortsatt seg selv.',
+    tekst: 'Nye vinduer, inngangsparti og beplantning. Huset er fortsatt seg selv.',
     poeng: '2 poeng',
   },
   {
@@ -128,7 +128,7 @@ export default function Landing() {
           <div>
             <span className="seklabel">Gratis beta · Norsk boligvisualisering</span>
             <h1 className="display">
-              Se huset ditt <span className="marker">ferdig</span> oppusset — før du begynner.
+              Se huset ditt <span className="marker">ferdig</span> oppusset, før du begynner.
             </h1>
             <p className="lede">
               Last opp ett bilde av boligen. Vøling viser fasaden i ny farge, ny kledning — eller
@@ -184,7 +184,7 @@ export default function Landing() {
           <div>
             <h2 className="sekttl avsloring">Syv stiler som kler norske hus.</h2>
             <p className="blokklede avsloring">
-              Kuratert for norsk byggeskikk og norsk lys — fra sørlandshvit til sort minimalisme.
+              Kuratert for norsk byggeskikk og norsk lys, fra sørlandshvit til sort minimalisme.
             </p>
             <div className="avsloring">
               <StyleStrip />
@@ -216,7 +216,7 @@ export default function Landing() {
               ))}
             </div>
             <p className="illu avsloring">
-              Poeng er dagskvoten i gratis-betaen. En render koster nivåets vekt — kvoten
+              Poeng er dagskvoten i gratis-betaen. En render koster nivåets vekt. Kvoten
               nullstilles hver dag.
             </p>
           </div>
@@ -233,7 +233,7 @@ export default function Landing() {
               <div className="rad avsloring">
                 <span className="radnr">01</span>
                 <b>Last opp ett bilde</b>
-                <p>Ta bildet rett forfra i dagslys — eller prøv eksempelhuset først.</p>
+                <p>Ta bildet rett forfra i dagslys. Eller prøv eksempelhuset først.</p>
               </div>
               <div className="rad avsloring">
                 <span className="radnr">02</span>
@@ -278,13 +278,13 @@ export default function Landing() {
               <div className="soyle avsloring">
                 <b>Alltid merket illustrasjon.</b>
                 <p>
-                  Alt Vøling lager er visualisering — samme spilleregler som prospektet fra
+                  Alt Vøling lager er visualisering, samme spilleregler som prospektet fra
                   megleren. Kostnadstall er grove estimater, ikke tilbud.
                 </p>
               </div>
               <div className="soyle avsloring">
                 <b>Ingen sporing.</b>
-                <p>Ingen konto, ingen cookies for annonser. Vi teller sidevisninger — det er alt.</p>
+                <p>Ingen konto, ingen cookies for annonser. Vi teller sidevisninger, ikke noe mer.</p>
               </div>
             </div>
           </div>
@@ -298,7 +298,7 @@ export default function Landing() {
           <div>
             <h2 className="sekttl avsloring">Gratis nå. Ryddig prising når betaling åpner.</h2>
             <p className="blokklede avsloring">
-              Betaen er åpen og gratis. Prisene under er planen — ikke en overraskelse som kommer
+              Betaen er åpen og gratis. Prisene under er planen, ikke en overraskelse som kommer
               senere.
             </p>
             <div className="prices">
@@ -386,7 +386,7 @@ export default function Landing() {
                 <span className="fototag">Før</span>
               </div>
               <div className="fotoramme">
-                <img src="/styles/lys-skandinavisk.jpg" alt="Huset etter — lys skandinavisk" />
+                <img src="/styles/lys-skandinavisk.jpg" alt="Huset etter: lys skandinavisk" />
                 <span className="fototag">Etter</span>
               </div>
             </div>
@@ -417,13 +417,13 @@ export default function Landing() {
                 <span className="seklabel">Merknad</span>
                 <div className="merknader">
                   <span>Alle bilder er illustrasjoner.</span>
-                  <span>Tiltak kan være søknadspliktige — sjekk med kommunen.</span>
+                  <span>Tiltak kan være søknadspliktige. Sjekk med kommunen.</span>
                   <span>Personvern</span>
                 </div>
               </div>
             </div>
             <div className="footer-bunn">
-              <span>© 2026 Vøling — Bygget i Norge</span>
+              <span>© 2026 Vøling · Bygget i Norge</span>
               <span>Gratis beta · 10 poeng per dag</span>
             </div>
           </footer>

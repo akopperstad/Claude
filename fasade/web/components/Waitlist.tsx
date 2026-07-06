@@ -8,7 +8,7 @@ export function Waitlist() {
   const [sent, setSent] = useState(false);
 
   if (sent) {
-    return <p className="ventetakk">Takk — du hører fra oss når det åpner.</p>;
+    return <p className="ventetakk">Takk. Du hører fra oss når det åpner.</p>;
   }
   return (
     <form

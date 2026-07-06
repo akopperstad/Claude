@@ -44,8 +44,8 @@ interface Project {
 /* Nivåtekstene er IDENTISKE med landingens nivåseksjon (gjenkjennelse, §4.3). */
 const NIVAER: { level: Level; navn: string; body: string; poeng: number }[] = [
   { level: 1, navn: 'Farge', body: 'Ny farge på kledningen. Alt annet står urørt.', poeng: 1 },
-  { level: 2, navn: 'Overflater', body: 'Ny kledning, nytt tak, nye lister — huset beholder formen.', poeng: 1 },
-  { level: 3, navn: 'Oppgradering', body: 'Nye vinduer, inngangsparti og beplantning — huset er fortsatt seg selv.', poeng: 2 },
+  { level: 2, navn: 'Overflater', body: 'Ny kledning, nytt tak og nye lister. Huset beholder formen.', poeng: 1 },
+  { level: 3, navn: 'Oppgradering', body: 'Nye vinduer, inngangsparti og beplantning. Huset er fortsatt seg selv.', poeng: 2 },
   { level: 4, navn: 'Visjon', body: 'Full arkitektonisk omtenkning. Se hva huset kunne vært.', poeng: 3 },
 ];
 
@@ -173,7 +173,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       setProgress(Math.min(90, Math.round((s / 110) * 100)));
       if (s < 3) setStage('Leser bildet …');
       else if (s < 8) setStage('Analyserer fasade og omgivelser …');
-      else if (s < 15) setStage('Genererer — tar vanligvis 1–2 minutter');
+      else if (s < 15) setStage('Genererer, tar vanligvis 1–2 minutter');
       else setStage(FUN[Math.floor((s - 15) / 7) % FUN.length]);
     }, 900);
     try {
@@ -207,7 +207,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       const timedOut = e instanceof DOMException && (e.name === 'TimeoutError' || e.name === 'AbortError');
       setError(
         timedOut
-          ? 'Genereringen tok for lang tid og ble avbrutt — prøv igjen. Poenget er ikke tapt hvis bildet aldri kom.'
+          ? 'Genereringen tok for lang tid og ble avbrutt. Prøv igjen — poenget er ikke tapt hvis bildet aldri kom.'
           : e instanceof Error
             ? e.message
             : 'rendering feilet',
@@ -276,7 +276,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
             <i className="aktiv" />
             <i className="aktiv" />
             <i className={result ? 'aktiv' : undefined} />
-            {result ? 'Illustrasjon' : 'Steg 2 av 3 — Tilpass'}
+            {result ? 'Illustrasjon' : 'Steg 2 av 3 · Tilpass'}
           </span>
         </div>
       </nav>
@@ -340,7 +340,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
               </div>
               <input
                 className="felt"
-                placeholder="Egen farge — f.eks. ‘dempet salviegrønn’ eller NCS S 7005-G20Y"
+                placeholder="Egen farge, f.eks. ‘dempet salviegrønn’ eller NCS S 7005-G20Y"
                 value={egenFarge}
                 onChange={(e) => {
                   setEgenFarge(e.target.value);
@@ -422,7 +422,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
               />
               <span className="brytertekst">
                 <b>Vis huset nyvasket og ryddet</b>
-                Fjerner rot, skitt og parabol — og merkes alltid i resultatet.
+                Fjerner rot, skitt og parabol. Merkes alltid i resultatet.
               </span>
             </label>
           </div>
@@ -435,7 +435,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
         </h2>
         <div className={`cta${!result && !busy ? ' klistret' : ''}`}>
           <button className="btn stor" disabled={busy} onClick={() => void render()}>
-            {busy ? 'Genererer visualisering …' : `Generer visualisering — ${poeng} poeng`}
+            {busy ? 'Genererer visualisering …' : `Generer visualisering · ${poeng} poeng`}
           </button>
           <span className="poengnote">av 10 gratis poeng i dag</span>
         </div>
@@ -449,7 +449,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
         )}
         {level >= 3 && !busy && (
           <div className="hint">
-            Nivå 3–4 kan foreslå tiltak som er søknadspliktige. Illustrasjon — ikke byggeteknisk
+            Nivå 3–4 kan foreslå tiltak som er søknadspliktige. Illustrasjon, ikke byggeteknisk
             vurdert.
           </div>
         )}
@@ -462,7 +462,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
             {((result.candidates ?? 0) > 1 || result.staging) && (
               <div className="merker">
                 {(result.candidates ?? 0) > 1 && (
-                  <span className="merke">Geometri rangert — beste av {result.candidates}</span>
+                  <span className="merke">Geometri rangert · beste av {result.candidates}</span>
                 )}
                 {result.staging && <span className="merke">Inkluderer rydding og vask</span>}
               </div>
@@ -471,10 +471,10 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
             <p className="illu">
               Illustrasjon · Nivå {result.level}: {result.target}
               {(result.candidates ?? 0) > 1 &&
-                ` · Geometri rangert — beste av ${result.candidates}`}
+                ` · Geometri rangert, beste av ${result.candidates}`}
               {result.staging && ' · Inkluderer rydding og vask'}
               {result.demoSubstituted &&
-                ' · Demo-modus: eksempelrender vist — koble til render-API for ditt bilde'}
+                ' · Demo-modus: eksempelrender vist. Koble til render-API for ditt bilde'}
               {' · Dra i linjen.'}
             </p>
             <div className="kort juster-kort">
@@ -486,7 +486,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
                       key={r.id ?? i}
                       className={`chip-farge${r === result ? ' valgt' : ''}`}
                       onClick={() => setResult(r)}
-                      title="Vis dette steget — neste justering bygger på steget du ser"
+                      title="Vis dette steget. Neste justering bygger på steget du ser"
                     >
                       {i + 1}. {r.instruction ?? r.target}
                     </button>
@@ -506,7 +506,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
                     <input
                       className="felt"
                       maxLength={400}
-                      placeholder="Beskriv endringen — ‘mal den rød’, ‘fjern hekken’"
+                      placeholder="Beskriv endringen: ‘mal den rød’, ‘fjern hekken’"
                       value={juster}
                       onChange={(e) => setJuster(e.target.value)}
                     />
@@ -562,7 +562,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
                   </tr>
                 </tbody>
               </table>
-              <p className="illu">Ikke et tilbud — grove anslag basert på norske prisguider.</p>
+              <p className="illu">Ikke et tilbud, bare grove anslag basert på norske prisguider.</p>
             </div>
             <div className="handling">
               <a className="btn w100" href="#">
@@ -579,7 +579,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
             <div className="kort">
               <span className="eyebrow">Få rapporten på e-post</span>
               {emailState === 'sent' ? (
-                <p className="takk-tekst">Sendt — sjekk innboksen.</p>
+                <p className="takk-tekst">Sendt. Sjekk innboksen.</p>
               ) : (
                 <form
                   className="justerform"
@@ -612,8 +612,8 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       )}
 
       <footer className="site footer-app">
-        <p>© 2026 Vøling — Bygget i Norge</p>
-        <p>Alle bilder er illustrasjoner. Tiltak kan være søknadspliktige — sjekk med kommunen.</p>
+        <p>© 2026 Vøling · Bygget i Norge</p>
+        <p>Alle bilder er illustrasjoner. Tiltak kan være søknadspliktige. Sjekk med kommunen.</p>
       </footer>
     </div>
   );
