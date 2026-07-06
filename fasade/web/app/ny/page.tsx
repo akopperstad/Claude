@@ -10,8 +10,32 @@ export default function NyPage() {
   const [busy, setBusy] = useState(false);
   const [drag, setDrag] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [finnUrl, setFinnUrl] = useState('');
+  const [finnBusy, setFinnBusy] = useState(false);
+  const [finnImages, setFinnImages] = useState<string[]>([]);
 
-  async function createProject(body: FormData | { demo: true }) {
+  async function hentFinn(e: React.FormEvent) {
+    e.preventDefault();
+    setFinnBusy(true);
+    setError(null);
+    setFinnImages([]);
+    try {
+      const res = await fetch('/api/finn', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: finnUrl }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error ?? 'noe gikk galt');
+      setFinnImages(data.images);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'noe gikk galt');
+    } finally {
+      setFinnBusy(false);
+    }
+  }
+
+  async function createProject(body: FormData | { demo: true } | { imageUrl: string }) {
     setBusy(true);
     setError(null);
     try {
@@ -88,6 +112,42 @@ export default function NyPage() {
           <span>📐 Hele fasaden i bildet</span>
           <span>☀️ Dagslys funker best</span>
           <span>📱 Mobilbilde er godt nok</span>
+        </div>
+
+        <div className="valg" style={{ marginTop: 40 }}>
+          <span className="eyebrow">… eller lim inn en finn-annonse</span>
+          <form onSubmit={hentFinn} style={{ display: 'flex', gap: 8, maxWidth: 640 }}>
+            <input
+              className="felt"
+              style={{ margin: 0, flex: 1, maxWidth: 'none' }}
+              type="url"
+              placeholder="https://www.finn.no/realestate/homes/ad.html?finnkode=…"
+              value={finnUrl}
+              onChange={(e) => setFinnUrl(e.target.value)}
+            />
+            <button className="btn" type="submit" disabled={finnBusy || !finnUrl}>
+              {finnBusy ? 'Henter …' : 'Hent bilder'}
+            </button>
+          </form>
+          {finnImages.length > 0 && (
+            <>
+              <p style={{ color: 'var(--muted)', fontSize: 14, margin: '16px 0 8px' }}>
+                Velg bildet som viser fasaden best:
+              </p>
+              <div className="finngrid">
+                {finnImages.map((u) => (
+                  <button
+                    key={u}
+                    className="finnbilde"
+                    disabled={busy}
+                    onClick={() => void createProject({ imageUrl: u })}
+                  >
+                    <img src={u} alt="Bilde fra annonsen" loading="lazy" />
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
         <div className="analyse" style={{ marginTop: 36 }}>
           <b>Har du ikke bilde for hånden?</b> Prøv med eksempelhuset vårt.{' '}

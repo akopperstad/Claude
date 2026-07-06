@@ -111,6 +111,16 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       'Retter opp flaggstanga …',
       'Krysser fingrene for tørkevær …',
       'Fjerner presenningen …',
+      'Låner stige av naboen …',
+      'Leter etter den andre arbeidshansken …',
+      'Blåser løv ut av takrenna …',
+      'Setter opp «Nymalt»-skilt …',
+      'Forhandler med måkene om stillasleie …',
+      'Måler opp for tredje gang, sager én gang …',
+      'Sender lærlingen etter stripete maling …',
+      'Venter på at grunningen skal tørke …',
+      'Børster granbar av trappa …',
+      'Tar den obligatoriske kaffepausen …',
     ];
     setProgress(4);
     setStage('Leser bildet …');
@@ -118,9 +128,9 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       const s = (Date.now() - started) / 1000;
       setProgress(Math.min(90, Math.round((s / 110) * 100)));
       if (s < 3) setStage('Leser bildet …');
-      else if (s < 8) setStage('Analyserer fasade og omgivelser …');
-      else if (s < 15) setStage('Genererer — tar vanligvis 1–2 minutter');
-      else setStage(FUN[Math.floor((s - 15) / 7) % FUN.length]);
+      else if (s < 7) setStage('Analyserer fasade og omgivelser …');
+      else if (s < 11) setStage('Genererer — tar vanligvis 1–2 minutter');
+      else setStage(FUN[Math.floor((s - 11) / 6) % FUN.length]);
     }, 900);
     try {
       const valgtFarge = egenFarge.trim() || farge;
