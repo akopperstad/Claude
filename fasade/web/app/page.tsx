@@ -131,7 +131,7 @@ export default function Landing() {
               Se huset ditt <span className="marker">ferdig</span> oppusset, før du begynner.
             </h1>
             <p className="lede">
-              Last opp ett bilde av boligen. Vøling viser fasaden i ny farge, ny kledning — eller
+              Last opp ett bilde av boligen. Vøling viser fasaden i ny farge, ny kledning, eller
               som noe helt nytt. Ferdig på et par minutter.
             </p>
             <div className="hero-cta">
@@ -146,7 +146,7 @@ export default function Landing() {
           <div className="hero-bilde">
             <CompareSlider before="/styles/base.jpg" after="/styles/sort-minimalisme.jpg" />
             <p className="illu">
-              Sort minimalisme — generert av Vøling fra originalfotoet. Dra i linjen.
+              Sort minimalisme, generert av Vøling fra originalfotoet. Dra i linjen.
             </p>
           </div>
           <div className="trust">

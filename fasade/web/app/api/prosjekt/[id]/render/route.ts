@@ -48,7 +48,7 @@ export async function POST(
   const quota = await consumeQuota(visitorId, quotaCost);
   if (!quota.ok) {
     return NextResponse.json(
-      { error: `Dagens ${DAILY_LIMIT} gratis render-poeng er brukt opp — prøv igjen i morgen.` },
+      { error: `Dagens ${DAILY_LIMIT} gratis render-poeng er brukt opp. Prøv igjen i morgen.` },
       { status: 429 },
     );
   }

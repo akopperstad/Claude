@@ -69,10 +69,15 @@ const FARGER: { navn: string; hex: string }[] = [
   { navn: 'Skogsgrønn', hex: '#3F5240' },
 ];
 
-/* «65 000 kr», «450 000 kr», «3,2 mill. kr» — aldri «3000 000 kr». */
+/* «65 000 kr», «450 000 kr», «3,2 mill. kr». Aldri «3000 000 kr». */
 function kr(n: number): string {
   if (n >= 1_000_000) {
-    const m = (n / 1_000_000).toLocaleString('nb-NO', { maximumFractionDigits: 1 });
+    // Alltid én desimal på millioner, så «2,0 mill.» ikke leses ujevnt ved
+    // siden av tusen-linjer i samme tabell.
+    const m = (n / 1_000_000).toLocaleString('nb-NO', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    });
     return `${m} mill. kr`;
   }
   return `${n.toLocaleString('nb-NO')} kr`;
@@ -106,13 +111,20 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
   const [stagingChoice, setStagingChoice] = useState<boolean | null>(null);
   const [insp, setInsp] = useState<{ base64: string; mime: string; name: string } | null>(null);
   const [skrollet, setSkrollet] = useState(false);
+  const [notFound, setNotFound] = useState(false);
   const staging = stagingChoice ?? level >= 3;
   const resultRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     void fetch(`/api/prosjekt/${params.id}`)
-      .then((r) => r.json())
+      .then(async (r) => (r.ok ? ((await r.json()) as Project) : null))
       .then((p) => {
+        // Unknown / expired id: the store is ephemeral, so a shared or
+        // post-restart link can 404. Show a friendly state, never crash.
+        if (!p || !p.analysis) {
+          setNotFound(true);
+          return;
+        }
         setProject(p);
         const last = p.renders?.at?.(-1);
         if (last) {
@@ -128,7 +140,8 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
           setStyleId(valgt.id);
           setLevel(Math.max(2, valgt.minLevel) as Level);
         }
-      });
+      })
+      .catch(() => setNotFound(true));
   }, [params.id]);
 
   // nav.site.skrollet — bunnhårlinjen vises først etter 8px scroll (§5.1)
@@ -138,6 +151,24 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  if (notFound) {
+    return (
+      <div className="wrap">
+        <nav className={`site${skrollet ? ' skrollet' : ''}`}>
+          <Logo />
+        </nav>
+        <div className="ikkefunnet">
+          <span className="eyebrow">Fant ikke prosjektet</span>
+          <h1>Denne lenken finnes ikke lenger.</h1>
+          <p>Prosjektet kan være utløpt eller lenken kan være feil. Start et nytt.</p>
+          <a className="btn" href="/ny">
+            Nytt prosjekt
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   if (!project) {
     return (
@@ -221,7 +252,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       const timedOut = e instanceof DOMException && (e.name === 'TimeoutError' || e.name === 'AbortError');
       setError(
         timedOut
-          ? 'Genereringen tok for lang tid og ble avbrutt. Prøv igjen — poenget er ikke tapt hvis bildet aldri kom.'
+          ? 'Genereringen tok for lang tid og ble avbrutt. Prøv igjen. Poenget er ikke tapt hvis bildet aldri kom.'
           : e instanceof Error
             ? e.message
             : 'rendering feilet',

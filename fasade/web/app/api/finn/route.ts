@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
 
   if (!images.length) {
     return NextResponse.json(
-      { error: 'fant ingen bilder i annonsen — prøv å laste opp bildet manuelt' },
+      { error: 'fant ingen bilder i annonsen. Prøv å laste opp bildet manuelt' },
       { status: 404 },
     );
   }

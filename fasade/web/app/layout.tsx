@@ -14,7 +14,7 @@ const sans = Schibsted_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'Vøling — Se boligen din i ny drakt',
+  title: 'Vøling · Se boligen din i ny drakt',
   description:
     'Last opp ett bilde av boligen, velg nivå, og få fotorealistiske visualiseringer på sekunder. Fra ny farge til full forvandling.',
 };
