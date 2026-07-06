@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { getProject, save, type RenderRecord } from '@/lib/store';
 import { paletteFor, renderEdit, renderLevel, visionBriefFor } from '@/lib/rendering';
-import { consumeQuota, DAILY_LIMIT } from '@/lib/quota';
+import { consumeQuota, refundQuota, DAILY_LIMIT } from '@/lib/quota';
 import { logEvent } from '@/lib/telemetry';
 import { estimate } from '@pipeline/estimate';
 import { LEVELS, type Level } from '@pipeline/levels';
@@ -70,6 +70,7 @@ export async function POST(
         palette: parent.palette,
         staging: parent.staging,
         styleId: parent.styleId,
+        modelUsed: outcome.modelUsed,
         createdAt: new Date().toISOString(),
       };
     } else {
@@ -139,12 +140,14 @@ export async function POST(
         styleId: style?.id,
         driftScore: outcome.driftScore,
         candidates: outcome.candidates,
+        modelUsed: outcome.modelUsed,
         createdAt: new Date().toISOString(),
       };
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : 'rendering feilet';
     console.error('render failed:', message);
+    await refundQuota(visitorId, quotaCost);
     return NextResponse.json({ error: `Rendering feilet: ${message}` }, { status: 502 });
   }
 
@@ -161,6 +164,7 @@ export async function POST(
     instruction: record.instruction,
     driftScore: record.driftScore,
     candidates: record.candidates,
+    modelUsed: record.modelUsed,
     demoSubstituted,
   });
 

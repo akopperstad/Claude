@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createProject, saveUpload } from '@/lib/store';
+import { normalizePhoto } from '@/lib/imageNormalize';
 import { analyzePhoto, DEMO_ANALYSIS } from '@/lib/rendering';
 
 export const runtime = 'nodejs';
@@ -38,11 +39,12 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'klarte ikke hente bildet' }, { status: 502 });
       }
       const mime = res.headers.get('content-type') ?? '';
-      const ext = mime.includes('png') || body.finnImageUrl.endsWith('.png') ? 'png' : 'jpg';
-      const bytes = Buffer.from(await res.arrayBuffer());
-      if (bytes.length > 20 * 1024 * 1024) {
+      const rawExt = mime.includes('png') || body.finnImageUrl.endsWith('.png') ? 'png' : 'jpg';
+      const raw = Buffer.from(await res.arrayBuffer());
+      if (raw.length > 30 * 1024 * 1024) {
         return NextResponse.json({ error: 'bildet er for stort' }, { status: 400 });
       }
+      const { bytes, ext } = normalizePhoto(raw, rawExt as 'png' | 'jpg');
       const photoPath = await saveUpload(bytes, ext);
       const analysis = await analyzePhoto(photoPath);
       const project = await createProject({ demo: false, photoPath, analysis });
@@ -68,8 +70,12 @@ export async function POST(req: NextRequest) {
   if (photo.size > 15 * 1024 * 1024) {
     return NextResponse.json({ error: 'bildet er for stort (maks 15 MB)' }, { status: 400 });
   }
-  const ext = photo.type === 'image/png' ? 'png' : 'jpg';
-  const photoPath = await saveUpload(Buffer.from(await photo.arrayBuffer()), ext);
+  const rawExt = photo.type === 'image/png' ? 'png' : 'jpg';
+  const { bytes, ext } = normalizePhoto(
+    Buffer.from(await photo.arrayBuffer()),
+    rawExt as 'png' | 'jpg',
+  );
+  const photoPath = await saveUpload(bytes, ext);
   const analysis = await analyzePhoto(photoPath);
   const project = await createProject({ demo: false, photoPath, analysis });
   return NextResponse.json(project);

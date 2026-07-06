@@ -31,6 +31,8 @@ export interface RenderRecord {
   driftScore?: number;
   /** Candidates generated and ranked for this render. */
   candidates?: number;
+  /** Gemini ladder model that produced the image — fallback visibility. */
+  modelUsed?: string;
   createdAt: string;
 }
 

@@ -19,6 +19,7 @@ export interface RenderEvent {
   instruction?: string;
   driftScore?: number;
   candidates?: number;
+  modelUsed?: string;
   demoSubstituted?: boolean;
 }
 

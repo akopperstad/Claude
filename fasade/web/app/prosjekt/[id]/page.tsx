@@ -156,6 +156,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
     const FUN = [
       'Klipper plenen mens vi venter …',
       'Rister malingsspannet …',
+      'Venter på plan og bygg …',
       'Teiper vinduskarmene …',
       'Flytter blomsterpottene vekk fra trappa …',
       'Diskuterer fargevalget med naboen …',
@@ -164,7 +165,6 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       'Retter opp flaggstanga …',
       'Krysser fingrene for tørkevær …',
       'Fjerner presenningen …',
-      'Venter på plan og bygg …',
     ];
     setProgress(4);
     setStage('Leser bildet …');
@@ -192,6 +192,7 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(300_000),
       });
       const text = await res.text();
       const data = text ? JSON.parse(text) : {};
@@ -203,7 +204,14 @@ export default function ProsjektPage({ params }: { params: { id: string } }) {
       if (edit) setJuster('');
       requestAnimationFrame(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'rendering feilet');
+      const timedOut = e instanceof DOMException && (e.name === 'TimeoutError' || e.name === 'AbortError');
+      setError(
+        timedOut
+          ? 'Genereringen tok for lang tid og ble avbrutt — prøv igjen. Poenget er ikke tapt hvis bildet aldri kom.'
+          : e instanceof Error
+            ? e.message
+            : 'rendering feilet',
+      );
     } finally {
       clearInterval(ticker);
       setBusy(false);

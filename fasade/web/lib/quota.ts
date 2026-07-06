@@ -35,3 +35,16 @@ export async function consumeQuota(
   await writeFile(file, JSON.stringify({ used: used + cost }));
   return { ok: true, used: used + cost };
 }
+
+/** Failed renders give the points back — the charge is for an image, not an attempt. */
+export async function refundQuota(visitorId: string, cost: number): Promise<void> {
+  if (process.env.VOLING_UNLIMITED === '1') return;
+  if (!/^[a-f0-9-]{8,40}$/.test(visitorId)) return;
+  const file = path.join(DIR, `${visitorId}-${today()}.json`);
+  try {
+    const used = (JSON.parse(await readFile(file, 'utf8')) as { used: number }).used;
+    await writeFile(file, JSON.stringify({ used: Math.max(0, used - cost) }));
+  } catch {
+    // nothing to refund
+  }
+}

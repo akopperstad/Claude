@@ -7,7 +7,11 @@ import { analyzeHouse } from '@pipeline/analyze';
 import { buildEditPrompt, buildPrompt, type PromptOptions } from '@pipeline/prompts';
 import { suggestPalette, type PaletteScheme } from '@pipeline/palette';
 import { draftVisionBrief } from '@pipeline/visionBrief';
-import { renderWithGemini, type GeminiImageInput } from '@pipeline/geminiProvider';
+import {
+  renderWithGemini,
+  type GeminiImageInput,
+  type GeminiImageResult,
+} from '@pipeline/geminiProvider';
 import { HiggsfieldProvider } from '@pipeline/higgsfieldProvider';
 import { LEVELS, type Level } from '@pipeline/levels';
 import type { HouseAnalysis, RenderRequest } from '@pipeline/types';
@@ -65,7 +69,7 @@ export async function analyzePhoto(photoPath: string): Promise<HouseAnalysis> {
   return analyzeHouse(
     bytes.toString('base64'),
     photoPath.endsWith('.png') ? 'image/png' : 'image/jpeg',
-    new Anthropic(),
+    new Anthropic({ timeout: 60_000, maxRetries: 1 }),
   );
 }
 
@@ -74,7 +78,7 @@ export async function paletteFor(
   anchorCladding?: string,
 ): Promise<PaletteScheme> {
   if (!hasAnthropic) return DEMO_PALETTE;
-  return suggestPalette(analysis, new Anthropic(), anchorCladding);
+  return suggestPalette(analysis, new Anthropic({ timeout: 60_000, maxRetries: 1 }), anchorCladding);
 }
 
 /** Nivå 4 two-pass (A22): Claude drafts the bold brief, Gemini paints it. */
@@ -84,7 +88,7 @@ export async function visionBriefFor(
   wishes?: string,
 ): Promise<string | undefined> {
   if (!hasAnthropic) return undefined; // buildPrompt has a bold static fallback
-  return draftVisionBrief(analysis, new Anthropic(), style, wishes);
+  return draftVisionBrief(analysis, new Anthropic({ timeout: 60_000, maxRetries: 1 }), style, wishes);
 }
 
 export interface RenderOutcome {
@@ -92,6 +96,8 @@ export interface RenderOutcome {
   target: string;
   /** set when demo mode substituted a canned render */
   demoSubstituted: boolean;
+  /** which Gemini ladder model produced the image (fallback visibility) */
+  modelUsed?: string;
   /** best-of-N edge-dice score at nivå 1-2 (A7 interim) — ranking, not certificate */
   driftScore?: number;
   /** how many candidates were generated and ranked */
@@ -112,7 +118,7 @@ async function generateRaw(
   filePath: string,
   prompt: string,
   inspiration?: GeminiImageInput,
-): Promise<{ base64: string; mimeType: string }> {
+): Promise<GeminiImageResult> {
   const bytes = await readFile(filePath);
   const mime = filePath.endsWith('.png') ? 'image/png' : 'image/jpeg';
   return renderWithGemini(
@@ -137,8 +143,9 @@ async function generateWithGemini(
   filePath: string,
   prompt: string,
   inspiration?: GeminiImageInput,
-): Promise<string> {
-  return saveRender(await generateRaw(filePath, prompt, inspiration));
+): Promise<{ imageUrl: string; model: string }> {
+  const result = await generateRaw(filePath, prompt, inspiration);
+  return { imageUrl: await saveRender(result), model: result.model };
 }
 
 /**
@@ -149,7 +156,7 @@ async function generateWithGemini(
 async function generateBestOf3(
   filePath: string,
   prompt: string,
-): Promise<{ imageUrl: string; score: number; candidates: number }> {
+): Promise<{ imageUrl: string; score: number; candidates: number; model: string }> {
   const src = await readFile(filePath);
   const srcMime = filePath.endsWith('.png') ? 'image/png' : 'image/jpeg';
   const attempts = await Promise.allSettled(
@@ -168,6 +175,7 @@ async function generateBestOf3(
     imageUrl: await saveRender(best.r),
     score: Math.round(best.score * 100) / 100,
     candidates: ok.length,
+    model: best.r.model,
   };
 }
 
@@ -186,8 +194,8 @@ export async function renderEdit(
     const filePath = imageFilePath(sourceImageUrl);
     if (!filePath) throw new Error('fant ikke kildebildet for justeringen');
     const prompt = buildEditPrompt(analysis, target);
-    const imageUrl = await generateWithGemini(filePath, prompt);
-    return { imageUrl, target, demoSubstituted: false };
+    const gen = await generateWithGemini(filePath, prompt);
+    return { imageUrl: gen.imageUrl, target, demoSubstituted: false, modelUsed: gen.model };
   }
   // No provider: keep the flow clickable in demo mode, honestly labeled.
   return { imageUrl: sourceImageUrl, target, demoSubstituted: true };
@@ -222,10 +230,11 @@ export async function renderLevel(
         demoSubstituted: false,
         driftScore: best.score,
         candidates: best.candidates,
+        modelUsed: best.model,
       };
     }
-    const imageUrl = await generateWithGemini(filePath, prompt, inspiration);
-    return { imageUrl, target, demoSubstituted: false };
+    const gen = await generateWithGemini(filePath, prompt, inspiration);
+    return { imageUrl: gen.imageUrl, target, demoSubstituted: false, modelUsed: gen.model };
   }
 
   if (hasHiggsfield) {

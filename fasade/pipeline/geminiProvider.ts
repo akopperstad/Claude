@@ -17,7 +17,12 @@ const MODEL_LADDER = ['gemini-3-pro-image-preview', 'gemini-2.5-flash-image'];
 export interface GeminiImageResult {
   base64: string;
   mimeType: string;
+  /** Which ladder model actually produced the image — fallbacks must be visible. */
+  model: string;
 }
+
+/** Per-call ceiling; a hung upstream must never hang the product. */
+const CALL_TIMEOUT_MS = 150_000;
 
 export interface GeminiImageInput {
   base64: string;
@@ -40,6 +45,8 @@ export async function renderWithGemini(
     try {
       return await callGemini(imageBase64, mimeType, prompt, apiKey, model, inspiration);
     } catch (err) {
+      // Fallbacks trade quality for availability — never silently.
+      console.warn(`gemini ladder: ${model} failed, trying next`, err instanceof Error ? err.message : err);
       lastError = err;
     }
   }
@@ -56,6 +63,7 @@ async function callGemini(
 ): Promise<GeminiImageResult> {
   const res = await fetch(`${BASE}/${model}:generateContent`, {
     method: 'POST',
+    signal: AbortSignal.timeout(CALL_TIMEOUT_MS),
     headers: {
       'x-goog-api-key': apiKey,
       'Content-Type': 'application/json',
@@ -86,5 +94,5 @@ async function callGemini(
   if (!part?.inlineData) {
     throw new Error(`gemini ${model}: no image in response`);
   }
-  return { base64: part.inlineData.data, mimeType: part.inlineData.mimeType };
+  return { base64: part.inlineData.data, mimeType: part.inlineData.mimeType, model };
 }
