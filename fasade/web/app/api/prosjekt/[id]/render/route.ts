@@ -31,11 +31,28 @@ export async function POST(
   }
 
   const palette = spec.aiPalette || !body?.target ? await paletteFor(project.analysis) : undefined;
-  const target: string = body?.target ?? palette?.cladding ?? 'klassisk hvit';
   const wishes: string | undefined =
     typeof body?.wishes === 'string' && body.wishes.trim()
       ? body.wishes.trim().slice(0, 400)
       : undefined;
+
+  // Levels 1-2 take a single colour/material word; levels 3-4 need a full
+  // renovation brief composed from the palette, or Gemini gets "paint it
+  // white" as the entire instruction for a "Visjon" render.
+  let target: string;
+  if (level <= 2) {
+    target = body?.target ?? palette?.cladding ?? 'klassisk hvit';
+  } else if (palette) {
+    const base =
+      `repaint the cladding in ${palette.cladding}, trim in ${palette.trim}, ` +
+      `a ${palette.door} front door and ${palette.roof} roofing`;
+    target =
+      level === 3
+        ? `${base}, plus new larger windows in the existing openings, an upgraded entrance, a wooden terrace and refreshed landscaping`
+        : `clad it in ${palette.cladding} with ${palette.roof} roofing, larger floor-to-ceiling black-framed windows, a bold new entrance, a spacious terrace and refined minimalist landscaping`;
+  } else {
+    target = body?.target ?? 'en moderne oppgradering';
+  }
 
   let outcome;
   try {

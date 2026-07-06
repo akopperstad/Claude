@@ -29,10 +29,16 @@ export function buildPrompt(
   const change = changeSentence(house, req);
 
   if (!spec.strictGeometry) {
-    const keep = [...house.surroundings, house.lighting, 'the exact camera angle'].join(', ');
+    // Level 4 — Visjon. Bold architectural reimagining. We DON'T pin the
+    // building; we pin the setting so it stays the same property, and we
+    // keep the camera so before/after line up.
+    const wishes = req.wishes?.trim() ? ` The owner also wishes: ${req.wishes.trim()}.` : '';
+    const setting = [...house.surroundings, house.lighting, 'the exact same camera angle and framing'].join(', ');
     return (
-      `${change} Keep the same plot layout so it is recognizably the same property: ${keep}. ` +
-      'Photorealistic architectural photography.'
+      `Reimagine this ${house.buildingType} as an award-winning modern Norwegian ` +
+      `architectural renovation on the same plot: ${req.target}.${wishes} ` +
+      `The house may change substantially, but keep the same setting so it is ` +
+      `clearly the same property: ${setting}. Photorealistic architectural photography.`
     );
   }
 
@@ -51,8 +57,9 @@ export function buildPrompt(
 }
 
 function changeSentence(house: HouseAnalysis, req: RenderRequest): string {
-  // Owner wishes only apply to the loose transforms; the strict levels'
-  // whole promise is that nothing else changes.
+  // Level 4 uses the free frame in buildPrompt and never reaches here.
+  // These are the STRICT transforms (levels 1-3); their promise is that
+  // nothing but the named element changes.
   const wishes =
     req.transform === 'refresh' && req.wishes?.trim()
       ? ` The owner also wishes: ${req.wishes.trim()}.`
