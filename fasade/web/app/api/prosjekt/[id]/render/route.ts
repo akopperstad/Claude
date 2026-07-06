@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
-import { getProject, save, type RenderRecord } from '@/lib/store';
+import { getProject, appendRender, type RenderRecord } from '@/lib/store';
 import { paletteFor, renderEdit, renderLevel, visionBriefFor } from '@/lib/rendering';
 import { consumeQuota, refundQuota, DAILY_LIMIT } from '@/lib/quota';
 import { logEvent } from '@/lib/telemetry';
@@ -38,18 +38,35 @@ export async function POST(
     if (!instruction) return NextResponse.json({ error: 'skriv hva som skal justeres' }, { status: 400 });
     level = parent.level;
   } else {
+    // Number(true) === 1, so require an actual integer nivå.
     level = Number(body?.level) as Level;
-    if (!LEVELS[level]) return NextResponse.json({ error: 'ugyldig nivå' }, { status: 400 });
+    if (!Number.isInteger(level) || !LEVELS[level]) {
+      return NextResponse.json({ error: 'ugyldig nivå' }, { status: 400 });
+    }
   }
 
   // Chained edits cost 1; fresh renders cost their nivå's weight (A23).
   const quotaCost = chained ? 1 : LEVELS[level].quotaCost;
   const visitorId = req.cookies.get('vid')?.value ?? randomUUID();
+  // Stamp the visitor cookie on EVERY response (not just success), so a new
+  // visitor whose first render errors still gets a stable id next time.
+  const withVid = (res: NextResponse) => {
+    res.cookies.set('vid', visitorId, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 365,
+    });
+    return res;
+  };
   const quota = await consumeQuota(visitorId, quotaCost);
   if (!quota.ok) {
-    return NextResponse.json(
-      { error: `Dagens ${DAILY_LIMIT} gratis render-poeng er brukt opp. Prøv igjen i morgen.` },
-      { status: 429 },
+    return withVid(
+      NextResponse.json(
+        { error: `Dagens ${DAILY_LIMIT} gratis render-poeng er brukt opp. Prøv igjen i morgen.` },
+        { status: 429 },
+      ),
     );
   }
 
@@ -95,17 +112,28 @@ export async function POST(
       let palette;
       const anchor = level === 2 ? userTarget ?? style?.target : undefined;
       if (spec.aiPalette || level === 2 || !userTarget) {
-        palette = await paletteFor(project.analysis, anchor);
+        // A palette-service hiccup must not fail a render — degrade to the
+        // user's own target / a default rather than dying.
+        try {
+          palette = await paletteFor(project.analysis, anchor);
+        } catch (e) {
+          console.warn('palette failed, continuing without:', e instanceof Error ? e.message : e);
+        }
       }
 
       const target: string =
         userTarget ?? style?.target ?? palette?.cladding ?? 'klassisk hvit';
 
-      // Nivå 4 two-pass: bespoke architect brief (A22).
-      const brief =
-        level === 4
-          ? await visionBriefFor(project.analysis, style?.direction, wishes)
-          : undefined;
+      // Nivå 4 two-pass: bespoke architect brief (A22). A failure falls back
+      // to buildPrompt's static bold brief, so never let it kill the render.
+      let brief: string | undefined;
+      if (level === 4) {
+        try {
+          brief = await visionBriefFor(project.analysis, style?.direction, wishes);
+        } catch (e) {
+          console.warn('vision brief failed, using static fallback:', e instanceof Error ? e.message : e);
+        }
+      }
 
       const inspiration =
         typeof body?.inspirationBase64 === 'string' &&
@@ -157,11 +185,21 @@ export async function POST(
     const melding = networky
       ? 'Kunne ikke nå render-tjenesten. Sjekk nettforbindelsen og API-nøkkelen, og prøv igjen. Poenget er ikke brukt.'
       : `Rendering feilet: ${raw}`;
-    return NextResponse.json({ error: melding }, { status: 502 });
+    return withVid(NextResponse.json({ error: melding }, { status: 502 }));
   }
 
-  project.renders.push(record);
-  await save(project);
+  // Atomic append: re-reads the project inside a per-id lock so a concurrent
+  // render can't clobber this one (lost-update fix). Refund if the write
+  // itself fails, so we never charge for a render we couldn't persist.
+  try {
+    await appendRender(params.id, record);
+  } catch (err) {
+    console.error('save failed:', err instanceof Error ? err.message : err);
+    await refundQuota(visitorId, quotaCost);
+    return withVid(
+      NextResponse.json({ error: 'Klarte ikke lagre resultatet. Prøv igjen.' }, { status: 502 }),
+    );
+  }
 
   await logEvent({
     kind: 'render',
@@ -177,11 +215,5 @@ export async function POST(
     demoSubstituted,
   });
 
-  const res = NextResponse.json({ ...record, demoSubstituted });
-  res.cookies.set('vid', visitorId, {
-    httpOnly: true,
-    sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 365,
-  });
-  return res;
+  return withVid(NextResponse.json({ ...record, demoSubstituted }));
 }

@@ -9,7 +9,9 @@ export async function GET(
   _req: NextRequest,
   { params }: { params: { name: string } },
 ) {
-  if (!/^[a-f0-9-]{12}\.(png|jpg)$/.test(params.name)) {
+  // Names are pure hex (randomUUID with dashes stripped); no dash, matching
+  // imageFilePath so a served render can always be chained.
+  if (!/^[a-f0-9]{12}\.(png|jpg)$/.test(params.name)) {
     return NextResponse.json({ error: 'ukjent fil' }, { status: 404 });
   }
   try {

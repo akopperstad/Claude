@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
+import { withLock } from '@/lib/mutex';
 import type { HouseAnalysis } from '@pipeline/types';
 import type { Level } from '@pipeline/levels';
 import type { Estimate } from '@pipeline/estimate';
@@ -77,6 +78,21 @@ export async function getProject(id: string): Promise<Project | null> {
 export async function save(project: Project): Promise<void> {
   await ensureDir();
   await writeFile(recordPath(project.id), JSON.stringify(project, null, 2));
+}
+
+/**
+ * Append one render to a project atomically (fixes the lost-update race):
+ * two concurrent renders for the same project used to read [], each push
+ * one, and the second save clobbered the first. Serialised per id, and the
+ * project is RE-READ inside the lock so the push lands on the latest renders.
+ */
+export async function appendRender(id: string, record: RenderRecord): Promise<void> {
+  await withLock(`project:${id}`, async () => {
+    const project = await getProject(id);
+    if (!project) throw new Error('prosjektet forsvant under lagring');
+    project.renders.push(record);
+    await save(project);
+  });
 }
 
 export async function saveUpload(bytes: Buffer, ext: string): Promise<string> {
