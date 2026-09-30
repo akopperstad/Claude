@@ -105,6 +105,7 @@ This is the single source of truth. Every task maps to a milestone here. Update 
 | Date | Decision | Why |
 |---|---|---|
 | 2026-09-30 | Lawyer: the founders' approach is sufficient clearance; no further action needed toward Lerøy Havfisk or DeepOcean (IP/employer) | [EVIDENCE: lawyer's advice, per Arne] |
+| 2026-09-30 | Fishing outreach opened: Arne may contact and sell to Lerøy Havfisk's competitors, provided no Lerøy information or knowledge is used. Selling to Lerøy group itself remains off-limits while employed | [EVIDENCE: lawyer's advice, per Arne] |
 | 2026-09-30 | M1 = 24 interviews across 10 segments | Founders approved; [EVIDENCE: 03-all-segments-scored.md, QA-passed] |
 | 2026-09-30 | Beachhead = fishing (provisional); final choice at Gate 1 from interviews across 4 segments | Founders objected to the presumption; MIT step 1 requires primary research across segments |
 | 2026-09-30 | Arne owns sales; Kristian owns product, delivery and M0 | Founders |
