@@ -10,6 +10,15 @@ Merged from 5 panel reviews (`panel/reviews/outreach-*.md`): sales, MIT coach, b
 - Two fixed time slots.
 - Something to give back: an anonymous summary of how other shipping companies handle it.
 
+## v4 (Arne's own draft, tightened)
+
+**With a recommendation (only if true):**
+> Hei [navn]! Jeg er maskinsjef på en bunntråler og driver med markedsavklaring rundt vedlikehold og drift av fartøy. Vi snakker med folk fra flere deler av næringen – fiske, brønnbåt, offshore og nærskip – for å få et bredt og ærlig bilde. [Navn] mente du var riktig person å snakke med om dette. Har du 10–15 minutter til en telefon tirsdag eller torsdag?
+>
+> Arne Kopperstad, maskinsjef og gründer av Seawise – 480 35 351
+
+**Without a recommendation:** replace the [Navn] line with "…og med [konkret og sant om personen] tror jeg du kan gi oss verdifull innsikt."
+
 ## v3 (recommended): ask for advice, short, phone as the goal
 
 Norwegian adjustment: lavmælt, no template feel, ask for advice rather than an interview, 15 min on the phone.
