@@ -1,5 +1,7 @@
 # Seawise AS: strategy roadmap (Disciplined Entrepreneurship, 24 steps)
 
+> **Superseded in part (2026-09-30):** see `20-synthesis-and-verdict.md` for the revised beachhead, offer, pricing, 90-day plan and quit gates. The panel (`panel/08-de-coach-ops.md`) found flaws in this roadmap: it assumes a DMU contact list that does not exist, spreads step 1 over too many segments, and its pilot timing conflicts with the sales cycle.
+
 **Starting point (Oct 2026):**
 - Seawise AS is incorporated, and the IP question is cleared with both founders' employers.
 - There is a website, a small LinkedIn page and a working MVP (Nautech).
