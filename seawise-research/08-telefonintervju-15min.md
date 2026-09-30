@@ -1,3 +1,72 @@
+# Telefonintervju, 15 minutter: v3 (kartlegger alle 12 modulene)
+
+**Hvorfor v3:** v2 gikk rett på vedlikehold og tok dermed for gitt hvilken modul vi skulle selge inn først. v3 kartlegger først hvor smerten er størst, på tvers av alle arbeidsområdene, og graver deretter i den største. Modulene nevnes aldri høyt. Tabellen under er bare for oss.
+
+## Spørsmålene (les ordrett)
+
+**Åpning**
+1. «Takk for at du tar deg tid. Jeg har et kvarter med noen spørsmål om hvordan dere jobber med administrasjonen rundt båtene. Er det greit at jeg noterer?»
+
+**Åpent, før du nevner noe selv**
+2. «Hvis du tenker på alt det administrative rundt båtene – hva tar mest tid for dere i dag?»
+
+**Kartlegging (les opp områdene ett og ett)**
+3. «Jeg leser opp noen områder. Si for hvert om det fungerer greit, er irriterende eller er et stort problem – og hva dere bruker på det i dag: system, Excel eller papir.»
+   - Vedlikehold og reservedeler
+   - Sertifikater, klasse og tilsyn
+   - Mannskap, rotasjon, hviletid og lønn
+   - HMS, avvik, risikovurderinger og revisjon
+   - Dokumenter, prosedyrer og loggbøker
+   - Utslipp og drivstoff
+   - Fangst, kvoter og rapportering *(kun fiske)*
+   - Seilaser og havneanløp
+   - Økonomi og budsjett per båt
+   - Kjemikalier, medisiner og miljøkartlegging (IHM)
+
+**Grav i det største**
+4. «Du sa at [største område] er det største problemet. Fortell om siste gang det skapte trøbbel. Hva skjedde?»
+5. «Hva gjorde dere for å løse det?»
+6. «Hvem gjør den jobben, og hvor mange timer i uka går med til det?»
+
+**System og avtale for det området**
+7. «Hvilket system bruker dere på det i dag, og hvor lenge har dere hatt det?»
+8. «Når fornyes avtalen, og hvor lang oppsigelsestid har dere? Får dere ut dataene hvis dere bytter?»
+
+**Siste kjøp**
+9. «Hvordan endte dere opp med det systemet? Hvem fant det, hvem sa ja, og hvem skrev under?»
+10. «Hva ville vært grunnen til å la være å bytte, selv om noe var bedre?»
+
+**Kostnad**
+11. «Grovt sett, hva koster det per båt i året: under 50 000, mellom 50 og 150 000, eller over? Helt greit å si pass.»
+
+**Avslutning**
+12. «Er det noe jeg burde ha spurt om?»
+13. «Hvem andre bør jeg snakke med? Har du et navn?»
+14. «Kan jeg sende deg en kort oppsummering på e-post som du kan rette på?»
+15. «Kan vi sette av 30 minutter [dato], så viser jeg hva vi har funnet?»
+
+**Når svaret blir vagt:** «Kan du gi et eksempel?»
+
+## Kobling fra område til modul (bare for oss, les aldri opp)
+
+| Område i spørsmål 3 | Seawise-modul |
+|---|---|
+| Vedlikehold og reservedeler | Maintenance + innkjøp |
+| Sertifikater, klasse og tilsyn | Fleet & Vessels (sertifikater, klassebesiktelser) |
+| Mannskap, rotasjon, hviletid, lønn | Crew |
+| HMS, avvik, risiko, revisjon | Safety & Quality |
+| Dokumenter, prosedyrer, loggbøker | Documents |
+| Utslipp og drivstoff | Emissions |
+| Fangst, kvoter, rapportering | Fishery |
+| Seilaser og havneanløp | Voyages |
+| Økonomi og budsjett per båt | Finance |
+| Kjemikalier, medisiner, IHM | Hazmat & Medical |
+| (Oversikt på tvers og analyse) | Command Center / Intelligence: tilleggsverdi, ikke inngang |
+
+**Notatmal, tillegg:** noter hvert område som *greit / irriterende / stort problem* sammen med dagens verktøy. Etter 24 samtaler viser dette hvilken modul som bør være inngangen, basert på fakta, og det svarer på Gate 1.
+
+---
+
 # Telefonintervju, 15 minutter: v2 (etter panelgjennomgang 30.09)
 
 Bygger på fem gjennomganger i `panel/reviews/interview-*.md`: MIT-coach, salg, teknisk inspektør, red team og CFO.
