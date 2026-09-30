@@ -17,6 +17,7 @@
 
    For major deliverables, run a separate reviewer agent first and fix what it finds before showing the founders.
 6. **Short and direct.** No filler, no fancy wording. Lead with the answer.
+9. **One step at a time.** Give the founders one action or one question per message, and only the questions needed for that step.
 7. **Push back when you disagree,** with reasons. Don't just agree.
 8. **Update `PLAN.md`** (statuses, this week, scoreboard, decision log with evidence or assumption) whenever something changes.
 
