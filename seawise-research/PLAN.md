@@ -95,7 +95,7 @@ This is the single source of truth. Every task maps to a milestone here. Update 
 | O3 | ✅ seawise.no without www: https works, redirects to www (checked 30 Sep) | — | done |
 | O4 | Unpublish the old Lovable project once the new site is confirmed | Arne (after O1) | 30 Sep |
 | O5 | Cloudflare Web Analytics token + founders' LinkedIn URLs | Arne | 30 Sep |
-| O6 | Master outreach list + panel review of the order | Claude (running) | 30 Sep |
+| O6 | ✅ Master list (64) + final wave 1 (16) in scratchpad | Arne: Møgster decision; Kristian: DeepOcean charter check | 30 Sep |
 | O7 | Holding companies + shareholder agreement | Arne/Kristian with the lawyer | 30 Sep |
 | O8 | Confirm cash position (for the quit model) | Arne | 30 Sep |
 
