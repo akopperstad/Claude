@@ -21,6 +21,8 @@
 7. **Push back when you disagree,** with reasons. Don't just agree.
 8. **Update `PLAN.md`** (statuses, this week, scoreboard, decision log with evidence or assumption) whenever something changes.
 
+10. **Keep the thread.** After every completed step, check "Open items" in `PLAN.md`: update it, and end the reply with one line about the oldest item waiting on the founders. Never let an item drop silently.
+
 ## Confidentiality
 - Never publish confidential figures (competitor invoices, employer data).
 - Never use employer data in demos or sales.

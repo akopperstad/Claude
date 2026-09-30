@@ -87,6 +87,18 @@ This is the single source of truth. Every task maps to a milestone here. Update 
   - Never use employer data.
 - **Cold email:** get a legal check (markedsføringsloven § 15). Default order: phone, then LinkedIn, then a 1:1 email.
 
+## Open items (check at every step; the oldest waiting item is raised first)
+| # | Item | Waiting on | Since |
+|---|---|---|---|
+| O1 | Website Part A (pre-rendering, GEO, speed): preview at geo-technical.seawise-web.pages.dev | **Arne: approve** → Claude publishes to seawise.no + runs IndexNow | 30 Sep |
+| O2 | Website Part B (copy: hero, founders, FAQ, "Fosnavåg" → Gurskøy/Herøy, module claims, privacy page) | Claude drafts → Arne approves | after O1 |
+| O3 | seawise.no without www: https certificate at Domeneshop | Claude checks | 30 Sep |
+| O4 | Unpublish the old Lovable project once the new site is confirmed | Arne (after O1) | 30 Sep |
+| O5 | Cloudflare Web Analytics token + founders' LinkedIn URLs | Arne | 30 Sep |
+| O6 | Master outreach list + panel review of the order | Claude (running) | 30 Sep |
+| O7 | Holding companies + shareholder agreement | Arne/Kristian with the lawyer | 30 Sep |
+| O8 | Confirm cash position (for the quit model) | Arne | 30 Sep |
+
 ## This week (5–11 Oct 2026)
 - [x] Remove the false website claims (done 30 Sep: new site on Cloudflare Pages)
 - [x] Lawyer booked (brief: `M0-advokat-brief.md`) (M0)
