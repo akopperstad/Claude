@@ -86,6 +86,11 @@
 | Onboarding / migration after the pioneer phase | 15–25k per vessel |
 | Audit-readiness review ("Sdir-klar") | 25–40k fixed |
 
+**Price evidence from founders' invoices (2026-09-30, confidential; do not publish):**
+- **PreMaster:** about NOK 16k per vessel per month, plus a yearly fee per vessel. That is roughly NOK 190–200k+ per vessel per year.
+- **TM Master:** about NOK 100k per vessel per year at another Norwegian fishing company.
+- **Conclusion:** incumbent PMS spend is roughly NOK 100–200k per vessel per year. The list price of NOK 9–12k per month (108–144k a year) sits between the two. The Pioneer price (about 50% off, roughly 5–6k per month) is a clear saving against both.
+
 **Why these levels:**
 - The CFO puts the anchor tier at NOK 10–12k per vessel per month.
 - The competitor research suggests NOK 8–15k per vessel per month for a full product.
@@ -165,3 +170,9 @@ All other modules stay behind feature flags until a paying customer asks for the
 6. **Time:** real weekday hours each of you can spend on customer meetings, given work rotations.
 7. **Equity:** are you willing to give a part-time commercial advisor or co-founder 1–5%?
 8. **Kill rule:** do you accept the 20-meeting kill/pivot rule, in writing?
+
+### Founder answers (2026-09-30)
+- **Class:** the ocean-going trawlers the founders know run class-approved maintenance, so replacing PreMaster there needs DNV type approval. **Don't apply yet.** Validate demand first, with conditional letters of intent ("we buy if type-approved"). Read DNV-CP-0206 now so the architecture meets it: audit trail, versioning, maintenance-data export.
+- **Price:** see §5, "Price evidence".
+- **Sales owner:** Arne (CEO). Kristian owns product and delivery.
+- **Kill rule:** accepted.
