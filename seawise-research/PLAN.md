@@ -88,7 +88,8 @@ This is the single source of truth. Every task maps to a milestone here. Update 
 - **Cold email:** get a legal check (markedsføringsloven § 15). Default order: phone, then LinkedIn, then a 1:1 email.
 
 ## This week (5–11 Oct 2026)
-- [ ] Kristian: remove the false website claims; trademark search; book the lawyer (IP waivers + duty of loyalty); holding companies + shareholder agreement (M0)
+- [x] Remove the false website claims (done 30 Sep: new site on Cloudflare Pages)
+- [ ] Kristian: trademark search; book the lawyer (IP waivers + duty of loyalty); holding companies + shareholder agreement (M0)
 - [ ] Arne: share the rotation calendar; pick 15 Tier A prospects (non-conflict) from `prospects-fishing.csv`; book 10 interviews **after** the written loyalty advice (M1)
 - [ ] Both: confirm cash, IN grant terms (what counts as "market acceptance") and the hoppid amount (M0, M7)
 - [ ] Claude: DNV-CP-0206 requirement map draft (M10a); DNV register class-PMS lookup plan for Tier A vessels (M2); interview guide v2 with class-PMS/system/price questions (M1)
@@ -106,3 +107,4 @@ This is the single source of truth. Every task maps to a milestone here. Update 
 | 2026-09-30 | Arne owns sales; Kristian owns product, delivery and M0 | Founders |
 | 2026-09-30 | Kill rule accepted | Founders |
 | 2026-09-30 | Seawise as the single brand (subject to the trademark search) | Brand review |
+| 2026-09-30 | seawise.no moved off Lovable: code in `akopperstad/seawise-web`, hosted on Cloudflare Pages, contact form via Web3Forms, false claims removed; DNS stays at Domeneshop (www CNAME, apex forwarding), email records untouched | Founders; [EVIDENCE: form test email received] |
