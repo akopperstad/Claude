@@ -10,6 +10,33 @@ Merged from 5 panel reviews (`panel/reviews/outreach-*.md`): sales, MIT coach, b
 - Two fixed time slots.
 - Something to give back: an anonymous summary of how other shipping companies handle it.
 
+## v5: FINAL (panel consensus, 30 Sep)
+
+**Panel ranking:**
+- v3: 1st for sales, brand and red team.
+- v2: 1st for the MIT coach and the technical superintendent.
+- v4: last for all five.
+
+v5 takes v3's tone and v2's question.
+
+### Technical manager / fleet manager
+> Hei [navn]. Jeg er maskinsjef på en bunntråler og bygger Seawise, et vedlikeholdssystem for fartøy, sammen med broren min. Før vi går videre trenger jeg råd fra noen som kjenner [brønnbåt/offshore/nærskip]-drift fra land, og du har [konkret og sant om personen].
+>
+> Ett kort spørsmål, om du har tid: Da dere sist hadde klasse, Sdir-tilsyn eller revisjon – hva måtte dere lete fram utenfor vedlikeholdssystemet?
+>
+> Kan jeg ringe deg et kvarter tirsdag eller torsdag?
+>
+> Arne Kopperstad, Seawise – 480 35 351
+
+### Owner / CEO
+> Hei [navn]. Jeg er maskinsjef på en bunntråler og bygger Seawise, et vedlikeholdssystem for fartøy, sammen med broren min. Før vi går videre trenger jeg råd fra rederier som [rederi] om hvordan dere holder styr på vedlikehold og sertifikater i dag.
+>
+> Kan jeg ringe deg et kvarter tirsdag eller torsdag – eller er det noen i teknisk avdeling jeg heller bør snakke med?
+>
+> Arne Kopperstad, Seawise – 480 35 351
+
+**With a real recommendation:** add "[Navn] mente du var riktig person å spørre." after the first sentence.
+
 ## v4 (Arne's own draft, tightened)
 
 **With a recommendation (only if true):**
