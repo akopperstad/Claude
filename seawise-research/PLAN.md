@@ -40,7 +40,7 @@ This is the single source of truth. Every task maps to a milestone here. Update 
 - **Evidence (confidential):** PreMaster about NOK 16k per month per vessel plus a yearly fee; TM Master about NOK 100k per vessel per year.
 
 ## Funding status
-- **Innovation Norway:** NOK 250k granted. NOK 750k more is promised on proof of market acceptance plus letters of interest (LOIs).
+- **Innovation Norway:** NOK 250k granted, for validating demand (= Phase 1 interviews). The further NOK 750k is a **verbal** promise only [ASSUMPTION: not secured until in writing]. Action: get the evidence requirements confirmed by email.
 - **hoppid.no:** backing (amount: fill in).
 - **ÅKP:** ScaleUp programme. Use the monthly ÅKP sessions as MIT gate reviews.
 
