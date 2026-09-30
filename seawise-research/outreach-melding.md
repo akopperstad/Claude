@@ -10,6 +10,21 @@ Merged from 5 panel reviews (`panel/reviews/outreach-*.md`): sales, MIT coach, b
 - Two fixed time slots.
 - Something to give back: an anonymous summary of how other shipping companies handle it.
 
+## v3 (recommended): ask for advice, short, phone as the goal
+
+Norwegian adjustment: lavmælt, no template feel, ask for advice rather than an interview, 15 min on the phone.
+
+> Hei [navn]. Jeg er maskinsjef på en bunntråler og holder på med et vedlikeholdssystem for fartøy på si. Jeg trenger råd fra noen som kjenner [brønnbåt/offshore/nærskip]-drift fra [kontoret/teknisk avdeling], og du har jo [konkret og sant: f.eks. mange år som teknisk sjef i X]. Kan jeg ringe deg et kvarter en dag neste uke?
+>
+> Arne Kopperstad, 480 35 351
+
+**Priority order of channels (highest success first) [ASSUMPTION based on B2B practice; measure it]:**
+1. Warm intro through a mutual contact, e.g. "Fulgt av Glen" on LinkedIn: ask Glen to introduce you.
+2. Phone call.
+3. A short advice-ask message (v3).
+
+**Measure:** send v3 to 10 people and v2 to 10, and log the reply rate. The data decides.
+
 ## v2 (30 Sep, after founder input: chief engineer on a bottom trawler; bokmål; open about Seawise; LinkedIn first)
 
 ### C: technical manager / fleet manager
