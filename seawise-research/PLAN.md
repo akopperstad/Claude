@@ -92,7 +92,7 @@ This is the single source of truth. Every task maps to a milestone here. Update 
 |---|---|---|---|
 | O1 | Website Part A (pre-rendering, GEO, speed): preview at geo-technical.seawise-web.pages.dev | **Arne: approve** → Claude publishes to seawise.no + runs IndexNow | 30 Sep |
 | O2 | Website Part B (copy: hero, founders, FAQ, "Fosnavåg" → Gurskøy/Herøy, module claims, privacy page) | Claude drafts → Arne approves | after O1 |
-| O3 | seawise.no without www: https certificate at Domeneshop | Claude checks | 30 Sep |
+| O3 | ✅ seawise.no without www: https works, redirects to www (checked 30 Sep) | — | done |
 | O4 | Unpublish the old Lovable project once the new site is confirmed | Arne (after O1) | 30 Sep |
 | O5 | Cloudflare Web Analytics token + founders' LinkedIn URLs | Arne | 30 Sep |
 | O6 | Master outreach list + panel review of the order | Claude (running) | 30 Sep |
