@@ -10,14 +10,14 @@
 
 ## 0. Key findings
 
-1. **The top of the ranking is the same whichever way you cut it:** ocean-going fishing (pelagic, whitefish, autoline), coastal fishing 15–28 m, and aquaculture vessels (wellboats and service vessels of 15 m or more). Nothing outside fishing or aquaculture scores above 25/35 except short-sea cargo and small third-party ship managers (24–25).
+1. **The top of the ranking is the same whichever way you cut it:** ocean-going fishing (pelagic, whitefish, autoline), coastal fishing 15–28 m, and aquaculture vessels (wellboats and service vessels of 15 m or more). Outside fishing and aquaculture, only small third-party ship managers (S14) reach 25/35; short-sea cargo (C1) and Redningsselskapet (S7) score 24. *(QA: the same ten segments form the top 10 with C7 founder fit removed or set to 3 for all, and with the C4 gate ignored; only the order changes.)*
 2. **A new competitor that `01-competitors.md` missed: UniSea AS (Skudeneshavn).**
    - It got **DNV class approval for its Maintenance module in April 2025** [V] ([UniSea](https://www.unisea.no/post/unisea-maintenance-dnv-class-approval)).
-   - It won **Fjord1** (85+ ferries) in April 2025 [V] ([UniSea](https://unisea.no/post/fjord1-picks-unisea-maintenance)).
+   - It won **Fjord1** in April 2025 for Maintenance, Procurement and Maindeck on **Fjord1's next-generation "Autonomous Crossing" vessels (Lavik–Oppedal)**, not yet the whole 85+ fleet [V] ([UniSea](https://unisea.no/post/fjord1-picks-unisea-maintenance)). Fleet-wide roll-out is [?].
    - Other named customers: Buksér og Berging, Eidesvik, North Sea Shipping, Napier, Omega Subsea and **Njord Aquashipping** (aquaculture transport) [R] ([UniSea/Napier](https://unisea.no/post/napier-unisea-maintenance), [UniSea/Njord](https://www.unisea.no/post/njord-aquashipping)).
-   - It owns Maindeck (dry-dock projects), chosen by **Hurtigruten**, Massterly and Arriva Shipping [V] ([Maindeck](https://maindeck.io/blog/hurtigruten-chooses-maindeck-for-their-ship-maintenance)). It bought Kaiko Systems (AI inspections) in June 2026 [R].
-   - **Implications:** (a) "modern Norwegian cloud PMS" is already taken in ferries, tugs and parts of offshore and aquaculture; (b) a small Norwegian vendor *can* get DNV approval (useful evidence for M10); (c) Seawise's real white space is **fishing plus small aquaculture and cargo vessels**.
-3. **Most Norwegian-controlled tonnage by vessel count sits in deep-sea and offshore, and scores badly for Seawise.** The Norwegian-controlled foreign-going fleet is **1,581 ships** (1 Jan 2026) [V] ([Rederiforbundet Q1 2026](https://www.rederi.no/globalassets/dokumenter/alle/rapporter/quarterly-report-no-1-2026.pdf)): 455 OSVs, 554 other dry cargo, 215 chemical tankers, 137 gas carriers, 92 bulk carriers, 56 shuttle tankers, 23 other oil tankers, 16 combination carriers, 33 passenger ships, plus 28 mobile offshore units.
+   - It owns Maindeck (dry-dock projects), chosen by **Hurtigruten**, Massterly and Arriva Shipping [V] ([Maindeck](https://maindeck.io/blog/hurtigruten-chooses-maindeck-for-their-ship-maintenance)). It bought Kaiko Systems (AI inspections; month not verified in QA) [R] ([Hellenic Shipping News](https://www.hellenicshippingnews.com/unisea-acquires-ai-powered-frontline-intelligence-company-kaiko-systems/)). UniSea is majority-owned by PE firm Adelis Equity (since 2022) and serves 3,000+ vessels (HSEQ, maintenance, procurement, drydock) [R] (same source).
+   - **Implications:** (a) "modern Norwegian cloud PMS" is already taken in ferries, tugs and parts of offshore and aquaculture; (b) a Norwegian vendor with a PMS module launched in early 2025 *can* get DNV class approval, though UniSea is PE-backed with 3,000+ vessels, not a two-founder start-up (useful evidence for M10); (c) Seawise's real white space is **fishing plus small aquaculture and cargo vessels**.
+3. **Most Norwegian-controlled *tonnage* sits in the foreign-going deep-sea and offshore fleet, and it scores badly for Seawise.** (By vessel count, the domestic fleet is far larger: 4,994 fishing vessels and 3,213 SSB "work ships", see `02`.) The Norwegian-controlled foreign-going fleet is **1,581 ships** (1 Jan 2026) [V] ([Rederiforbundet Q1 2026](https://www.rederi.no/globalassets/dokumenter/alle/rapporter/quarterly-report-no-1-2026.pdf)): 455 OSVs, 554 other dry cargo, 215 chemical tankers, 137 gas carriers, 92 bulk carriers, 56 shuttle tankers, 23 other oil tankers, 16 combination carriers, 33 passenger ships, plus 28 mobile offshore units.
    - These fleets are run by **large or listed groups on class-approved PMS**, with ship-management, vetting (SIRE/TMSA) and cyber requirements.
    - Selling to them needs DNV-CP-0206 type approval (see `02`, §2.2), security certification and references. None of these exist today.
    - They are **Stage 3–4 markets, not interview targets now.**
@@ -50,7 +50,7 @@
 - **Deep-sea and offshore:** Norwegian Shipowners' Association (Rederiforbundet), Norwegian-controlled foreign-going fleet, 1 Jan 2026. This includes foreign flags.
 - **Owners:** "legal owners" overstates buying decisions, because groups hold each vessel in its own AS. The owner counts below are **purchasing organisations [E]** unless marked otherwise.
 
-### 1.3 Price bands used (per vessel per year, NOK; from `01`, §2c)
+### 1.3 Price bands used (per vessel per year, NOK; simplified from `01`, §2c, not a direct copy: `01` puts the full suite at 60–120k / 150–300k / 300–600k)
 - **L** = light SMB PMS/compliance, 15–60k
 - **M** = mid-fleet PMS + QHSE, 60–150k
 - **H** = enterprise stack (PMS + QHSE + crew + procurement), 150–300k+
@@ -113,7 +113,7 @@ Column key:
 
 | # | Segment | Vessels / buyers | Size | Class-PMS gate? / ISM? | Incumbents | Spend | Buyer | Reach | Compelling reason | C1 | C2 | C3 | C4 | C5 | C6 | C7 | **Tot** |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| P1 | Car ferries | 241 [V] (SSB) / ~12 (Fjord1 85+ [V], Norled ~80 incl. fast ferries [R], Boreal, Torghatten, Bastø Fosen, small municipal companies) | 30–130 m, 100–5,000 GT | P / Y (>100 pax) | **UniSea (Fjord1, Apr 2025 [V])**, Star IPS (Helgelandske 13–14 vessels [R], [MarineLink](https://www.marinelink.com/news/norwegian-upgrades305271)), TM Master, Mintra OCS (Norled [V]) | M | L/M (Fjord1 is owned by Havilafjord, Fosnavåg) | High (Fjord1 in Florø; Havila in Fosnavåg) | Public-tender KPIs; battery/electric maintenance; but the biggest buyer has just chosen UniSea | 3 | 4 | 3 | 2 | 2 | 3 | 3 | **20** |
+| P1 | Car ferries | 241 [V] (SSB) / ~12 (Fjord1 85+ [V], Norled ~80 incl. fast ferries [R], Boreal, Torghatten, Bastø Fosen, small municipal companies) | 30–130 m, 100–5,000 GT | P / Y (>100 pax) | **UniSea (Fjord1 newbuilds on Lavik–Oppedal, Apr 2025 [V])**, Star IPS (Helgelandske 13–14 vessels [R], [MarineLink](https://www.marinelink.com/news/norwegian-upgrades305271)), TM Master, Mintra OCS (Norled [V]) | M | L/M (Fjord1 is owned by Havilafjord, Fosnavåg) | High (Fjord1 in Florø; Havila in Fosnavåg) | Public-tender KPIs; battery/electric maintenance; but the biggest buyer has just chosen UniSea for its next-generation vessels | 3 | 4 | 3 | 2 | 2 | 3 | 3 | **20** |
 | P2 | Fast ferries (hurtigbåt) | ~150 of 701 passenger boats [E] (SSB) / ~15 | 25–45 m, <500 GT | N / Y (>100 pax) or 1770 | Operator's own PMS (Norled, Boreal, Fjord1), Excel for small ones [E] | L–M | L/M + small local companies | Medium | County tenders; new electric vessels | 2 | 3 | 3 | 4 | 3 | 3 | 2 | **20** |
 | P3 | Coastal cruise (Hurtigruten, Havila Kystruten) | 7 + 4 ships [R] / 2 | 15,000 GT | Y / Y + MLC | Kongsberg service agreement including planned maintenance (Havila) [V] ([ship-technology](https://www.ship-technology.com/news/havila-kystruten-kongsberg-cruise-vessels/)); Maindeck (Hurtigruten) [V] | H | L | High (Havila is in Fosnavåg) | Few buyers, embedded | 3 | 4 | 2 | 1 | 2 | 2 | 2 | **16** |
 | P4 | Expedition cruise | ~10 (HX, REV Ocean etc.) [E] / 2–3 | 5,000–20,000 GT | Y / Y | Cruise ERP plus class PMS [E] | H | L | Low (Oslo) | None specific | 3 | 2 | 2 | 1 | 1 | 2 | 2 | **13** |
@@ -157,7 +157,7 @@ Column key:
 
 ## 3. Ranking (all 56)
 
-Tie-breaks, in order: the C4 gate first (C4 = 1 ranks last), then C3, then C2.
+Tie-breaks, in order: the C4 gate first (C4 = 1 ranks last), then C3, then C2. *(QA: ranks re-sorted on 30 Sept 2026 to apply this rule as written; see QA review.)*
 
 | Rank | Segment | Total | C4 | Note |
 |---|---|---|---|---|
@@ -180,7 +180,7 @@ Tie-breaks, in order: the C4 gate first (C4 = 1 ranks last), then C3, then C2.
 | 17 | F9 Snow crab | 21 | 3 | Loss-making |
 | 18 | F5 Danish seiners | 21 | 4 | Fold into F6 interviews |
 | 19 | F8 Shrimp trawlers | 21 | 5 | North; low budget |
-| 20 | P1 Car ferries | 20 | 2 | Fjord1 just chose UniSea |
+| 20 | P1 Car ferries | 20 | 2 | Fjord1 chose UniSea for its newbuilds |
 | 21 | P2 Fast ferries | 20 | 4 | Operator-driven |
 | 22 | A5 Workboats 8–15 m | 20 | 5 | Low budget; possible later light tier |
 | 23 | O6 Standby/ERRV | 19 | 2 | — |
@@ -219,9 +219,9 @@ Tie-breaks, in order: the C4 gate first (C4 = 1 ranks last), then C3, then C2.
 | 56 | C5 Crude tankers | 11 | 1 | Out of scope until Stage 4 |
 
 **What the ranking says.**
-- **Tier 1 (≥ 25), eight segments:** four fishing (pelagic, whitefish, autoline, coastal), two aquaculture (wellboats, service vessels), and the ship-manager buyer type.
-- **Tier 2 (21–24):** adjacent small-vessel segments. They are useful as Track A expansion, but either the budget is low or there are only a few buyers.
-- **Tier 3 (≤ 20):** everything class-gated. **Offshore scores high on money and geography (C1, C2 = 4–5) but is blocked by C4 and C5.** That can change after DNV approval (M10), and UniSea's April 2025 approval shows it is achievable.
+- **Tier 1 (≥ 25), eight segments:** five fishing (purse seine and pelagic trawl, whitefish, autoline, coastal), two aquaculture (wellboats, service vessels), and the ship-manager buyer type.
+- **Tier 2 (21–24, C4 ≥ 2):** adjacent small-vessel segments. They are useful as Track A expansion, but either the budget is low or there are only a few buyers.
+- **Tier 3 (≤ 20, or any C4 = 1):** everything class-gated (O3 scores 21 but is gated). **Offshore scores high on money and geography (C1, C2 = 4–5) but is blocked by C4 and C5.** That can change after DNV approval (M10), and UniSea's April 2025 approval shows it is achievable.
 
 **Sensitivity.** If C4 were not a gate (after type approval), PSV/subsea would rise about 4 points to 24–25, level with Tier 1. That is the Stage 2 case in `PLAN.md`, not today's.
 
@@ -229,7 +229,7 @@ Tie-breaks, in order: the C4 gate first (C4 = 1 ranks last), then C3, then C2.
 
 ## 4. Recommended interview coverage for M1 (24 interviews, 8 segments)
 
-This refines the M1 split in `PLAN.md` (fishing 8, wellboat 4, offshore 4, short-sea 4). **Proposed change:** fishing 12 split across four sub-segments, aquaculture 6, short-sea 2, ship managers 2, RS 1, offshore 1. The reason: Aulet requires primary evidence per *segment*, and "fishing" is really four segments with different buyers, class status and budgets. Four offshore interviews would mostly confirm a gate we already know about.
+This refines the M1 split in `PLAN.md` (**20** interviews: fishing 8, wellboat 4, offshore 4, short-sea 4). **It also raises the total from 20 to 24; PLAN M1 and the decision log must be updated if the founders accept this.** **Proposed change:** fishing 12 split across four sub-segments, aquaculture 6, short-sea 2, ship managers 2, RS 1, offshore 1. The reason: Aulet requires primary evidence per *segment*, and "fishing" is really four segments with different buyers, class status and budgets. Four offshore interviews would mostly confirm a gate we already know about.
 
 | # | Segment (codes) | Interviews | Who (DMU mix) | What the interviews must settle for Gate 1 |
 |---|---|---|---|---|
@@ -256,7 +256,7 @@ This refines the M1 split in `PLAN.md` (fishing 8, wellboat 4, offshore 4, short
 - They cover **all three buyer types:** family AS, mid-size groups and a public/NGO buyer.
 - **They exclude on purpose:**
   - Deep-sea cargo, tankers, gas, PCTC, rigs and FPSO: class-gated, large-company procurement, no founder network.
-  - Coastal cruise and car ferries: embedded, and UniSea has just won Fjord1.
+  - Coastal cruise and car ferries: embedded, and UniSea has just won Fjord1's next-generation vessels.
   - Krill: 2 buyers, one of them Aker.
   - Kystvakten: defence procurement.
   - Anything under 15 m: budget too low for a Stage 1 business.
@@ -265,7 +265,7 @@ This refines the M1 split in `PLAN.md` (fishing 8, wellboat 4, offshore 4, short
   - A4 carries to fish farmers' own fleets.
   - C1 carries to small tankers and feed carriers.
 
-**Conflict rules (PLAN "Conflicts").** No interviews at Lerøy group companies or DeepOcean. Decide how to treat Møgster-linked owners before booking pelagic interviews.
+**Conflict rules (PLAN "Conflicts" and M0).** No fishing outreach before the written duty-of-loyalty advice (M0, due 11 Oct). No interviews at Lerøy group companies or DeepOcean. Decide how to treat Møgster-linked owners before booking pelagic interviews.
 
 **Record in every interview** (feeds M2 and the Gate 1 count of class-PMS vs non-class-PMS vessels):
 - vessel GT and class
@@ -324,3 +324,73 @@ This refines the M1 split in `PLAN.md` (fishing 8, wellboat 4, offshore 4, short
 - Kystrederiene (100 companies, 284 vessels): https://www.uib.no/sampol/101212/kystrederiene
 
 **Inherited from `02` and `01`** (not repeated here): the Fiskeridirektoratet register and profitability survey 2024, SSB 08203, the Sdir aquaculture study 2023, FOR-2016-12-16-1770, FOR-2014-09-05-1191, DNV PMS.A / CP-0206, EU MRV/ETS, Sirkel, Mintra, BASSnet/Stenersen, TM Master customer list.
+
+---
+
+## QA review (30 Sept 2026, independent reviewer; milestones M1, M2)
+
+**Verdict: pass with fixes.** The top 10 and the interview allocation stand. The methodology is unchanged.
+
+### What was checked
+1. **Arithmetic:** C1–C7 re-summed for all 56 rows (script), and the ranking table compared with the segment tables.
+2. **Rank order vs the stated rule** (C4 = 1 ranks last, then total, C3, C2).
+3. **Consistency with `PLAN.md`, `01`, `02` and `_case-brief.md`:** counts, regulations, price bands, conflicts, M1 split.
+4. **Sourcing:** facts without a link or tag.
+5. **Scope:** stated reasons for exclusions.
+6. **Bias sensitivity:**
+   - Top 10 re-computed with C7 removed, with C7 = 3 for everyone, and with the C4 gate ignored.
+   - Offshore re-scored with C4 = 2 (Track B beside TM Master/Star, the same logic that gives F3 C4 = 2).
+7. **Web checks** (5 claims):
+   - UniSea DNV approval: **confirmed**, 10 Apr 2025 ([UniSea](https://www.unisea.no/post/unisea-maintenance-dnv-class-approval)). The page says "DNV Class Approval" for the PMS but does not name the standard (for example CP-0206).
+   - UniSea/Fjord1: **scope overstated**. The deal covers the next-generation "Autonomous Crossing" vessels on Lavik–Oppedal, not the 85+ fleet (25 Apr 2025, [UniSea](https://unisea.no/post/fjord1-picks-unisea-maintenance)).
+   - UniSea/Kaiko: **confirmed** ([HSN](https://www.hellenicshippingnews.com/unisea-acquires-ai-powered-frontline-intelligence-company-kaiko-systems/)). UniSea is majority-owned by Adelis Equity and serves 3,000+ vessels.
+   - Also found: UniSea customers **Hagland** (short-sea, relevant to C1) and **REV Ocean** (relevant to P4) ([UniSea search results](https://www.unisea.no/post/unisea-maintenance-dnv-class-approval), [REV Ocean](https://unisea.no/post/rev-ocean-chooses-unisea)) [R].
+
+### What was fixed
+- **S10 Dredgers total:** was 11, sums to **12**.
+- **Ranking re-sorted to apply the file's own rule.**
+  - Nine class-gated segments (O3, O1, O4, O2, F10, P3, O10, C4, S6) had been ranked above ungated ones, and several tie-breaks were wrong.
+  - S14 now ranks above F2 (C2 5 vs 4). A6 now ranks above S5 (C3 3 vs 2). The 21-point and 20-point groups were reordered on C3/C2.
+  - The top-10 *set* is unchanged.
+- **Key finding 1:** said nothing outside fishing/aquaculture scores "above 25", then cited 24–25. Reworded.
+- **Fjord1 scope** corrected in key finding 2, row P1, the ranking note and §4 exclusions. The P1 scores are left as they are: the evidence is weaker, but the ranking doesn't change.
+- **UniSea description:** "small Norwegian vendor" corrected to PE-backed with 3,000+ vessels. Kaiko got a source; its month is unverified.
+- **Key finding 3:** "tonnage by vessel count" was wrong. By count, the domestic fleet dominates.
+- **Tier labels:** Tier 1 has five fishing segments, not four. Tier 2/3 boundaries now state the C4 gate.
+- **§1.3 price bands:** relabelled "simplified from `01`". They don't match `01` §2c exactly.
+- **§4:** now says the proposal raises M1 from **20 to 24 interviews**. It previously said "refines", which hid that it contradicts `PLAN.md`.
+- **Conflict rule:** added the PLAN M0 prerequisite (written loyalty advice before any fishing outreach).
+
+### Findings by check
+- **Scores and bias (check 5).**
+  - Top 10 is robust: identical membership under all three sensitivity cuts. Without C7, A1 wellboats tie F1 at #1.
+  - **Founder-fit (C7) does favour fishing, but it doesn't decide the top 10.**
+  - **The class gate is applied unevenly.** F3 gets C4 = 2 because Track B can sit beside an existing class PMS, but O1/O3/O4 get C4 = 1 although the same Track B layer would work there.
+    - Re-scoring offshore at C4 = 2 gives O3 22 and O1/O4 21, still below the top 10 (24).
+    - So the allocation holds. But the "offshore is gated" conclusion is really about Track A, not Track B. The single offshore control interview should test Track B explicitly (it already asks about "a compliance layer").
+- **Interview allocation (check 6).**
+  - All top-10 segments get interviews. Sums check out: 3+3+3+3+3+3+2+2+1+1 = 24. Kristian's share is 9/24 = 37.5 %, above the 30 % rule.
+  - Weighting is defensible: fishing gets 12 (5 of the top 10), aquaculture 6 (2 of the top 10 plus A3/A6).
+  - S14 (rank 7) gets 2 while each fishing sub-segment gets 3. That is acceptable because S14 is a channel test.
+- **Scope (check 4).**
+  - The file scores only **Norwegian-owned/controlled** vessels and gives no explicit reason. CLAUDE.md's default is "all vessel types over 15 m worldwide".
+  - The implied reason is reach (C2) and PLAN Stage 1 = Norway. **Fix:** state it in §1 before M2, owner Claude, by 7 Oct 2026.
+  - Nordic/foreign fishing is Stage 3 per PLAN, which is acceptable.
+- **Contradictions with other files (check 2).**
+  - M1 total: PLAN says 20, this file says 24. Founders decide at the next plan update (owner Arne, by 5 Oct 2026); then update the PLAN decision log.
+  - `02`'s OSV matrix gives "whole product" 2, while this file gives C4 = 1. The scales differ, so this is noted, not changed.
+
+### What remains uncertain (open issues)
+- **Sourcing (check 3).** These facts lack a link or an [E] tag:
+  - "Fjord1 is owned by Havilafjord"
+  - "Sølvtrans, Trident, Frøy majority foreign-owned [V]"
+  - "Norled ~80 [R]"
+  - "DeepBlue DNV type-approved [R]"
+  - "7 + 4 coastal cruise ships [R]"
+  - "Cape Town PSC from Feb 2027" (`02` says only "2027")
+
+  Fix: add links or downgrade to [E] (owner Claude, by 7 Oct 2026).
+- **MOU count.** Key finding 3 says 28 mobile offshore units, but O7 + O8 + O9 = 1 + 22 + 6 = 29 (and some may be production units, not MOUs). Check against the Rederiforbundet Q1 2026 report.
+- **UniSea's approval standard.** Is it DNV-CP-0206 type approval (PMS.A credit) or a narrower class approval? This matters for M10 and for UniSea's threat in classed fishing. Check the DNV type-approval register (owner Kristian, M10a).
+- **Class-PMS share per segment** is still the biggest scoring uncertainty (C4 for F1–F4 and A1). It is already open data gap 1.
+- **Confidentiality.** F3 puts the ~NOK 500k/vessel figure next to "Lerøy Havfisk". Keep this file internal. Never quote the figure in the same place as the operator name.
