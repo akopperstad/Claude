@@ -49,7 +49,7 @@ This is the single source of truth. Every task maps to a milestone here. Update 
 |---|---|---|---|---|---|
 | M0 | Foundation: remove false website claims; written IP waivers + written duty-of-loyalty advice (**before any fishing outreach**); trademark search; holding companies + shareholder agreement (vesting, deadlock); redirect nautech.no; confirm cash and runway | — | Kristian | 11 Oct 2026 | ⬜ |
 | M0b | Website rebuilt as pre-rendered "Seawise – vedlikeholdssystem for fiskeflåten", with JSON-LD (`panel/07`) | — | Kristian + Claude | 1 Nov 2026 | ⬜ |
-| M1 | 20 discovery interviews across **4 segments**: fishing (8), wellboats/fish carriers (4), offshore/OSV/subsea (4), short-sea/tankers (4); users, the people who choose, the people who pay; at least 30% by Kristian. Record class-PMS status, current system and price for each vessel | 1, 3 | Arne | 15 Nov 2026 | ⬜ |
+| M1 | 24 discovery interviews per `03-all-segments-scored.md`: purse seiners 3, whitefish trawlers (non-Lerøy) 3, autoliners 3, coastal fishing 15–28 m 3, wellboats 3, aquaculture service 3, short-sea 2, ship managers 2, Redningsselskapet 1, offshore 1. Cover users, the people who choose and the people who pay; at least 30% by Kristian. Record class-PMS status, current system and price for each vessel | 1, 3 | Arne | 15 Nov 2026 | ⬜ |
 | M1b | Content engine: 2 LinkedIn posts a week each, every post ending with an interview request; at least 10 interviews inbound | — | Arne + Kristian | ongoing | ⬜ |
 | M2 | **Gate 1:** beachhead + track mix, end-user profile, TAM for non-class-PMS vs class-PMS, persona, top-3 pains quantified | 2, 4, 5 | Arne + Claude | 22 Nov 2026 | ⬜ |
 | M2b | Key-assumption register plus one cheap test per assumption | 20, 21 | Kristian + Claude | 22 Nov 2026 | ⬜ |
@@ -101,6 +101,7 @@ This is the single source of truth. Every task maps to a milestone here. Update 
 ## Decision log
 | Date | Decision | Why |
 |---|---|---|
+| 2026-09-30 | M1 = 24 interviews across 10 segments | Founders approved; [EVIDENCE: 03-all-segments-scored.md, QA-passed] |
 | 2026-09-30 | Beachhead = fishing (provisional); final choice at Gate 1 from interviews across 4 segments | Founders objected to the presumption; MIT step 1 requires primary research across segments |
 | 2026-09-30 | Arne owns sales; Kristian owns product, delivery and M0 | Founders |
 | 2026-09-30 | Kill rule accepted | Founders |
