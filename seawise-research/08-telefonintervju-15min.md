@@ -1,53 +1,79 @@
-# Telefonintervju, 15 minutter (M1)
+# Telefonintervju, 15 minutter: v2 (etter panelgjennomgang 30.09)
 
-Brukes når noen har svart ja på v5-meldingen. Bygger på `07-intervjuguide.md` og panelets råd (MIT DE og The Mom Test): spør om fortid og fakta, ikke om meninger om Seawise.
+Bygger på fem gjennomganger i `panel/reviews/interview-*.md`: MIT-coach, salg, teknisk inspektør, red team og CFO.
 
-## Hvilken informasjon er mest verdt (i prioritert rekkefølge)
+**Prinsipp:** spør om fortid og fakta, ikke om meninger om Seawise. Det vanskelige, som kostnad, kommer sent i samtalen, når tilliten er bygget.
 
-| # | Hva vi trenger å vite | Hvorfor det betyr mest | MIT-steg |
-|---|---|---|---|
-| 1 | **Hvilket system de bruker i dag, og hva det koster** | Avgjør prissetting og markedsstørrelse. Uten dette gjetter vi | 4, 16 |
-| 2 | **Om vedlikeholdet er klassegodkjent (PMS-ordning hos klassen)** | Avgjør om vi kan selge nå eller trenger DNV-typegodkjenning først | 1, 2, 20 |
-| 3 | **Siste konkrete problem og hva det kostet** (timer, penger, avvik) | Gir verdiforslaget i kundens egne ord og tall | 8 |
-| 4 | **Sist de byttet eller vurderte å bytte system: hva utløste det og hva stoppet det** | Viser hva som får dem til å bytte, og hva som holder dem igjen | 13, 20 |
-| 5 | **Hvem som bestemmer og når budsjettet settes** | Viser hvem som faktisk bestemmer og hvor lang salgsprosessen blir | 12, 13 |
-| 6 | **Vilje til neste steg** (ny samtale, intro til andre, eventuell intensjonsavtale senere) | Et ekte signal. Komplimenter teller ikke | 9, 23 |
+## Før samtalen (5 min forberedelse)
+Slå opp dette på forhånd, så slipper du å bruke samtaletid på det:
+- flåten: antall fartøy, størrelse og byggeår (Fiskeridirektoratet, Sdir, Brreg/Proff)
+- klasseselskap og om fartøyene har PMS-notasjon (DNV Vessel Register)
+- hvem personen er og hvilken rolle de har.
+
+**Ha dette svaret klart hvis de spør «hva lager dere?»:**
+> «Et vedlikeholds- og sertifikatsystem for fartøy. Men akkurat nå er jeg mest nysgjerrig på hvordan dere gjør det i dag.»
 
 ## Samtalen (15 min)
 
 **Åpning (1 min)**
-«Takk for at du tar deg tid. Jeg selger ingenting i dag, jeg vil forstå hvordan dere jobber. Er det greit at jeg noterer underveis?»
+> «Takk for at du tar deg tid. Jeg har et kvarter med noen spørsmål om hvordan dere jobber med vedlikehold og sertifikater. Er det greit at jeg noterer?»
 
-**Kjernen (10 min): still disse fem, i denne rekkefølgen**
-1. «Hvordan holder dere styr på vedlikehold og sertifikater i dag: system, Excel eller papir? Hvor lenge har dere hatt det?»
-   - Oppfølging: «Omtrent hva koster det per fartøy i året, med lisenser og vedlikehold?» (Ikke press hvis de ikke vil svare.)
-2. «Har dere vedlikeholdet godkjent hos klassen, slik at klassen godtar det som del av besiktelsen? Eller er det mest for egen del og for Sdir?»
-3. «Fortell om siste gang noe med vedlikehold eller sertifikater gikk galt eller tok unødvendig mye tid. Hva skjedde, og hva kostet det?»
-4. «Når vurderte dere sist å bytte system? Hva fikk dere til å vurdere det, og hva gjorde at dere byttet, eller ikke byttet?»
-5. «Hvis dere skulle skifte system, hvem hos dere tar den beslutningen, og når settes budsjettet for sånt?»
+**1. Siste klassebesøk eller revisjon (4 min): det viktigste spørsmålet**
+> «Tenk på siste årlige klassebesøk, Sdir-tilsyn eller ISM-revisjon. Hva tok mest tid å få klart?»
+- «Hva måtte dere hente fram utenfor vedlikeholdssystemet? Excel, e-post, papir?»
+- «Hva gjorde dere for å løse det?» (Egne løsninger ved siden av systemet er det sterkeste tegnet på et reelt problem.)
+- «Hvem gjør den jobben til vanlig, og omtrent hvor mange timer i uka går med, om bord og på land?»
+
+**2. Systemet i dag og avtalen (3 min)**
+> «Hvilket system bruker dere for vedlikehold og sertifikater? Hvor lenge har dere hatt det?»
+- «Bestiller dere deler i samme system?»
+- «Kjører det lokalt om bord eller i nettleseren? Hva skjer når dere mister forbindelsen?»
+- «Hvor bundet er dere? Når fornyes avtalen, og hvor lang er oppsigelsestiden? Får dere ut dataene deres hvis dere bytter?»
+- *Kun hvis klassestatus var ukjent før samtalen:* «Går maskineriet på PMS-ordning hos klassen, eller på CMS eller vanlig fornyelse?» Skriv «vet ikke» som eget svar.
+
+**3. Siste gang dere kjøpte system (2 min)**
+> «Hvordan endte dere opp med dagens system? Hvem fant det, hvem sa ja, hvem skrev under, og hvor lang tid tok det?»
+- «Hva krevde dere av leverandøren den gangen?» (Tester om et lite selskap vil bli tatt på alvor.)
+- «Hva ville vært grunnen til å la være å bytte, selv om noe var bedre? Hva ville IT, klassen eller mannskapet sagt?»
+
+**4. Kostnad (2 min)**
+> «Hvordan er det priset: per båt, per bruker eller fast sum? Er det årsavgift i tillegg?»
+> «Grovt sett, er det under 50 000 per båt i året, 50–150 000, eller over? Helt greit å si pass.»
 
 **Avslutning (3 min)**
 - «Er det noe jeg burde ha spurt om?»
-- «Hvem andre bør jeg snakke med, her hos dere eller i andre rederier?»
-- «Kan jeg komme tilbake om noen uker og vise hva vi har lært?»
+- «Hvem andre bør jeg snakke med, en maskinsjef om bord eller han som tar beslutningene?» Be om ett konkret navn.
+- «Jeg sender deg en kort oppsummering på e-post som du kan rette på. Og kan vi sette av 30 minutter [dato] når jeg har snakket med de andre, for å vise hva vi har funnet?» Bestem datoen mens dere snakker.
+- *Bare for en beslutningstaker med tydelig problem:* «Hvis vi kan løse [problemet de nevnte] – er det noe dere kunne testet i en betalt pilot på én båt?»
+
+## Til redere og daglige ledere (samme struktur, andre spørsmål i punkt 1 og 3)
+- **1:** «Sist vedlikehold, sertifikater eller en revisjon skapte trøbbel for rederiet – hva skjedde, og hva betydde det for driften?»
+- **3:** «Sist dere kjøpte et system – hvem tok initiativ, hvem vurderte, hvem skrev under? Er budsjettet for 2027 lagt?»
 
 ## Regler
-- **Du prater maks 10 % av tiden.** Ikke vis og ikke forklar Seawise med mindre de spør. Spør de, svar kort og gå tilbake til spørsmålene.
-- **Grav i det konkrete.** «Kan du gi et eksempel?» og «Hva skjedde da?» er gull. «Hadde du brukt …?» er verdiløst.
-- **Skriv notater samme dag** i malen under (SODUS). Ellers går halve verdien tapt.
+- **Du prater maks 10 %.** Svar aldri på et problem med «det har vi laget». Spør i stedet: «hvordan løser dere det i dag?»
+- **Kritiser aldri konkurrenten.** Spør hva de gjør i tillegg til systemet.
+- **«Kan du gi et eksempel?»** er det viktigste spørsmålet du har.
+- **E-posten med oppsummeringen** som de bekrefter eller retter, er dokumentasjon for Innovasjon Norge.
 
-## Notatmal (én per samtale)
+## Notatmal (én rad per samtale i CRM, fylles ut samme dag)
 
 | Felt | |
 |---|---|
 | Dato, navn, rolle, selskap, segment | |
-| Antall fartøy, størrelse, klasseselskap | |
-| **1. System i dag, og hvor lenge** | |
-| **1b. Kostnad per fartøy per år** | |
-| **2. Klassegodkjent vedlikehold (ja / nei / vet ikke)** | |
-| **3. Siste problem, og hva det kostet** (egne ord) | |
-| **4. Siste byttevurdering: hva utløste den, hva stoppet den** | |
-| **5. Hvem bestemmer, og når settes budsjettet** | |
-| Overraskelser | |
-| Neste steg avtalt (ny samtale / intro / ingen) | |
-| Henvisninger (navn) | |
+| Kjenner personen Arne? (ja/nei). Rapporteres separat for å fange vennlighetseffekten | |
+| Flåte (fra forberedelsen) og klassestatus (PMS/CMS/vet ikke) | |
+| Siste klasse eller revisjon: hva tok tid, og hva lå utenfor systemet | |
+| Egne løsninger (Excel/e-post/papir) | |
+| Timer per uke (om bord / på land), og hvem gjør jobben | |
+| System, hvor lenge, deler i samme system, lokalt eller i nettleseren | |
+| Fornyelsesdato, oppsigelsestid, dataeksport | |
+| Siste kjøp: hvem fant det, hvem sa ja, hvem skrev under, hvor lang tid | |
+| Krav til leverandør, og grunner til å la være | |
+| Prismodell og intervall (<50k / 50–150k / >150k per båt) | |
+| **Ett faktum som motsier hypotesen vår** | |
+| Pitchet jeg? (ja/nei) | |
+| **Forpliktelse 0–4:** 0 = høflig, 1 = svarte på e-post, 2 = intro gitt, 3 = møte med beslutningstaker booket, 4 = sier ja til betalt pilot eller signerer LOI | |
+| Neste steg, dato, henvisning (navn) | |
+
+**Mål for de 24 samtalene:** minst 8 på nivå 2 eller høyere. Bare nivå 3–4 teller i drepe-regelen.
