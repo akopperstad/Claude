@@ -11,7 +11,7 @@ This is the single source of truth. Every task maps to a milestone here. Update 
 ## End goal (staged)
 | Stage | Market | Target | Window |
 |---|---|---|---|
-| 1 | Norwegian fishing vessels ≥ 15 m (two tracks, see below) | 10+ customers / 30 vessels, NOK 1.5–2.5M ARR | 2026–28 |
+| 1 | **Provisional:** Norwegian fishing vessels ≥ 15 m (two tracks, see below). **Confirmed or replaced at Gate 1 (M2) on interview evidence** | 10+ customers / 30 vessels, NOK 1.5–2.5M ARR | 2026–28 |
 | 2 | DNV type approval, then class-PMS trawlers; Norwegian aquaculture service; small offshore | 60+ vessels | 2028–29 |
 | 3 | Nordic and North Atlantic fishing | 150+ vessels | 2029–30 |
 | 4 | All vessels over 15 m, full platform | Global | 2030+ |
@@ -49,7 +49,7 @@ This is the single source of truth. Every task maps to a milestone here. Update 
 |---|---|---|---|---|---|
 | M0 | Foundation: remove false website claims; written IP waivers + written duty-of-loyalty advice (**before any fishing outreach**); trademark search; holding companies + shareholder agreement (vesting, deadlock); redirect nautech.no; confirm cash and runway | — | Kristian | 11 Oct 2026 | ⬜ |
 | M0b | Website rebuilt as pre-rendered "Seawise – vedlikeholdssystem for fiskeflåten", with JSON-LD (`panel/07`) | — | Kristian + Claude | 1 Nov 2026 | ⬜ |
-| M1 | 20 discovery interviews: users, the people who choose, the people who pay; at least 30% by Kristian. Record class-PMS status and current system for each vessel | 1, 3 | Arne | 15 Nov 2026 | ⬜ |
+| M1 | 20 discovery interviews across **4 segments**: fishing (8), wellboats/fish carriers (4), offshore/OSV/subsea (4), short-sea/tankers (4); users, the people who choose, the people who pay; at least 30% by Kristian. Record class-PMS status, current system and price for each vessel | 1, 3 | Arne | 15 Nov 2026 | ⬜ |
 | M1b | Content engine: 2 LinkedIn posts a week each, every post ending with an interview request; at least 10 interviews inbound | — | Arne + Kristian | ongoing | ⬜ |
 | M2 | **Gate 1:** beachhead + track mix, end-user profile, TAM for non-class-PMS vs class-PMS, persona, top-3 pains quantified | 2, 4, 5 | Arne + Claude | 22 Nov 2026 | ⬜ |
 | M2b | Key-assumption register plus one cheap test per assumption | 20, 21 | Kristian + Claude | 22 Nov 2026 | ⬜ |
@@ -101,7 +101,7 @@ This is the single source of truth. Every task maps to a milestone here. Update 
 ## Decision log
 | Date | Decision | Why |
 |---|---|---|
-| 2026-09-30 | Beachhead = Norwegian fishing ≥ 15 m, two tracks | Panel consensus; class-PMS reality |
+| 2026-09-30 | Beachhead = fishing (provisional); final choice at Gate 1 from interviews across 4 segments | Founders objected to the presumption; MIT step 1 requires primary research across segments |
 | 2026-09-30 | Arne owns sales; Kristian owns product, delivery and M0 | Founders |
 | 2026-09-30 | Kill rule accepted | Founders |
 | 2026-09-30 | Seawise as the single brand (subject to the trademark search) | Brand review |
