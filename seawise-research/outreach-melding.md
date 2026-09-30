@@ -10,6 +10,38 @@ Merged from 5 panel reviews (`panel/reviews/outreach-*.md`): sales, MIT coach, b
 - Two fixed time slots.
 - Something to give back: an anonymous summary of how other shipping companies handle it.
 
+## v2 (30 Sep, after founder input: chief engineer on a bottom trawler; bokmål; open about Seawise; LinkedIn first)
+
+### C: technical manager / fleet manager
+> Hei [navn]! Kort spørsmål fra en maskinsjef på bunntråler: Da dere sist hadde klasse eller revisjon om bord – hva måtte dere lete fram utenfor vedlikeholdssystemet?
+>
+> Broren min og jeg bygger et vedlikeholdssystem, og før vi bygger mer vil vi høre hvordan tekniske avdelinger faktisk jobber i dag.
+>
+> Har du 20 minutter tirsdag eller torsdag neste uke? Du får en anonym oppsummering av hva de andre svarer.
+>
+> Arne Kopperstad
+> Maskinsjef | Seawise
+
+### B: owner / CEO
+> Hei [navn]! Hvor mye koster vedlikehold, sertifikater og klasse [rederi] i året – i timer på kontoret, i lisenser og når noe glipper?
+>
+> Jeg er maskinsjef på bunntråler og bygger et vedlikeholdssystem sammen med broren min. Før vi går videre vil vi høre hvordan rederier som dere løser dette i dag.
+>
+> Har du 20 minutter tirsdag eller torsdag neste uke – eller er det noen i teknisk avdeling jeg heller bør snakke med? Du får en anonym oppsummering av funnene.
+>
+> Arne Kopperstad
+> Maskinsjef | Seawise
+
+### Channel
+LinkedIn message first. They follow you, so it's not cold email. If there's no reply after 5 days, send the follow-up. If there's still no reply after 10 days, call decision-makers.
+
+### Not to be used
+- Invented stories.
+- Figures from your employer (e.g. budget overruns). They are confidential and a breach of your duty of loyalty.
+
+---
+
+## v1 (replaced)
 ## C: technical manager / fleet manager / technical superintendent
 
 > Hei [navn]! Hva måtte dere lete fram utenfor vedlikeholdssystemet sist klassen eller revisor var om bord?
