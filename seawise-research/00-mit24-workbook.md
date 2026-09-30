@@ -117,3 +117,11 @@ Legend: ✅ done / evidence exists · 🟡 partial / implicit · ❌ not done / 
    - **U**tfordringer (challenges): surface concerns and opponents, especially at executive level.
    - **S**tyring videre (steering ahead): agree next steps, owners and deadlines, and a clear path to a signed contract.
    - *Use:* write SODUS notes for every pilot/prospect meeting in a CRM from day 1.
+
+## Ground truth from founders (2026-09-30)
+
+- **Stage:** MVP only. No live pilots, no daily users, no revenue. The outside-in statuses above were already mostly ❌ and are now confirmed. Steps 8, 21 and 23 cannot start until there is a first design partner.
+- **Website accuracy:** seawise.no says "Nautech is live… the first crews are using it". That is not true today. Change it to "MVP ready — seeking design partners" before any investor, grant officer or customer checks. Misleading marketing claims are also a legal risk under markedsføringsloven.
+- **Partner strategy:** the founders prefer a large listed company (ASA) or large group as co-development partner. Their strongest domain is fishing, and they are open to more than one beachhead.
+  - *Recommended framing:* one fishing-group **design partner** as the lighthouse, plus smaller fishing operators as the **volume beachhead**. Both sit in the same segment, so references cascade down.
+- **Price signal:** the founders say competitors charge about NOK 25–45k per month per licence per vessel. This is unverified; confirm the source and what is included.
